@@ -13,6 +13,8 @@ test.describe('Login', () => {
       await homePage.goto(routes.home);
       await homePage.openLogin();
       await loginPage.expectLoaded();
+      // Intentional failure to verify the CI/CD pipeline blocks a bad PR from merging.
+      await expect(loginPage.heading).toHaveText('This text will never match');
     },
   );
 
