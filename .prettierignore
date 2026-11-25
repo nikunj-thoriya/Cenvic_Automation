@@ -1,0 +1,9 @@
+node_modules/
+reports/
+test-results/
+backups/
+dom/
+AI-Conversation-History/
+documentation/**/*.html
+AI_RULEBOOK.md
+package-lock.json

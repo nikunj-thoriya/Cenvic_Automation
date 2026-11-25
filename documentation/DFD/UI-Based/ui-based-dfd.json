@@ -1,0 +1,337 @@
+{
+  "project": "Cenvic",
+  "title": "UI-Based Data Flow Diagram",
+  "dfdType": "UI-Based",
+  "version": "1.0",
+  "lastUpdated": "2026-11-23 IST",
+  "scope": ["Home", "Login", "Signup (Request Access)", "Forgot Password", "Reset Password"],
+  "note": "No FRD, DFD, API specification or database schema has been provided. These diagrams are built only from the recorded flows, the captured DOM, the environment configuration and the approved test cases. Solid shapes are confirmed by those sources. Dashed shapes and flows are derived from observed behavior and are not documented by the application owner. The backend is shown as a single black box (Cenvic Backend); its internal structure is not modeled here.",
+  "notation": "Gane-Sarson notation. External entities are rectangles, processes are rounded rectangles with a number, data stores are open-ended rectangles with an ID, and arrows are labelled data flows (F1, F2...). Level 0 is the context diagram, Level 1 shows the pages, and Level 2 shows the functions of one page.",
+  "sources": [
+    "dom/login/login-recorded-flow.txt and login-dom.html",
+    "dom/home/home-recorded-flow.txt and home-dom.html",
+    "dom/signup/signup-recorded-flow.txt and signup-dom.html",
+    "dom/forgot-password/forgot-password-recorded-flow.txt and the Forgot / Reset Password DOM snapshots",
+    "documentation/Test-Cases/test-cases.json (approved test cases for the five modules)",
+    "Environment configuration (dev): web application URL and API base URL"
+  ],
+  "diagrams": [
+    {
+      "id": "UI-L0",
+      "level": "0",
+      "title": "Context diagram",
+      "description": "The Cenvic web UI for the five modules and the people and systems it exchanges data with.",
+      "nodes": [
+        { "id": "V", "type": "entity", "label": "Visitor / Prospective Customer", "col": 0, "row": 0 },
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 0, "row": 2 },
+        {
+          "id": "P0",
+          "type": "process",
+          "number": "0",
+          "label": "Cenvic Web UI (Home, Login, Request Access, Forgot / Reset Password)",
+          "col": 1,
+          "row": 1
+        },
+        { "id": "S", "type": "entity", "label": "Cenvic Backend", "col": 2, "row": 1 },
+        {
+          "id": "SO",
+          "type": "entity",
+          "label": "Social Platforms (Facebook, LinkedIn, Instagram)",
+          "col": 2,
+          "row": 0
+        },
+        { "id": "EM", "type": "entity", "label": "Email Service", "col": 1, "row": 2 }
+      ],
+      "flows": [
+        { "from": "V", "to": "P0", "label": "Page visits, link clicks, contact dialog actions, Request Access form" },
+        { "from": "P0", "to": "V", "label": "Page content, validation messages, thank-you message" },
+        { "from": "U", "to": "P0", "label": "Email, password, verification code, new password" },
+        { "from": "P0", "to": "U", "label": "Validation messages, toasts, Dashboard redirect" },
+        { "from": "P0", "to": "S", "label": "Submitted form data" },
+        { "from": "S", "to": "P0", "label": "Results, messages, page content" },
+        { "from": "EM", "to": "U", "label": "Verification code email" },
+        { "from": "P0", "to": "SO", "label": "Social link opens in a new tab" }
+      ],
+      "notes": [
+        "The person who requests access and the person who logs in are shown as two roles of the same actor type; role and permission rules are not documented (PT-005)."
+      ]
+    },
+    {
+      "id": "UI-L1",
+      "level": "1",
+      "title": "Pages and navigation",
+      "description": "The five pages of the scope, the navigation between them and the data each page exchanges with the user.",
+      "nodes": [
+        { "id": "V", "type": "entity", "label": "Visitor / Prospective Customer", "col": 1, "row": 0 },
+        { "id": "P1", "type": "process", "number": "1.0", "label": "Home Page", "col": 0, "row": 1 },
+        { "id": "P3", "type": "process", "number": "3.0", "label": "Request Access Page (Signup)", "col": 2, "row": 1 },
+        { "id": "DB", "type": "entity", "label": "Dashboard (outside this scope)", "col": 0, "row": 2 },
+        { "id": "P2", "type": "process", "number": "2.0", "label": "Login Page", "col": 1, "row": 2 },
+        { "id": "P4", "type": "process", "number": "4.0", "label": "Forgot Password Page", "col": 2, "row": 2 },
+        { "id": "P5", "type": "process", "number": "5.0", "label": "Reset Password Step", "col": 3, "row": 2 },
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 2, "row": 3.4 },
+        { "id": "EM", "type": "entity", "label": "Email Service", "col": 3, "row": 3.4 }
+      ],
+      "flows": [
+        { "from": "V", "to": "P1", "label": "Page visit, section and link clicks" },
+        { "from": "P1", "to": "V", "label": "Landing page content" },
+        { "from": "V", "to": "P3", "label": "Request Access form data" },
+        { "from": "P3", "to": "V", "label": "Validation messages, thank-you message" },
+        { "from": "P1", "to": "P2", "label": "Get Started click" },
+        { "from": "P2", "to": "P1", "label": "Back to Home click" },
+        { "from": "P1", "to": "P3", "label": "Start Now click" },
+        { "from": "P2", "to": "P3", "label": "Request Access link click" },
+        { "from": "P3", "to": "P2", "label": "Login link click" },
+        { "from": "P2", "to": "P4", "label": "Forgot Password link click" },
+        { "from": "P4", "to": "P2", "label": "Back to Login click" },
+        { "from": "P4", "to": "P5", "label": "Verification code sent, next step opens" },
+        {
+          "from": "P5",
+          "to": "P2",
+          "label": "Password changed or Back to Login click",
+          "via": [[2.5, 1.4]],
+          "at": 0.3
+        },
+        { "from": "U", "to": "P2", "label": "Email, password, Remember Me" },
+        { "from": "P2", "to": "U", "label": "Validation messages, toasts" },
+        { "from": "P2", "to": "DB", "label": "Redirect after Login successfully" },
+        { "from": "U", "to": "P4", "label": "Email address" },
+        { "from": "P4", "to": "U", "label": "Validation messages, code sent toast" },
+        { "from": "U", "to": "P5", "label": "Verification code, new password" },
+        { "from": "P5", "to": "U", "label": "Validation messages, success toast" },
+        { "from": "EM", "to": "U", "label": "Verification code email" }
+      ],
+      "notes": [
+        "The Reset Password step is shown on the same URL as Forgot Password after the code is sent; it is drawn as its own process for clarity.",
+        "Destination pages for About Us, Privacy and Contact are not recorded (PT-027)."
+      ]
+    },
+    {
+      "id": "UI-L2-HOME",
+      "level": "2",
+      "title": "1.0 Home Page",
+      "description": "The functions of the Home page as seen by the visitor.",
+      "nodes": [
+        { "id": "V", "type": "entity", "label": "Visitor / Prospective Customer", "col": 0, "row": 1.5 },
+        {
+          "id": "P11",
+          "type": "process",
+          "number": "1.1",
+          "label": "Display landing page content",
+          "col": 1,
+          "row": 0
+        },
+        { "id": "P12", "type": "process", "number": "1.2", "label": "Navigate sections and pages", "col": 1, "row": 1 },
+        { "id": "P13", "type": "process", "number": "1.3", "label": "Handle Contact dialog", "col": 1, "row": 2 },
+        { "id": "P14", "type": "process", "number": "1.4", "label": "Open social links", "col": 1, "row": 3 },
+        { "id": "S", "type": "entity", "label": "Cenvic Backend (Home content)", "col": 2, "row": 0, "derived": true },
+        { "id": "LG", "type": "entity", "label": "Login Page (2.0)", "col": 2, "row": 1 },
+        { "id": "RA", "type": "entity", "label": "Request Access Page (3.0)", "col": 2, "row": 2 },
+        { "id": "SO", "type": "entity", "label": "Social Platforms", "col": 2, "row": 3 }
+      ],
+      "flows": [
+        { "from": "V", "to": "P11", "label": "Page visit (/)" },
+        { "from": "P11", "to": "V", "label": "Hero, stats, Features, How It Works, Teams Use Campaigns, footer" },
+        { "from": "P11", "to": "S", "label": "Content request", "derived": true },
+        { "from": "S", "to": "P11", "label": "Dynamic content (categories)", "derived": true },
+        { "from": "V", "to": "P12", "label": "Navigation bar, CTA and footer Products clicks" },
+        { "from": "P12", "to": "V", "label": "Scroll to section" },
+        { "from": "P12", "to": "LG", "label": "Get Started click" },
+        { "from": "P12", "to": "RA", "label": "Start Now click" },
+        { "from": "V", "to": "P13", "label": "Contact Us, Contact, Close, X, Escape, outside click" },
+        { "from": "P13", "to": "V", "label": "Contact dialog opened or closed" },
+        { "from": "V", "to": "P14", "label": "Facebook, LinkedIn, Instagram click" },
+        { "from": "P14", "to": "SO", "label": "Link opens in a new tab" }
+      ],
+      "notes": [
+        "Contact dialog fields and any submission are not documented (PT-027); the dialog is shown only as opened and closed.",
+        "Home content loaded from the backend is derived from the CMS-driven category buttons noted in the Home recording (PT-018)."
+      ]
+    },
+    {
+      "id": "UI-L2-LOGIN",
+      "level": "2",
+      "title": "2.0 Login Page",
+      "description": "The functions of the Login page as seen by the registered user.",
+      "nodes": [
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 0, "row": 2 },
+        {
+          "id": "P22",
+          "type": "process",
+          "number": "2.2",
+          "label": "Toggle password visibility and Remember Me",
+          "col": 1,
+          "row": 0
+        },
+        { "id": "P21", "type": "process", "number": "2.1", "label": "Validate Login fields", "col": 1, "row": 1 },
+        { "id": "P23", "type": "process", "number": "2.3", "label": "Submit credentials", "col": 1, "row": 2 },
+        { "id": "P24", "type": "process", "number": "2.4", "label": "Display result", "col": 1, "row": 3 },
+        { "id": "P25", "type": "process", "number": "2.5", "label": "Navigate from Login", "col": 1, "row": 4 },
+        { "id": "S", "type": "entity", "label": "Cenvic Backend", "col": 2, "row": 2 },
+        { "id": "DB", "type": "entity", "label": "Dashboard (outside this scope)", "col": 2, "row": 3 },
+        { "id": "FP", "type": "entity", "label": "Forgot Password Page (4.0)", "col": 2, "row": 4 },
+        { "id": "HM", "type": "entity", "label": "Home Page (1.0)", "col": 1, "row": 5 },
+        { "id": "RA", "type": "entity", "label": "Request Access Page (3.0)", "col": 2, "row": 5 }
+      ],
+      "flows": [
+        { "from": "U", "to": "P22", "label": "Show / Hide password, Remember Me clicks" },
+        { "from": "P22", "to": "U", "label": "Masked or visible password, checkbox state" },
+        { "from": "U", "to": "P21", "label": "Email, password" },
+        { "from": "P21", "to": "U", "label": "Required and valid email messages" },
+        { "from": "P21", "to": "P23", "label": "Valid fields" },
+        { "from": "P23", "to": "S", "label": "Email, password, Remember Me" },
+        { "from": "S", "to": "P24", "label": "Login result" },
+        {
+          "from": "P24",
+          "to": "U",
+          "label": "Login successfully, Incorrect password or Email ID not registered toast"
+        },
+        { "from": "P24", "to": "DB", "label": "Redirect to /app/dashboard" },
+        { "from": "U", "to": "P25", "label": "Forgot Password, Request Access, Back to Home clicks" },
+        { "from": "P25", "to": "FP", "label": "Forgot Password link" },
+        { "from": "P25", "to": "HM", "label": "Back to Home link" },
+        { "from": "P25", "to": "RA", "label": "Request Access link" }
+      ],
+      "notes": [
+        "Remember Me persistence after the browser is reopened is not confirmed (PT-017).",
+        "Account lockout after repeated failures is not confirmed (PT-013)."
+      ]
+    },
+    {
+      "id": "UI-L2-SIGNUP",
+      "level": "2",
+      "title": "3.0 Request Access Page (Signup)",
+      "description": "The functions of the Request Access page at /get-started as seen by the visitor.",
+      "nodes": [
+        { "id": "V", "type": "entity", "label": "Visitor / Prospective Customer", "col": 0, "row": 2 },
+        { "id": "P31", "type": "process", "number": "3.1", "label": "Display Request Access form", "col": 1, "row": 0 },
+        {
+          "id": "P32",
+          "type": "process",
+          "number": "3.2",
+          "label": "Validate fields and agreements",
+          "col": 1,
+          "row": 1
+        },
+        { "id": "P33", "type": "process", "number": "3.3", "label": "Submit Request Access form", "col": 1, "row": 2 },
+        { "id": "P34", "type": "process", "number": "3.4", "label": "Display result", "col": 1, "row": 3 },
+        {
+          "id": "P35",
+          "type": "process",
+          "number": "3.5",
+          "label": "Open Login, Terms and Privacy Policy links",
+          "col": 1,
+          "row": 4
+        },
+        { "id": "S", "type": "entity", "label": "Cenvic Backend", "col": 2, "row": 2 },
+        { "id": "LG", "type": "entity", "label": "Login Page (2.0)", "col": 2, "row": 4 },
+        { "id": "TP", "type": "entity", "label": "Terms and Privacy Policy pages", "col": 1, "row": 5 }
+      ],
+      "flows": [
+        { "from": "V", "to": "P31", "label": "Page visit (/get-started)" },
+        { "from": "P31", "to": "V", "label": "Company Details and Personal Details form" },
+        { "from": "V", "to": "P32", "label": "Field values, agreement checkboxes" },
+        { "from": "P32", "to": "V", "label": "Required and format messages" },
+        { "from": "P32", "to": "P33", "label": "Valid form data" },
+        { "from": "P33", "to": "S", "label": "Company, contact details, message, agreements" },
+        { "from": "S", "to": "P34", "label": "Submission result (success or Email already exists)" },
+        { "from": "P34", "to": "V", "label": "Thank-you message, Back to Login link or error message" },
+        { "from": "V", "to": "P35", "label": "Login, Terms, Privacy Policy clicks" },
+        { "from": "P35", "to": "LG", "label": "Login link" },
+        { "from": "P35", "to": "TP", "label": "Opens in a new tab" }
+      ],
+      "notes": ["Phone, message length and double-click submission rules are not confirmed (PT-025)."]
+    },
+    {
+      "id": "UI-L2-FORGOT",
+      "level": "2",
+      "title": "4.0 Forgot Password Page",
+      "description": "The functions of the Forgot Password page (email step) as seen by the registered user.",
+      "nodes": [
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 0, "row": 2 },
+        { "id": "EM", "type": "entity", "label": "Email Service", "col": 0, "row": 4 },
+        {
+          "id": "P41",
+          "type": "process",
+          "number": "4.1",
+          "label": "Display Forgot Password page",
+          "col": 1,
+          "row": 0
+        },
+        { "id": "P42", "type": "process", "number": "4.2", "label": "Validate email", "col": 1, "row": 1 },
+        { "id": "P43", "type": "process", "number": "4.3", "label": "Request verification code", "col": 1, "row": 2 },
+        { "id": "P44", "type": "process", "number": "4.4", "label": "Display result", "col": 1, "row": 3 },
+        { "id": "P45", "type": "process", "number": "4.5", "label": "Return to Login", "col": 1, "row": 4 },
+        { "id": "S", "type": "entity", "label": "Cenvic Backend", "col": 2, "row": 2 },
+        { "id": "RS", "type": "entity", "label": "Reset Password Step (5.0)", "col": 2, "row": 3 },
+        { "id": "LG", "type": "entity", "label": "Login Page (2.0)", "col": 2, "row": 4 }
+      ],
+      "flows": [
+        { "from": "U", "to": "P41", "label": "Page visit via Forgot Password link" },
+        { "from": "P41", "to": "U", "label": "Heading, email field, branding panel, testimonial carousel" },
+        { "from": "U", "to": "P42", "label": "Email address" },
+        { "from": "P42", "to": "U", "label": "Required and valid email messages" },
+        { "from": "P42", "to": "P43", "label": "Valid email" },
+        { "from": "P43", "to": "S", "label": "Email address" },
+        { "from": "S", "to": "P44", "label": "Result (code sent or User not found)" },
+        { "from": "P44", "to": "U", "label": "Verification code has been sent or User not found toast" },
+        { "from": "P44", "to": "RS", "label": "Reset Password step opens" },
+        { "from": "EM", "to": "U", "label": "Verification code email" },
+        { "from": "U", "to": "P45", "label": "Back to Login click" },
+        { "from": "P45", "to": "LG", "label": "Login page opens" }
+      ],
+      "notes": ["Rate limiting of repeated requests and behavior for a logged-in user are not confirmed (PT-022)."]
+    },
+    {
+      "id": "UI-L2-RESET",
+      "level": "2",
+      "title": "5.0 Reset Password Step",
+      "description": "The functions of the Reset Password step (code and new password) as seen by the registered user.",
+      "nodes": [
+        { "id": "EM", "type": "entity", "label": "Email Service", "col": 0, "row": 0 },
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 0, "row": 2 },
+        { "id": "P55", "type": "process", "number": "5.5", "label": "Resend verification code", "col": 1, "row": 0 },
+        {
+          "id": "P51",
+          "type": "process",
+          "number": "5.1",
+          "label": "Display step and toggle password visibility",
+          "col": 1,
+          "row": 1
+        },
+        { "id": "P52", "type": "process", "number": "5.2", "label": "Validate code and passwords", "col": 1, "row": 2 },
+        { "id": "P53", "type": "process", "number": "5.3", "label": "Submit password reset", "col": 1, "row": 3 },
+        { "id": "P54", "type": "process", "number": "5.4", "label": "Display result", "col": 1, "row": 4 },
+        { "id": "S", "type": "entity", "label": "Cenvic Backend", "col": 2, "row": 1 },
+        { "id": "LG", "type": "entity", "label": "Login Page (2.0)", "col": 1, "row": 5 }
+      ],
+      "flows": [
+        { "from": "U", "to": "P51", "label": "Step opens, Show / Hide password clicks" },
+        { "from": "P51", "to": "U", "label": "Fields, password rules, countdowns, visibility state" },
+        { "from": "U", "to": "P52", "label": "Verification code, new password, confirm password", "at": 0.3 },
+        { "from": "P52", "to": "U", "label": "Required, mismatch and password rule messages" },
+        { "from": "P52", "to": "P53", "label": "Valid input" },
+        { "from": "P53", "to": "S", "label": "Verification code, new password" },
+        {
+          "from": "S",
+          "to": "P54",
+          "label": "Reset result",
+          "via": [
+            [1.5, 1],
+            [1.5, 4]
+          ]
+        },
+        { "from": "P54", "to": "U", "label": "Password changed successfully or invalid code toast" },
+        { "from": "P54", "to": "LG", "label": "Login page opens" },
+        { "from": "U", "to": "P55", "label": "Resend click" },
+        { "from": "P55", "to": "S", "label": "Resend request" },
+        { "from": "P55", "to": "U", "label": "Verification code has been sent toast" },
+        { "from": "EM", "to": "U", "label": "New verification code email" }
+      ],
+      "notes": [
+        "Password rule messages, code format and reload behavior are not confirmed (PT-023, PT-026).",
+        "The reset user and the email inbox used for automation are tracked in PT-019 and PT-020."
+      ]
+    }
+  ]
+}

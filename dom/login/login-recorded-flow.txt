@@ -1,0 +1,73 @@
+Module        : Login
+Page          : Home -> Login -> Dashboard
+Environment   : dev
+Captured on   : 2026-11-20 (IST)
+Source        : Playwright codegen recording provided by the user
+State         : Unauthenticated, then successful login
+Credentials   : Not stored here. Real values are kept only in .env.dev (USER_USERNAME / USER_PASSWORD).
+Note          : Click-only focus steps and duplicates were omitted. Evidence of captured UI structure only,
+                not proof of business logic.
+
+URLs
+  Home      : https://cenvicagencydev.alliancetek.net/
+  Login     : https://cenvicagencydev.alliancetek.net/login
+  Dashboard : https://cenvicagencydev.alliancetek.net/app/dashboard   (redirect after successful login)
+
+Navigation
+  Home -> navigation bar link "Get Started" -> Login
+  Login -> link "Back to Home" -> Home
+  Login -> link "Request Access." -> Request Access (see dom/login/request-access-recorded-flow.txt)
+  Login -> link "Forgot Password?" -> Forgot Password (see dom/forgot-password/forgot-password-recorded-flow.txt) -> button "Back to Login" -> Login
+
+Login page elements (stable locators)
+  Logo image         : getByRole('img', { name: 'Cenvic Logo' })
+  Heading            : getByRole('heading', { name: 'Welcome Back.' })
+  Subtext            : getByText('Log in to your account below.')
+  Email field        : getByRole('textbox', { name: 'Email Address *' })      (input id: cncEmail)
+  Password field     : getByRole('textbox', { name: 'Password *' })
+  Show password      : getByRole('button', { name: 'Show password' })
+  Hide password      : getByRole('button', { name: 'Hide password' })
+  Remember Me        : getByRole('checkbox', { name: 'Remember Me' })
+  Forgot Password    : getByRole('link', { name: 'Forgot Password?' })
+  Login button       : getByRole('button', { name: 'Login' })
+  Account text       : getByText("Don't have an account?")
+  Request Access     : getByRole('link', { name: 'Request Access.' })
+  Back to Home       : getByRole('link', { name: 'Back to Home' })
+  Get Started (home) : getByRole('navigation').getByRole('link', { name: 'Get Started' })
+
+Left-side marketing panel (static content)
+  Heading "Voices That Convert."; heading "Collect, manage, and showcase ..."
+  Items: "QR-based video collection", "Powerful analytics dashboard", "Secure & compliant platform"
+  Testimonial: heading "CENVIC helped us turn real ..." by "Mark Wood"
+  Logo: getByRole('img', { name: 'Logo Icon' })
+  Carousel: '.carousel-item' (CSS; avoid if a user-facing locator is available)
+
+Messages (confirmed final by the user)
+  Empty email on submit : "Email address is required"
+  Empty password        : "Password is required"
+  Invalid email format  : "Please enter a valid email address"   (inline message under the Email field; shown for text without "@")
+  Email without domain extension : "Please enter a valid email address"   (inline under the Email field; confirmed in Incognito on 2026-11-25, the earlier toast came from a cached build)
+  Unregistered email    : "Email ID not registered"      (alert toast, title "Cenvic")
+  Successful login      : "Login successfully"           (toast, title "Cenvic")
+  Wrong password        : "Incorrect password, please try again"  (alert toast, title "Cenvic")
+  Toast locators        : getByRole('alert'); message via getByRole('alert').getByText('<message>')
+
+Recorded flows
+  1. Home -> Get Started -> Login page is displayed.
+  2. Click Login with empty fields -> "Email address is required" and "Password is required".
+  3. Enter invalid email text, enter a password, click Login -> "Please enter a valid email address" (inline).
+  4. Enter a password -> Show password -> Hide password toggles visibility.
+  5. Remember Me -> check and uncheck.
+  6. Login -> Request Access. -> Login -> Back to Home -> Get Started.
+  7. Login -> Forgot Password? -> Back to Login.
+  8. Enter an unregistered email + password, click Login -> "Email ID not registered".
+  9. Enter valid email + password (from .env.dev), click Login -> "Login successfully", then redirect to /app/dashboard.
+  10. Enter a registered email (from .env.dev) + an incorrect password, click Login -> "Incorrect password, please try again" toast.
+      Several toasts can be visible together, so scope message checks with getByRole('alert').
+  11. Enter an email with "@" but no domain extension + a password, click Login -> inline "Please enter a valid email address".
+
+Locator notes
+  Avoid recorded locators that use div filters with .nth(n) and position-based selectors
+  (for example locator('div').filter({ hasText: ... }).nth(4), locator('div:nth-child(4)')).
+  getByRole('strong') in the recording is not a valid ARIA role; the toast title "Cenvic" is better matched
+  within getByRole('alert').

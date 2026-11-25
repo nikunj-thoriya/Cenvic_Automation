@@ -1,0 +1,45 @@
+{
+  "routes": {
+    "home": "/",
+    "dashboard": "/app/dashboard",
+    "forgotPassword": "/forgot-password",
+    "requestAccess": "/get-started"
+  },
+  "messages": {
+    "emailRequired": "Email address is required",
+    "passwordRequired": "Password is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidEmailToast": "Please enter valid email address.",
+    "emailNotRegistered": "Email ID not registered",
+    "loginSuccessful": "Login successfully",
+    "incorrectPassword": "Incorrect password, please try again",
+    "toastTitle": "Cenvic"
+  },
+  "lockout": {
+    "failedAttempts": 6
+  },
+  "emailInput": {
+    "type": "email",
+    "placeholder": "Enter Your Email Address",
+    "autocomplete": "email"
+  },
+  "inputs": {
+    "incorrectPassword": "autoIncorrect@123",
+    "unregisteredPassword": "autoPassword@123",
+    "maskedPasswordSample": "autoSample@123",
+    "invalidEmail": "autoInvalidEmail",
+    "emailWithoutDomainExtension": "auto.invalid@example",
+    "standardSpecialCharacterEmails": [
+      "first.last@example.com",
+      "first+tag@example.com",
+      "first_last@example.com",
+      "first-last@example.co.in"
+    ],
+    "sqlInjectionEmail": "auto'OR'1'='1@example.com",
+    "sqlInjectionPassword": "' OR '1'='1",
+    "scriptInjectionEmail": "<script>alert(1)</script>@example.com",
+    "scriptInjectionPassword": "<script>alert(1)</script>",
+    "unregisteredEmailLocalPart": "unregistered",
+    "unregisteredEmailDomain": "example.com"
+  }
+}

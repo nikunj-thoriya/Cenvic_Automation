@@ -1,0 +1,286 @@
+# SIGNUP PAGE - RECORDED FLOWS & LOCATORS
+# URL: https://cenvicagencydev.alliancetek.net/get-started
+# Date Generated: 2026-11-23
+
+## Page Structure
+
+### Header & Navigation
+- Logo: `.cnc-logo` or `getByRole('img', { name: 'Cenvic Logo' })`
+- Main Heading: `getByRole('heading', { name: 'Voices That Convert.' })`
+- Tagline: `getByRole('heading', { name: 'Collect, manage, and showcase' })`
+- Features Section: Displays 3 features with carousel
+
+### Form Sections
+
+#### Company Details Section
+- Heading: `getByText('Company Details')`
+- Company Name Field: `getByRole('textbox', { name: 'Company Name *' })`
+  - Type: Text input
+  - Required: Yes
+  - Validation: "Company name is required"
+  
+- Industry Dropdown: `getByLabel('Industry *')`
+  - Type: Select dropdown
+  - Required: Yes
+  - Options: "1: 1", "2: 2", etc.
+  - Validation: "Please select an industry"
+  
+- Address Field: `getByRole('textbox', { name: 'Address *' })`
+  - Type: Text input
+  - Required: Yes
+  - Validation: "Company address is required"
+
+#### Personal Details Section
+- Heading: `getByText('Personal Details')`
+- Name Field: `getByRole('textbox', { name: 'Name *', exact: true })`
+  - Type: Text input
+  - Required: Yes
+  - Validation: "Name is required"
+  
+- Email Field: `getByRole('textbox', { name: 'Email *' })`
+  - Type: Email input
+  - Required: Yes
+  - Validation ID: `#err-email`
+  - Validations: 
+    - "Email is required"
+    - "Email already exists"
+    - Invalid format errors
+  
+- Phone Number Field: `getByRole('textbox', { name: 'Phone Number *' })`
+  - Type: Phone input
+  - Required: Yes
+  - Format: (555) 555-5555
+  - Validation: "Phone number is required"
+  - Format Error: "Enter phone in (555) 555-5555"
+  
+- Message Field (Optional): `getByRole('textbox', { name: 'Message / Reason for Joining' })`
+  - Type: Textarea
+  - Required: No
+  - Max length: Accepts long text
+
+#### Checkboxes Section
+- "I agree to be contacted": `getByRole('checkbox', { name: 'I agree to be contacted' })`
+  - Required: Yes
+  - Validation: "You must agree to be contacted"
+  
+- "I agree to the Terms & Conditions": `getByRole('checkbox', { name: 'I agree to the Terms &' })`
+  - Required: Yes
+  - Validation: "You must accept the Terms &"
+
+### Buttons
+- Submit Button: `getByRole('button', { name: 'Submit' })`
+  - Text: "Submit"
+  - Action: Submits signup form
+  - Location: Below all form fields
+
+### Links
+- Login Link: `getByRole('link', { name: 'Login' })`
+  - Text: "Already have an account? Login"
+  - Navigates to: /login
+  
+- Terms Link: `getByRole('link', { name: 'Terms' })`
+  - Opens in new window/tab
+  
+- Privacy Policy Link: `getByRole('link', { name: 'Privacy Policy' })`
+  - Opens in new window/tab
+  
+- Back to Login Link: `getByRole('link', { name: 'Back to Login' })`
+  - Appears after successful submission
+  - Navigates to: /login
+
+### Alerts & Messages
+- Success Message: `getByText(/Thank you! Your request has|Thank you! Our team will/)`
+  - Displays after successful form submission
+  - Text: "Thank you! Our team will contact you via..."
+  
+- Error Messages Container: `.cnc-login-box` or specific error elements
+  - Appears above/below form fields
+
+## Recorded Flows
+
+### Flow 1: Page Load & Initial Display
+1. Navigate to /get-started
+2. Page loads with:
+   - Main heading "Voices That Convert."
+   - Company Details section visible
+   - Personal Details section visible
+   - All form fields empty
+   - Submit button disabled (implicit)
+
+### Flow 2: Company Details Entry
+1. Click Company Name field
+2. Enter company name (e.g., "Alliance Tek")
+3. Click Industry dropdown
+4. Select industry (e.g., "1: 1")
+5. Click Address field
+6. Enter address (e.g., "Ahmedabad")
+7. Fields populate with entered values
+
+### Flow 3: Personal Details Entry
+1. Scroll/navigate to Personal Details section
+2. Click Name field
+3. Enter name (e.g., "Nikunj Thoriya")
+4. Click Email field
+5. Enter email (e.g., "nikunj.thoriya@alliancetek.com")
+6. Click Phone Number field
+7. Enter phone in format (111) 111-1111
+8. Optionally fill Message field
+9. All fields populate correctly
+
+### Flow 4: Checkbox & Agreement
+1. Click "I agree to be contacted" checkbox
+2. Checkbox becomes checked ✓
+3. Click "I agree to the Terms & Conditions" checkbox
+4. Checkbox becomes checked ✓
+
+### Flow 5: Form Submission - Valid Data
+1. All form fields filled with valid data
+2. Both checkboxes checked
+3. Click Submit button
+4. Form submits successfully
+5. Success message displays: "Thank you! Our team will contact you..."
+6. "Back to Login" link appears
+7. Can click "Back to Login" to return to login page
+
+### Flow 6: Form Submission - Missing Company Name
+1. Leave Company Name empty
+2. Fill all other required fields
+3. Click Submit
+4. Error message appears: "Company name is required"
+5. Form not submitted
+6. User can correct and resubmit
+
+### Flow 7: Form Submission - Missing Industry
+1. Leave Industry dropdown empty
+2. Fill all other required fields
+3. Click Submit
+4. Error message appears: "Please select an industry"
+5. Form not submitted
+
+### Flow 8: Form Submission - Missing Address
+1. Leave Address empty
+2. Fill all other required fields
+3. Click Submit
+4. Error message appears: "Company address is required"
+5. Form not submitted
+
+### Flow 9: Form Submission - Missing Personal Details
+1. Leave Name/Email/Phone empty
+2. Click Submit
+3. Multiple error messages appear:
+   - "Name is required"
+   - Email error (via #err-email)
+   - "Phone number is required"
+4. Form not submitted
+
+### Flow 10: Phone Format Validation
+1. Enter phone number in invalid format (e.g., "(111) 11")
+2. Click Submit
+3. Error message appears: "Enter phone in (555) 555-5555"
+4. Form not submitted
+5. User must enter correct format: (555) 555-5555
+
+### Flow 11: Email Validation & Duplicate Check
+1. First time: Enter valid email, submit successfully
+2. Second time: Try same email again
+3. Error message: "Email already exists"
+4. Form not submitted
+5. User must enter different email
+6. Try with new email (e.g., nikunj.thoriya+1@alliancetek.com)
+7. Submit succeeds
+
+### Flow 12: Agreement Checkbox Validation
+1. Fill all form fields
+2. Leave "I agree to be contacted" unchecked
+3. Click Submit
+4. Error: "You must agree to be contacted"
+5. Check the checkbox
+6. Leave "I agree to Terms &" unchecked
+7. Click Submit
+8. Error: "You must accept the Terms &"
+9. Check both checkboxes
+10. Submit succeeds
+
+### Flow 13: Link Navigation - Login
+1. On signup page
+2. Click "Already have an account? Login" or "Login" link
+3. Navigate to /login page
+
+### Flow 14: Link Navigation - Terms & Privacy
+1. On signup page
+2. Click "Terms" link
+3. Opens Terms page in new window/tab
+4. Return to signup page
+5. Click "Privacy Policy" link
+6. Opens Privacy Policy page in new window/tab
+
+## Test Data
+
+### Valid Company Details
+- Company Name: "Alliance Tek"
+- Industry: "1: 1"
+- Address: "Ahmedabad, Gujarat"
+
+### Valid Personal Details
+- Name: "Nikunj Thoriya"
+- Email: "nikunj.thoriya+test@alliancetek.com"
+- Phone: "(111) 111-1111"
+- Message: "Interested in CENVIC for video testimonials"
+
+### Invalid Data Examples
+- Invalid Email Partial: "nikunj.thoriya@a"
+- Invalid Phone: "(111) 11" (too short)
+- Duplicate Email: "nikunj.thoriya@alliancetek.com"
+
+### Phone Format
+- Valid: (555) 555-5555, (111) 111-1111
+- Invalid: (111) 11, 1111111111, 555-555-5555
+
+### Email Format
+- Valid: user@domain.com, user+tag@domain.com
+- Invalid: user@a, user@domain, @domain.com
+
+## Locator Best Practices
+
+### Preferred (Most Reliable)
+- `getByRole('textbox', { name: 'Company Name *' })`
+- `getByRole('textbox', { name: 'Email *' })`
+- `getByRole('button', { name: 'Submit' })`
+- `getByRole('checkbox', { name: 'I agree...' })`
+- `getByLabel('Industry *')`
+- `getByText('Company name is required')`
+
+### Fallback (If needed)
+- `getByText('Company Details')`
+- `getByText('Personal Details')`
+- Specific test IDs if available
+
+### Avoid
+- CSS selectors with nth() - brittle
+- XPath - not maintainable
+- Generic div/span selectors
+
+## Validation Rules Summary
+
+| Field | Required | Format | Error Message |
+|-------|----------|--------|----------------|
+| Company Name | Yes | Text | Company name is required |
+| Industry | Yes | Dropdown | Please select an industry |
+| Address | Yes | Text | Company address is required |
+| Name | Yes | Text | Name is required |
+| Email | Yes | email@domain.com | Email is required / Email already exists |
+| Phone | Yes | (555) 555-5555 | Phone number is required / Enter phone in (555) 555-5555 |
+| Message | No | Text | - |
+| Agree to Contact | Yes | Checkbox | You must agree to be contacted |
+| Agree to Terms | Yes | Checkbox | You must accept the Terms & |
+
+## Success Criteria
+- Page loads at /get-started
+- All form fields visible and accessible
+- Validation works for all required fields
+- Phone format validation enforces (555) 555-5555
+- Email duplicate check works
+- Checkboxes can be toggled
+- Form submits only when ALL validations pass
+- Success message displays: "Thank you! Our team will..."
+- Links work (Login, Terms, Privacy Policy)

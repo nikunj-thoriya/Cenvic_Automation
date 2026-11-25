@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cenvic — Complete System Data Flow Diagram</title>
+<style>
+  body { font-family: Segoe UI, Arial, sans-serif; margin: 0; background: #f5f7fa; color: #1f2933; }
+  header { background: #1f3a5f; color: #fff; padding: 16px 24px; }
+  header h1 { margin: 0; font-size: 22px; }
+  header p { margin: 4px 0 0; font-size: 13px; opacity: 0.85; }
+  main { padding: 16px 24px; }
+  section { background: #fff; border: 1px solid #d9e2ec; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; }
+  h2 { font-size: 16px; margin: 0 0 8px; }
+  .level { font-size: 12px; background: #e3ecfa; border-radius: 3px; padding: 2px 8px; margin-left: 8px; font-weight: 500; }
+  .note { background: #fff3cd; border: 1px solid #ffeeba; color: #533f03; border-radius: 4px; padding: 8px 12px; font-size: 13px; }
+  .diagram { overflow-x: auto; border: 1px solid #e4e7eb; border-radius: 4px; background: #fff; }
+  .diagram svg { width: 100%; height: auto; min-width: 760px; }
+  svg text { font-family: Segoe UI, Arial, sans-serif; font-size: 12.5px; fill: #1f2933; }
+  svg .num { font-weight: 600; font-size: 12px; }
+  svg .legend-text { font-size: 11px; }
+  .node rect, .node line { stroke: #334e68; stroke-width: 1.5; }
+  .entity rect { fill: #fff7d6; }
+  .process rect { fill: #dbeafe; }
+  .store line { fill: none; }
+  .flow { fill: none; stroke: #334e68; stroke-width: 1.5; }
+  .label rect { fill: #fff; fill-opacity: 0.94; }
+  .label text { font-size: 11.5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  th, td { border: 1px solid #d9e2ec; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: #eef2f7; }
+  summary { cursor: pointer; font-size: 13px; font-weight: 500; margin-top: 8px; }
+  ul { margin: 4px 0; padding-left: 20px; font-size: 13px; }
+  nav ol { columns: 2; font-size: 13px; }
+  a { color: #1f4e8c; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Cenvic — Complete System Data Flow Diagram</h1>
+  <p>Scope: Home, Login, Signup (Request Access), Forgot Password, Reset Password | Version 1.0 | Last updated 2026-11-23 17:42 IST</p>
+</header>
+<main>
+  <section><div class="note">No FRD, DFD, API specification or database schema has been provided. These diagrams are built only from the recorded flows, the captured DOM, the environment configuration and the approved test cases. Solid shapes are confirmed by those sources: the web application, the API reached through the API base URL, S3 image storage and the verification code email. Dashed shapes and flows (data stores, Cenvic Team, browser session) are logical items derived from observed behavior; their real names, structure and technology are not documented. The Administrator and any admin or CMS integration are not shown because they are unconfirmed (PT-018).</div></section>
+  <section>
+    <h2>Notation and Legend</h2>
+    <p>Gane-Sarson notation. External entities are rectangles, processes are rounded rectangles with a number, data stores are open-ended rectangles with an ID (D1, D2...), and arrows are labelled data flows (F1, F2...). Level 0 is the context diagram, Level 1 shows the main processes and data stores, and Level 2 shows the functions of one module. Reset Password is part of the Password Recovery process (4.0), so its Level 2 functions are numbered 4.6 to 4.10.</p>
+    <svg viewBox="0 0 760 120" role="img" aria-label="Legend" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-legend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<g class="node entity"><rect x="10" y="10" width="140" height="44"/><text x="80" y="36" text-anchor="middle">External entity</text></g>
+<g class="node process"><rect x="170" y="10" width="140" height="44" rx="10"/><line x1="170" y1="26" x2="310" y2="26"/><text class="num" x="240" y="22" text-anchor="middle">1.0</text><text x="240" y="43" text-anchor="middle">Process</text></g>
+<g class="node store"><line x1="330" y1="10" x2="470" y2="10"/><line x1="330" y1="54" x2="470" y2="54"/><line x1="330" y1="10" x2="330" y2="54"/><line x1="360" y1="10" x2="360" y2="54"/><text class="num" x="345" y="36" text-anchor="middle">D1</text><text x="415" y="36" text-anchor="middle">Data store</text></g>
+<polyline class="flow" points="500,32 600,32" marker-end="url(#arr-legend)"/><text x="550" y="22" text-anchor="middle" class="legend-text">Data flow (Fn)</text>
+<polyline class="flow" points="620,32 740,32" stroke-dasharray="6 4" marker-end="url(#arr-legend)"/><text x="680" y="22" text-anchor="middle" class="legend-text">Derived flow</text>
+<g class="node entity"><rect x="10" y="70" width="140" height="40" stroke-dasharray="6 4"/><text x="80" y="94" text-anchor="middle">Derived element</text></g>
+</svg>
+  </section>
+  <section>
+    <h2>Sources</h2>
+    <ul><li>dom/login/login-recorded-flow.txt and login-dom.html</li><li>dom/home/home-recorded-flow.txt and home-dom.html</li><li>dom/signup/signup-recorded-flow.txt and signup-dom.html</li><li>dom/forgot-password/forgot-password-recorded-flow.txt and the Forgot / Reset Password DOM snapshots</li><li>documentation/Test-Cases/test-cases.json (approved test cases for the five modules)</li><li>Environment configuration (dev): web application URL, API base URL and S3 image storage</li></ul>
+  </section>
+  <section>
+    <h2>Diagrams</h2>
+    <nav><ol><li><a href="#CS-L0">CS-L0 — Context diagram</a></li><li><a href="#CS-L1">CS-L1 — Main processes and data stores</a></li><li><a href="#CS-L2-HOME">CS-L2-HOME — 1.0 Public Content (Home)</a></li><li><a href="#CS-L2-LOGIN">CS-L2-LOGIN — 2.0 Authentication (Login)</a></li><li><a href="#CS-L2-SIGNUP">CS-L2-SIGNUP — 3.0 Access Request (Signup)</a></li><li><a href="#CS-L2-FORGOT">CS-L2-FORGOT — 4.0 Password Recovery - Forgot Password</a></li><li><a href="#CS-L2-RESET">CS-L2-RESET — 4.0 Password Recovery - Reset Password</a></li></ol></nav>
+  </section>
+<section id="CS-L0">
+<h2>CS-L0 — Context diagram <span class="level">Level 0</span></h2>
+<p>The Cenvic platform for the five modules and the people and systems it exchanges data with.</p>
+<div class="diagram"><svg viewBox="0 0 1200 486" role="img" aria-label="Context diagram" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-CS-L0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="186.7,116.0 500.0,228.4" marker-end="url(#arr-CS-L0)"/>
+<polyline class="flow" points="553.3,205.0 240.0,92.6" marker-end="url(#arr-CS-L0)"/>
+<polyline class="flow" points="240.0,393.4 553.3,281.0" marker-end="url(#arr-CS-L0)"/>
+<polyline class="flow" points="500.0,257.6 186.7,370.0" marker-end="url(#arr-CS-L0)"/>
+<polyline class="flow" points="960.0,113.9 700.0,207.1" marker-end="url(#arr-CS-L0)"/>
+<polyline class="flow" points="700.0,243.0 960.0,243.0" marker-end="url(#arr-CS-L0)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="700.0,278.9 960.0,372.1" marker-end="url(#arr-CS-L0)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,408.0 240.0,408.0" marker-end="url(#arr-CS-L0)"/>
+<polyline class="flow" points="500.0,243.0 240.0,243.0" marker-end="url(#arr-CS-L0)"/>
+<g class="node entity"><rect x="40" y="40" width="200" height="76"/><text x="140" y="74.5" text-anchor="middle">Visitor / Prospective</text><text x="140" y="89.5" text-anchor="middle">Customer</text></g>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="412" text-anchor="middle">Registered User</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">0</text><text x="600" y="250.5" text-anchor="middle">Cenvic Platform (web</text><text x="600" y="265.5" text-anchor="middle">application, API and data)</text></g>
+<g class="node entity"><rect x="40" y="205" width="200" height="76"/><text x="140" y="232" text-anchor="middle">Social Platforms</text><text x="140" y="247" text-anchor="middle">(Facebook, LinkedIn,</text><text x="140" y="262" text-anchor="middle">Instagram)</text></g>
+<g class="node entity"><rect x="960" y="40" width="200" height="76"/><text x="1060" y="82" text-anchor="middle">S3 Image Storage</text></g>
+<g class="node entity"><rect x="960" y="205" width="200" height="76" stroke-dasharray="6 4"/><text x="1060" y="247" text-anchor="middle">Cenvic Team</text></g>
+<g class="node entity"><rect x="960" y="370" width="200" height="76"/><text x="1060" y="412" text-anchor="middle">Email Service</text></g>
+<g class="label"><rect x="271.0" y="151.6" width="163.6" height="48" rx="3"/><text x="352.8" y="163.6" text-anchor="middle">F1 Page visits, link</text><text x="352.8" y="177.6" text-anchor="middle">clicks, Request Access</text><text x="352.8" y="191.6" text-anchor="middle">form</text></g>
+<g class="label"><rect x="255.9" y="101.2" width="150.0" height="48" rx="3"/><text x="330.9" y="113.2" text-anchor="middle">F2 Page content,</text><text x="330.9" y="127.2" text-anchor="middle">validation messages,</text><text x="330.9" y="141.2" text-anchor="middle">thank-you message</text></g>
+<g class="label"><rect x="377.5" y="290.7" width="163.6" height="48" rx="3"/><text x="459.3" y="302.7" text-anchor="middle">F3 Email, password,</text><text x="459.3" y="316.7" text-anchor="middle">verification code, new</text><text x="459.3" y="330.7" text-anchor="middle">password</text></g>
+<g class="label"><rect x="237.6" y="303.3" width="136.4" height="48" rx="3"/><text x="305.8" y="315.3" text-anchor="middle">F4 Validation</text><text x="305.8" y="329.3" text-anchor="middle">messages, toasts,</text><text x="305.8" y="343.3" text-anchor="middle">Dashboard redirect</text></g>
+<g class="label"><rect x="792.4" y="150.5" width="75.2" height="20" rx="3"/><text x="830.0" y="162.5" text-anchor="middle">F5 Images</text></g>
+<g class="label"><rect x="751.6" y="226.0" width="156.8" height="34" rx="3"/><text x="830.0" y="238.0" text-anchor="middle">F6 Access request for</text><text x="830.0" y="252.0" text-anchor="middle">review</text></g>
+<g class="label"><rect x="755.0" y="308.5" width="150.0" height="34" rx="3"/><text x="830.0" y="320.5" text-anchor="middle">F7 Verification code</text><text x="830.0" y="334.5" text-anchor="middle">email request</text></g>
+<g class="label"><rect x="525.0" y="391.0" width="150.0" height="34" rx="3"/><text x="600.0" y="403.0" text-anchor="middle">F8 Verification code</text><text x="600.0" y="417.0" text-anchor="middle">email</text></g>
+<g class="label"><rect x="295.0" y="226.0" width="150.0" height="34" rx="3"/><text x="370.0" y="238.0" text-anchor="middle">F9 Social link opens</text><text x="370.0" y="252.0" text-anchor="middle">in a new tab</text></g>
+</svg></div>
+<ul><li>The person who requests access and the person who logs in are shown as two roles of the same actor type; role and permission rules are not documented (PT-005).</li><li>How a Request Access submission reaches the Cenvic Team (email, admin screen or CMS) is not confirmed (PT-018).</li></ul>
+<details><summary>Data flows (9) and elements (7)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Visitor / Prospective Customer</td><td>0 Cenvic Platform (web application, API and data)</td><td>Page visits, link clicks, Request Access form</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>0 Cenvic Platform (web application, API and data)</td><td>Visitor / Prospective Customer</td><td>Page content, validation messages, thank-you message</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>Registered User</td><td>0 Cenvic Platform (web application, API and data)</td><td>Email, password, verification code, new password</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>0 Cenvic Platform (web application, API and data)</td><td>Registered User</td><td>Validation messages, toasts, Dashboard redirect</td><td>Confirmed</td></tr>
+<tr><td>F5</td><td>S3 Image Storage</td><td>0 Cenvic Platform (web application, API and data)</td><td>Images</td><td>Confirmed</td></tr>
+<tr><td>F6</td><td>0 Cenvic Platform (web application, API and data)</td><td>Cenvic Team</td><td>Access request for review</td><td>Derived</td></tr>
+<tr><td>F7</td><td>0 Cenvic Platform (web application, API and data)</td><td>Email Service</td><td>Verification code email request</td><td>Derived</td></tr>
+<tr><td>F8</td><td>Email Service</td><td>Registered User</td><td>Verification code email</td><td>Confirmed</td></tr>
+<tr><td>F9</td><td>0 Cenvic Platform (web application, API and data)</td><td>Social Platforms (Facebook, LinkedIn, Instagram)</td><td>Social link opens in a new tab</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Visitor / Prospective Customer</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>0 Cenvic Platform (web application, API and data)</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>Social Platforms (Facebook, LinkedIn, Instagram)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>S3 Image Storage</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Cenvic Team</td><td>External entity</td><td>Derived</td></tr>
+<tr><td>Email Service</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="CS-L1">
+<h2>CS-L1 — Main processes and data stores <span class="level">Level 1</span></h2>
+<p>The four main processes of the scope and the logical data stores they read and write.</p>
+<div class="diagram"><svg viewBox="0 0 1660 1063.5" role="img" aria-label="Main processes and data stores" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-CS-L1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="240.0,327.9 501.4,281.0" marker-end="url(#arr-CS-L1)"/>
+<polyline class="flow" points="500.0,240.6 238.6,287.5" marker-end="url(#arr-CS-L1)"/>
+<polyline class="flow" points="238.6,363.5 500.0,410.4" marker-end="url(#arr-CS-L1)"/>
+<polyline class="flow" points="501.4,370.0 240.0,323.1" marker-end="url(#arr-CS-L1)"/>
+<polyline class="flow" points="960.0,243.0 700.0,243.0" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,113.9 700.0,207.1" marker-end="url(#arr-CS-L1)"/>
+<polyline class="flow" points="700.0,428.0 960.0,428.0" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,388.0 700.0,388.0" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="500.0,440.3 240.0,524.2" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="240.0,723.4 553.3,611.0" marker-end="url(#arr-CS-L1)"/>
+<polyline class="flow" points="500.0,587.6 186.7,700.0" marker-end="url(#arr-CS-L1)"/>
+<polyline class="flow" points="664.3,611.0 960.0,690.6" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="995.7,658.8 700.0,579.2" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="700.0,564.0 1420.0,499.5" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="238.6,776.0 500.0,822.9" marker-end="url(#arr-CS-L1)"/>
+<polyline class="flow" points="501.4,782.5 240.0,735.6" marker-end="url(#arr-CS-L1)"/>
+<polyline class="flow" points="700.0,814.3 995.7,734.8" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,702.9 664.3,782.5" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="646.7,858.5 960.0,970.9" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="1013.3,947.5 700.0,835.1" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="500.0,852.8 240.0,936.7" marker-end="url(#arr-CS-L1)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="140.0,931.0 140.0,776.0" marker-end="url(#arr-CS-L1)"/>
+<g class="node entity"><rect x="40" y="287.5" width="200" height="76"/><text x="140" y="322" text-anchor="middle">Visitor / Prospective</text><text x="140" y="337" text-anchor="middle">Customer</text></g>
+<g class="node entity"><rect x="40" y="518.5" width="200" height="76" stroke-dasharray="6 4"/><text x="140" y="560.5" text-anchor="middle">Cenvic Team</text></g>
+<g class="node entity"><rect x="40" y="700" width="200" height="76"/><text x="140" y="742" text-anchor="middle">Registered User</text></g>
+<g class="node entity"><rect x="40" y="931.0000000000001" width="200" height="76"/><text x="140" y="973.0000000000001" text-anchor="middle">Email Service</text></g>
+<g class="node entity"><rect x="960" y="40" width="200" height="76"/><text x="1060" y="82" text-anchor="middle">S3 Image Storage</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">1.0</text><text x="600" y="258" text-anchor="middle">Public Content (Home)</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">3.0</text><text x="600" y="423" text-anchor="middle">Access Request (Signup)</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">2.0</text><text x="600" y="588" text-anchor="middle">Authentication (Login)</text></g>
+<g class="node process"><rect x="500" y="782.5" width="200" height="76" rx="12"/><line x1="500" y1="804.5" x2="700" y2="804.5"/><text class="num" x="600" y="798.5" text-anchor="middle">4.0</text><text x="600" y="828" text-anchor="middle">Password Recovery (Forgot</text><text x="600" y="843" text-anchor="middle">and Reset)</text></g>
+<g class="node store"><line x1="960" y1="205" x2="1160" y2="205" stroke-dasharray="6 4"/><line x1="960" y1="281" x2="1160" y2="281" stroke-dasharray="6 4"/><line x1="960" y1="205" x2="960" y2="281" stroke-dasharray="6 4"/><line x1="1004" y1="205" x2="1004" y2="281"/><text class="num" x="982" y="247" text-anchor="middle">D4</text><text x="1082" y="247" text-anchor="middle">Home Content</text></g>
+<g class="node store"><line x1="960" y1="370" x2="1160" y2="370" stroke-dasharray="6 4"/><line x1="960" y1="446" x2="1160" y2="446" stroke-dasharray="6 4"/><line x1="960" y1="370" x2="960" y2="446" stroke-dasharray="6 4"/><line x1="1004" y1="370" x2="1004" y2="446"/><text class="num" x="982" y="412" text-anchor="middle">D2</text><text x="1082" y="412" text-anchor="middle">Access Requests</text></g>
+<g class="node store"><line x1="1420" y1="452.5" x2="1620" y2="452.5" stroke-dasharray="6 4"/><line x1="1420" y1="528.5" x2="1620" y2="528.5" stroke-dasharray="6 4"/><line x1="1420" y1="452.5" x2="1420" y2="528.5" stroke-dasharray="6 4"/><line x1="1464" y1="452.5" x2="1464" y2="528.5"/><text class="num" x="1442" y="494.5" text-anchor="middle">D5</text><text x="1542" y="494.5" text-anchor="middle">Browser Session</text></g>
+<g class="node store"><line x1="960" y1="658.75" x2="1160" y2="658.75" stroke-dasharray="6 4"/><line x1="960" y1="734.75" x2="1160" y2="734.75" stroke-dasharray="6 4"/><line x1="960" y1="658.75" x2="960" y2="734.75" stroke-dasharray="6 4"/><line x1="1004" y1="658.75" x2="1004" y2="734.75"/><text class="num" x="982" y="700.75" text-anchor="middle">D1</text><text x="1082" y="700.75" text-anchor="middle">User Accounts</text></g>
+<g class="node store"><line x1="960" y1="947.5" x2="1160" y2="947.5" stroke-dasharray="6 4"/><line x1="960" y1="1023.5" x2="1160" y2="1023.5" stroke-dasharray="6 4"/><line x1="960" y1="947.5" x2="960" y2="1023.5" stroke-dasharray="6 4"/><line x1="1004" y1="947.5" x2="1004" y2="1023.5"/><text class="num" x="982" y="989.5" text-anchor="middle">D3</text><text x="1082" y="989.5" text-anchor="middle">Verification Codes</text></g>
+<g class="label"><rect x="288.9" y="287.4" width="163.6" height="34" rx="3"/><text x="370.7" y="299.4" text-anchor="middle">F1 Page visit, section</text><text x="370.7" y="313.4" text-anchor="middle">and link clicks</text></g>
+<g class="label"><rect x="311.3" y="247.1" width="116.0" height="34" rx="3"/><text x="369.3" y="259.1" text-anchor="middle">F2 Landing page</text><text x="369.3" y="273.1" text-anchor="middle">content</text></g>
+<g class="label"><rect x="287.5" y="369.9" width="163.6" height="34" rx="3"/><text x="369.3" y="381.9" text-anchor="middle">F3 Request Access form</text><text x="369.3" y="395.9" text-anchor="middle">data</text></g>
+<g class="label"><rect x="299.1" y="322.6" width="143.2" height="48" rx="3"/><text x="370.7" y="334.6" text-anchor="middle">F4 Validation</text><text x="370.7" y="348.6" text-anchor="middle">messages, thank-you</text><text x="370.7" y="362.6" text-anchor="middle">message</text></g>
+<g class="label"><rect x="772.0" y="226.0" width="116.0" height="34" rx="3"/><text x="830.0" y="238.0" text-anchor="middle">F5 Home content</text><text x="830.0" y="252.0" text-anchor="middle">(categories)</text></g>
+<g class="label"><rect x="792.4" y="150.5" width="75.2" height="20" rx="3"/><text x="830.0" y="162.5" text-anchor="middle">F6 Images</text></g>
+<g class="label"><rect x="751.6" y="418.0" width="156.8" height="20" rx="3"/><text x="830.0" y="430.0" text-anchor="middle">F7 New access request</text></g>
+<g class="label"><rect x="765.2" y="371.0" width="129.6" height="34" rx="3"/><text x="830.0" y="383.0" text-anchor="middle">F8 Existing email</text><text x="830.0" y="397.0" text-anchor="middle">result</text></g>
+<g class="label"><rect x="291.6" y="465.3" width="156.8" height="34" rx="3"/><text x="370.0" y="477.3" text-anchor="middle">F9 Access request for</text><text x="370.0" y="491.3" text-anchor="middle">review</text></g>
+<g class="label"><rect x="321.6" y="650.2" width="150.0" height="34" rx="3"/><text x="396.6" y="662.2" text-anchor="middle">F10 Email, password,</text><text x="396.6" y="676.2" text-anchor="middle">Remember Me</text></g>
+<g class="label"><rect x="331.5" y="599.6" width="136.4" height="48" rx="3"/><text x="399.7" y="611.6" text-anchor="middle">F11 Validation</text><text x="399.7" y="625.6" text-anchor="middle">messages, toasts,</text><text x="399.7" y="639.6" text-anchor="middle">Dashboard redirect</text></g>
+<g class="label"><rect x="733.7" y="640.8" width="156.8" height="20" rx="3"/><text x="812.1" y="652.8" text-anchor="middle">F12 Credential lookup</text></g>
+<g class="label"><rect x="783.1" y="602.0" width="129.6" height="34" rx="3"/><text x="847.9" y="614.0" text-anchor="middle">F13 Account match</text><text x="847.9" y="628.0" text-anchor="middle">result</text></g>
+<g class="label"><rect x="998.6" y="521.8" width="122.8" height="20" rx="3"/><text x="1060.0" y="533.8" text-anchor="middle">F14 Session data</text></g>
+<g class="label"><rect x="287.5" y="775.4" width="163.6" height="48" rx="3"/><text x="369.3" y="787.4" text-anchor="middle">F15 Email,</text><text x="369.3" y="801.4" text-anchor="middle">verification code, new</text><text x="369.3" y="815.4" text-anchor="middle">password</text></g>
+<g class="label"><rect x="293.6" y="739.2" width="122.8" height="34" rx="3"/><text x="355.0" y="751.2" text-anchor="middle">F16 Validation</text><text x="355.0" y="765.2" text-anchor="middle">messages, toasts</text></g>
+<g class="label"><rect x="776.3" y="757.5" width="143.2" height="34" rx="3"/><text x="847.9" y="769.5" text-anchor="middle">F17 Account lookup,</text><text x="847.9" y="783.5" text-anchor="middle">new password</text></g>
+<g class="label"><rect x="754.9" y="720.9" width="150.0" height="34" rx="3"/><text x="829.9" y="732.9" text-anchor="middle">F18 Account found or</text><text x="829.9" y="746.9" text-anchor="middle">not found</text></g>
+<g class="label"><rect x="725.0" y="904.7" width="156.8" height="20" rx="3"/><text x="803.4" y="916.7" text-anchor="middle">F19 Verification code</text></g>
+<g class="label"><rect x="778.2" y="881.3" width="156.8" height="20" rx="3"/><text x="856.6" y="893.3" text-anchor="middle">F20 Code check result</text></g>
+<g class="label"><rect x="288.2" y="884.8" width="163.6" height="20" rx="3"/><text x="370.0" y="896.8" text-anchor="middle">F21 Code email request</text></g>
+<g class="label"><rect x="61.6" y="836.5" width="156.8" height="34" rx="3"/><text x="140.0" y="848.5" text-anchor="middle">F22 Verification code</text><text x="140.0" y="862.5" text-anchor="middle">email</text></g>
+</svg></div>
+<ul><li>Navigation between the pages (for example Home to Login) is shown in the UI-Based DFD.</li><li>Data store names and boundaries are logical and derived from observed behavior; they must be confirmed against the real database schema (PT-031).</li><li>Whether Remember Me keeps the session after the browser is reopened is not confirmed (PT-017).</li></ul>
+<details><summary>Data flows (22) and elements (14)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Visitor / Prospective Customer</td><td>1.0 Public Content (Home)</td><td>Page visit, section and link clicks</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>1.0 Public Content (Home)</td><td>Visitor / Prospective Customer</td><td>Landing page content</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>Visitor / Prospective Customer</td><td>3.0 Access Request (Signup)</td><td>Request Access form data</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>3.0 Access Request (Signup)</td><td>Visitor / Prospective Customer</td><td>Validation messages, thank-you message</td><td>Confirmed</td></tr>
+<tr><td>F5</td><td>D4 Home Content</td><td>1.0 Public Content (Home)</td><td>Home content (categories)</td><td>Derived</td></tr>
+<tr><td>F6</td><td>S3 Image Storage</td><td>1.0 Public Content (Home)</td><td>Images</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>3.0 Access Request (Signup)</td><td>D2 Access Requests</td><td>New access request</td><td>Derived</td></tr>
+<tr><td>F8</td><td>D2 Access Requests</td><td>3.0 Access Request (Signup)</td><td>Existing email result</td><td>Derived</td></tr>
+<tr><td>F9</td><td>3.0 Access Request (Signup)</td><td>Cenvic Team</td><td>Access request for review</td><td>Derived</td></tr>
+<tr><td>F10</td><td>Registered User</td><td>2.0 Authentication (Login)</td><td>Email, password, Remember Me</td><td>Confirmed</td></tr>
+<tr><td>F11</td><td>2.0 Authentication (Login)</td><td>Registered User</td><td>Validation messages, toasts, Dashboard redirect</td><td>Confirmed</td></tr>
+<tr><td>F12</td><td>2.0 Authentication (Login)</td><td>D1 User Accounts</td><td>Credential lookup</td><td>Derived</td></tr>
+<tr><td>F13</td><td>D1 User Accounts</td><td>2.0 Authentication (Login)</td><td>Account match result</td><td>Derived</td></tr>
+<tr><td>F14</td><td>2.0 Authentication (Login)</td><td>D5 Browser Session</td><td>Session data</td><td>Derived</td></tr>
+<tr><td>F15</td><td>Registered User</td><td>4.0 Password Recovery (Forgot and Reset)</td><td>Email, verification code, new password</td><td>Confirmed</td></tr>
+<tr><td>F16</td><td>4.0 Password Recovery (Forgot and Reset)</td><td>Registered User</td><td>Validation messages, toasts</td><td>Confirmed</td></tr>
+<tr><td>F17</td><td>4.0 Password Recovery (Forgot and Reset)</td><td>D1 User Accounts</td><td>Account lookup, new password</td><td>Derived</td></tr>
+<tr><td>F18</td><td>D1 User Accounts</td><td>4.0 Password Recovery (Forgot and Reset)</td><td>Account found or not found</td><td>Derived</td></tr>
+<tr><td>F19</td><td>4.0 Password Recovery (Forgot and Reset)</td><td>D3 Verification Codes</td><td>Verification code</td><td>Derived</td></tr>
+<tr><td>F20</td><td>D3 Verification Codes</td><td>4.0 Password Recovery (Forgot and Reset)</td><td>Code check result</td><td>Derived</td></tr>
+<tr><td>F21</td><td>4.0 Password Recovery (Forgot and Reset)</td><td>Email Service</td><td>Code email request</td><td>Derived</td></tr>
+<tr><td>F22</td><td>Email Service</td><td>Registered User</td><td>Verification code email</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Visitor / Prospective Customer</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Cenvic Team</td><td>External entity</td><td>Derived</td></tr>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Email Service</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>S3 Image Storage</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>1.0 Public Content (Home)</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>3.0 Access Request (Signup)</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>2.0 Authentication (Login)</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.0 Password Recovery (Forgot and Reset)</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>D4 Home Content</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>D2 Access Requests</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>D5 Browser Session</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>D1 User Accounts</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>D3 Verification Codes</td><td>Data store</td><td>Derived</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="CS-L2-HOME">
+<h2>CS-L2-HOME — 1.0 Public Content (Home) <span class="level">Level 2</span></h2>
+<p>The functions of the Home module and the data they use.</p>
+<div class="diagram"><svg viewBox="0 0 1200 816" role="img" aria-label="1.0 Public Content (Home)" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-CS-L2-HOME" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="193.0,370.0 547.0,116.0" marker-end="url(#arr-CS-L2-HOME)"/>
+<polyline class="flow" points="700.0,98.0 960.0,98.0" marker-end="url(#arr-CS-L2-HOME)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,58.0 700.0,58.0" marker-end="url(#arr-CS-L2-HOME)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="600.0,116.0 600.0,205.0" marker-end="url(#arr-CS-L2-HOME)"/>
+<polyline class="flow" points="960.0,243.0 700.0,243.0" marker-end="url(#arr-CS-L2-HOME)"/>
+<polyline class="flow" points="500.0,278.9 240.0,372.1" marker-end="url(#arr-CS-L2-HOME)"/>
+<polyline class="flow" points="240.0,428.0 500.0,428.0" marker-end="url(#arr-CS-L2-HOME)"/>
+<polyline class="flow" points="500.0,388.0 240.0,388.0" marker-end="url(#arr-CS-L2-HOME)"/>
+<polyline class="flow" points="186.7,446.0 500.0,558.4" marker-end="url(#arr-CS-L2-HOME)"/>
+<polyline class="flow" points="553.3,535.0 240.0,422.6" marker-end="url(#arr-CS-L2-HOME)"/>
+<polyline class="flow" points="193.0,446.0 547.0,700.0" marker-end="url(#arr-CS-L2-HOME)"/>
+<polyline class="flow" points="700.0,738.0 960.0,738.0" marker-end="url(#arr-CS-L2-HOME)"/>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="404.5" text-anchor="middle">Visitor / Prospective</text><text x="140" y="419.5" text-anchor="middle">Customer</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">1.1</text><text x="600" y="93" text-anchor="middle">Request Home content</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">1.2</text><text x="600" y="258" text-anchor="middle">Render landing page</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">1.3</text><text x="600" y="415.5" text-anchor="middle">Navigate sections and</text><text x="600" y="430.5" text-anchor="middle">pages</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">1.4</text><text x="600" y="588" text-anchor="middle">Handle Contact dialog</text></g>
+<g class="node process"><rect x="500" y="700" width="200" height="76" rx="12"/><line x1="500" y1="722" x2="700" y2="722"/><text class="num" x="600" y="716" text-anchor="middle">1.5</text><text x="600" y="753" text-anchor="middle">Open social links</text></g>
+<g class="node store"><line x1="960" y1="40" x2="1160" y2="40" stroke-dasharray="6 4"/><line x1="960" y1="116" x2="1160" y2="116" stroke-dasharray="6 4"/><line x1="960" y1="40" x2="960" y2="116" stroke-dasharray="6 4"/><line x1="1004" y1="40" x2="1004" y2="116"/><text class="num" x="982" y="82" text-anchor="middle">D4</text><text x="1082" y="82" text-anchor="middle">Home Content</text></g>
+<g class="node entity"><rect x="960" y="205" width="200" height="76"/><text x="1060" y="247" text-anchor="middle">S3 Image Storage</text></g>
+<g class="node entity"><rect x="960" y="700" width="200" height="76"/><text x="1060" y="742" text-anchor="middle">Social Platforms</text></g>
+<g class="label"><rect x="305.2" y="233.0" width="129.6" height="20" rx="3"/><text x="370.0" y="245.0" text-anchor="middle">F1 Page visit (/)</text></g>
+<g class="label"><rect x="761.8" y="88.0" width="136.4" height="20" rx="3"/><text x="830.0" y="100.0" text-anchor="middle">F2 Content request</text></g>
+<g class="label"><rect x="772.0" y="41.0" width="116.0" height="34" rx="3"/><text x="830.0" y="53.0" text-anchor="middle">F3 Home content</text><text x="830.0" y="67.0" text-anchor="middle">(categories)</text></g>
+<g class="label"><rect x="525.0" y="150.5" width="150.0" height="20" rx="3"/><text x="600.0" y="162.5" text-anchor="middle">F4 Content to render</text></g>
+<g class="label"><rect x="792.4" y="233.0" width="75.2" height="20" rx="3"/><text x="830.0" y="245.0" text-anchor="middle">F5 Images</text></g>
+<g class="label"><rect x="305.2" y="294.5" width="129.6" height="62" rx="3"/><text x="370.0" y="306.5" text-anchor="middle">F6 Hero, stats,</text><text x="370.0" y="320.5" text-anchor="middle">Features, How It</text><text x="370.0" y="334.5" text-anchor="middle">Works, Teams Use</text><text x="370.0" y="348.5" text-anchor="middle">Campaigns, footer</text></g>
+<g class="label"><rect x="303.8" y="411.0" width="163.6" height="34" rx="3"/><text x="385.6" y="423.0" text-anchor="middle">F7 Navigation bar, CTA</text><text x="385.6" y="437.0" text-anchor="middle">and footer clicks</text></g>
+<g class="label"><rect x="295.0" y="371.0" width="150.0" height="34" rx="3"/><text x="370.0" y="383.0" text-anchor="middle">F8 Scroll to section</text><text x="370.0" y="397.0" text-anchor="middle">or page change</text></g>
+<g class="label"><rect x="330.7" y="501.8" width="156.8" height="48" rx="3"/><text x="409.1" y="513.8" text-anchor="middle">F9 Contact Us, Close,</text><text x="409.1" y="527.8" text-anchor="middle">X, Escape, outside</text><text x="409.1" y="541.8" text-anchor="middle">click</text></g>
+<g class="label"><rect x="328.4" y="461.8" width="136.4" height="34" rx="3"/><text x="396.6" y="473.8" text-anchor="middle">F10 Contact dialog</text><text x="396.6" y="487.8" text-anchor="middle">opened or closed</text></g>
+<g class="label"><rect x="309.0" y="556.6" width="143.2" height="48" rx="3"/><text x="380.6" y="568.6" text-anchor="middle">F11 Facebook,</text><text x="380.6" y="582.6" text-anchor="middle">LinkedIn, Instagram</text><text x="380.6" y="596.6" text-anchor="middle">click</text></g>
+<g class="label"><rect x="758.4" y="721.0" width="143.2" height="34" rx="3"/><text x="830.0" y="733.0" text-anchor="middle">F12 Link opens in a</text><text x="830.0" y="747.0" text-anchor="middle">new tab</text></g>
+</svg></div>
+<ul><li>Contact dialog fields and any submission are not documented (PT-027); the dialog is shown only as opened and closed.</li><li>Home content is derived from the CMS-driven category buttons noted in the Home recording (PT-018).</li></ul>
+<details><summary>Data flows (12) and elements (9)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Visitor / Prospective Customer</td><td>1.1 Request Home content</td><td>Page visit (/)</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>1.1 Request Home content</td><td>D4 Home Content</td><td>Content request</td><td>Derived</td></tr>
+<tr><td>F3</td><td>D4 Home Content</td><td>1.1 Request Home content</td><td>Home content (categories)</td><td>Derived</td></tr>
+<tr><td>F4</td><td>1.1 Request Home content</td><td>1.2 Render landing page</td><td>Content to render</td><td>Confirmed</td></tr>
+<tr><td>F5</td><td>S3 Image Storage</td><td>1.2 Render landing page</td><td>Images</td><td>Confirmed</td></tr>
+<tr><td>F6</td><td>1.2 Render landing page</td><td>Visitor / Prospective Customer</td><td>Hero, stats, Features, How It Works, Teams Use Campaigns, footer</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>Visitor / Prospective Customer</td><td>1.3 Navigate sections and pages</td><td>Navigation bar, CTA and footer clicks</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>1.3 Navigate sections and pages</td><td>Visitor / Prospective Customer</td><td>Scroll to section or page change</td><td>Confirmed</td></tr>
+<tr><td>F9</td><td>Visitor / Prospective Customer</td><td>1.4 Handle Contact dialog</td><td>Contact Us, Close, X, Escape, outside click</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>1.4 Handle Contact dialog</td><td>Visitor / Prospective Customer</td><td>Contact dialog opened or closed</td><td>Confirmed</td></tr>
+<tr><td>F11</td><td>Visitor / Prospective Customer</td><td>1.5 Open social links</td><td>Facebook, LinkedIn, Instagram click</td><td>Confirmed</td></tr>
+<tr><td>F12</td><td>1.5 Open social links</td><td>Social Platforms</td><td>Link opens in a new tab</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Visitor / Prospective Customer</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>1.1 Request Home content</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>1.2 Render landing page</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>1.3 Navigate sections and pages</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>1.4 Handle Contact dialog</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>1.5 Open social links</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>D4 Home Content</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>S3 Image Storage</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Social Platforms</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="CS-L2-LOGIN">
+<h2>CS-L2-LOGIN — 2.0 Authentication (Login) <span class="level">Level 2</span></h2>
+<p>The functions of the Login module and the data they use.</p>
+<div class="diagram"><svg viewBox="0 0 1200 651" role="img" aria-label="2.0 Authentication (Login)" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-CS-L2-LOGIN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="240.0,294.4 571.6,116.0" marker-end="url(#arr-CS-L2-LOGIN)"/>
+<polyline class="flow" points="500.0,109.1 168.4,287.5" marker-end="url(#arr-CS-L2-LOGIN)"/>
+<polyline class="flow" points="600.0,116.0 600.0,205.0" marker-end="url(#arr-CS-L2-LOGIN)"/>
+<polyline class="flow" points="700.0,263.0 960.0,263.0" marker-end="url(#arr-CS-L2-LOGIN)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,223.0 700.0,223.0" marker-end="url(#arr-CS-L2-LOGIN)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="600.0,281.0 600.0,370.0" marker-end="url(#arr-CS-L2-LOGIN)"/>
+<polyline class="flow" points="500.0,390.1 240.0,343.4" marker-end="url(#arr-CS-L2-LOGIN)"/>
+<polyline class="flow" points="700.0,408.0 960.0,408.0" marker-end="url(#arr-CS-L2-LOGIN)"/>
+<polyline class="flow" points="600.0,446.0 600.0,535.0" marker-end="url(#arr-CS-L2-LOGIN)"/>
+<polyline class="flow" points="700.0,573.0 960.0,573.0" marker-end="url(#arr-CS-L2-LOGIN)" stroke-dasharray="6 4"/>
+<g class="node entity"><rect x="40" y="287.5" width="200" height="76"/><text x="140" y="329.5" text-anchor="middle">Registered User</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">2.1</text><text x="600" y="93" text-anchor="middle">Validate login input</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">2.2</text><text x="600" y="258" text-anchor="middle">Authenticate credentials</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">2.3</text><text x="600" y="415.5" text-anchor="middle">Display result and</text><text x="600" y="430.5" text-anchor="middle">redirect</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">2.4</text><text x="600" y="588" text-anchor="middle">Establish session</text></g>
+<g class="node store"><line x1="960" y1="205" x2="1160" y2="205" stroke-dasharray="6 4"/><line x1="960" y1="281" x2="1160" y2="281" stroke-dasharray="6 4"/><line x1="960" y1="205" x2="960" y2="281" stroke-dasharray="6 4"/><line x1="1004" y1="205" x2="1004" y2="281"/><text class="num" x="982" y="247" text-anchor="middle">D1</text><text x="1082" y="247" text-anchor="middle">User Accounts</text></g>
+<g class="node entity"><rect x="960" y="370" width="200" height="76"/><text x="1060" y="404.5" text-anchor="middle">Dashboard (outside this</text><text x="1060" y="419.5" text-anchor="middle">scope)</text></g>
+<g class="node store"><line x1="960" y1="535" x2="1160" y2="535" stroke-dasharray="6 4"/><line x1="960" y1="611" x2="1160" y2="611" stroke-dasharray="6 4"/><line x1="960" y1="535" x2="960" y2="611" stroke-dasharray="6 4"/><line x1="1004" y1="535" x2="1004" y2="611"/><text class="num" x="982" y="577" text-anchor="middle">D5</text><text x="1082" y="577" text-anchor="middle">Browser Session</text></g>
+<g class="label"><rect x="344.1" y="182.9" width="143.2" height="34" rx="3"/><text x="415.7" y="194.9" text-anchor="middle">F1 Email, password,</text><text x="415.7" y="208.9" text-anchor="middle">Remember Me</text></g>
+<g class="label"><rect x="335.4" y="138.5" width="156.8" height="34" rx="3"/><text x="413.8" y="150.5" text-anchor="middle">F2 Required and valid</text><text x="413.8" y="164.5" text-anchor="middle">email messages</text></g>
+<g class="label"><rect x="525.0" y="150.5" width="150.0" height="20" rx="3"/><text x="600.0" y="162.5" text-anchor="middle">F3 Valid credentials</text></g>
+<g class="label"><rect x="755.0" y="253.0" width="150.0" height="20" rx="3"/><text x="830.0" y="265.0" text-anchor="middle">F4 Credential lookup</text></g>
+<g class="label"><rect x="768.6" y="206.0" width="122.8" height="34" rx="3"/><text x="830.0" y="218.0" text-anchor="middle">F5 Account match</text><text x="830.0" y="232.0" text-anchor="middle">result</text></g>
+<g class="label"><rect x="535.2" y="308.5" width="129.6" height="34" rx="3"/><text x="600.0" y="320.5" text-anchor="middle">F6 Authentication</text><text x="600.0" y="334.5" text-anchor="middle">result</text></g>
+<g class="label"><rect x="288.2" y="335.8" width="163.6" height="62" rx="3"/><text x="370.0" y="347.8" text-anchor="middle">F7 Login successfully,</text><text x="370.0" y="361.8" text-anchor="middle">Incorrect password or</text><text x="370.0" y="375.8" text-anchor="middle">Email ID not</text><text x="370.0" y="389.8" text-anchor="middle">registered toast</text></g>
+<g class="label"><rect x="775.4" y="391.0" width="109.2" height="34" rx="3"/><text x="830.0" y="403.0" text-anchor="middle">F8 Redirect to</text><text x="830.0" y="417.0" text-anchor="middle">/app/dashboard</text></g>
+<g class="label"><rect x="528.4" y="480.5" width="143.2" height="20" rx="3"/><text x="600.0" y="492.5" text-anchor="middle">F9 Successful login</text></g>
+<g class="label"><rect x="768.6" y="563.0" width="122.8" height="20" rx="3"/><text x="830.0" y="575.0" text-anchor="middle">F10 Session data</text></g>
+</svg></div>
+<ul><li>How the session is stored (cookie, local storage or token) is not confirmed, and neither is Remember Me persistence (PT-017).</li><li>Account lockout after repeated failures is not confirmed (PT-013).</li></ul>
+<details><summary>Data flows (10) and elements (8)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Registered User</td><td>2.1 Validate login input</td><td>Email, password, Remember Me</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>2.1 Validate login input</td><td>Registered User</td><td>Required and valid email messages</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>2.1 Validate login input</td><td>2.2 Authenticate credentials</td><td>Valid credentials</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>2.2 Authenticate credentials</td><td>D1 User Accounts</td><td>Credential lookup</td><td>Derived</td></tr>
+<tr><td>F5</td><td>D1 User Accounts</td><td>2.2 Authenticate credentials</td><td>Account match result</td><td>Derived</td></tr>
+<tr><td>F6</td><td>2.2 Authenticate credentials</td><td>2.3 Display result and redirect</td><td>Authentication result</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>2.3 Display result and redirect</td><td>Registered User</td><td>Login successfully, Incorrect password or Email ID not registered toast</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>2.3 Display result and redirect</td><td>Dashboard (outside this scope)</td><td>Redirect to /app/dashboard</td><td>Confirmed</td></tr>
+<tr><td>F9</td><td>2.3 Display result and redirect</td><td>2.4 Establish session</td><td>Successful login</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>2.4 Establish session</td><td>D5 Browser Session</td><td>Session data</td><td>Derived</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>2.1 Validate login input</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>2.2 Authenticate credentials</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>2.3 Display result and redirect</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>2.4 Establish session</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>D1 User Accounts</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>Dashboard (outside this scope)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>D5 Browser Session</td><td>Data store</td><td>Derived</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="CS-L2-SIGNUP">
+<h2>CS-L2-SIGNUP — 3.0 Access Request (Signup) <span class="level">Level 2</span></h2>
+<p>The functions of the Request Access module and the data they use.</p>
+<div class="diagram"><svg viewBox="0 0 1200 486" role="img" aria-label="3.0 Access Request (Signup)" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-CS-L2-SIGNUP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="240.0,228.4 553.3,116.0" marker-end="url(#arr-CS-L2-SIGNUP)"/>
+<polyline class="flow" points="500.0,92.6 186.7,205.0" marker-end="url(#arr-CS-L2-SIGNUP)"/>
+<polyline class="flow" points="600.0,116.0 600.0,205.0" marker-end="url(#arr-CS-L2-SIGNUP)"/>
+<polyline class="flow" points="700.0,245.4 961.4,198.5" marker-end="url(#arr-CS-L2-SIGNUP)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,158.1 698.6,205.0" marker-end="url(#arr-CS-L2-SIGNUP)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="700.0,260.9 960.0,307.6" marker-end="url(#arr-CS-L2-SIGNUP)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="600.0,281.0 600.0,370.0" marker-end="url(#arr-CS-L2-SIGNUP)"/>
+<polyline class="flow" points="500.0,372.1 240.0,278.9" marker-end="url(#arr-CS-L2-SIGNUP)"/>
+<g class="node entity"><rect x="40" y="205" width="200" height="76"/><text x="140" y="239.5" text-anchor="middle">Visitor / Prospective</text><text x="140" y="254.5" text-anchor="middle">Customer</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">3.1</text><text x="600" y="93" text-anchor="middle">Validate request form</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">3.2</text><text x="600" y="250.5" text-anchor="middle">Check existing email and</text><text x="600" y="265.5" text-anchor="middle">save access request</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">3.3</text><text x="600" y="423" text-anchor="middle">Display result</text></g>
+<g class="node store"><line x1="960" y1="122.5" x2="1160" y2="122.5" stroke-dasharray="6 4"/><line x1="960" y1="198.5" x2="1160" y2="198.5" stroke-dasharray="6 4"/><line x1="960" y1="122.5" x2="960" y2="198.5" stroke-dasharray="6 4"/><line x1="1004" y1="122.5" x2="1004" y2="198.5"/><text class="num" x="982" y="164.5" text-anchor="middle">D2</text><text x="1082" y="164.5" text-anchor="middle">Access Requests</text></g>
+<g class="node entity"><rect x="960" y="287.5" width="200" height="76" stroke-dasharray="6 4"/><text x="1060" y="329.5" text-anchor="middle">Cenvic Team</text></g>
+<g class="label"><rect x="334.4" y="144.8" width="143.2" height="48" rx="3"/><text x="406.0" y="156.8" text-anchor="middle">F1 Company, contact</text><text x="406.0" y="170.8" text-anchor="middle">details, message,</text><text x="406.0" y="184.8" text-anchor="middle">agreements</text></g>
+<g class="label"><rect x="327.3" y="108.2" width="163.6" height="34" rx="3"/><text x="409.1" y="120.2" text-anchor="middle">F2 Required and format</text><text x="409.1" y="134.2" text-anchor="middle">messages</text></g>
+<g class="label"><rect x="531.8" y="150.5" width="136.4" height="20" rx="3"/><text x="600.0" y="162.5" text-anchor="middle">F3 Valid form data</text></g>
+<g class="label"><rect x="755.7" y="204.9" width="150.0" height="34" rx="3"/><text x="830.7" y="216.9" text-anchor="middle">F4 Email lookup, new</text><text x="830.7" y="230.9" text-anchor="middle">access request</text></g>
+<g class="label"><rect x="764.5" y="164.6" width="129.6" height="34" rx="3"/><text x="829.3" y="176.6" text-anchor="middle">F5 Existing email</text><text x="829.3" y="190.6" text-anchor="middle">result</text></g>
+<g class="label"><rect x="751.6" y="267.3" width="156.8" height="34" rx="3"/><text x="830.0" y="279.3" text-anchor="middle">F6 Access request for</text><text x="830.0" y="293.3" text-anchor="middle">review</text></g>
+<g class="label"><rect x="525.0" y="301.5" width="150.0" height="48" rx="3"/><text x="600.0" y="313.5" text-anchor="middle">F7 Submission result</text><text x="600.0" y="327.5" text-anchor="middle">(success or Email</text><text x="600.0" y="341.5" text-anchor="middle">already exists)</text></g>
+<g class="label"><rect x="291.6" y="301.5" width="156.8" height="48" rx="3"/><text x="370.0" y="313.5" text-anchor="middle">F8 Thank-you message,</text><text x="370.0" y="327.5" text-anchor="middle">Back to Login link or</text><text x="370.0" y="341.5" text-anchor="middle">error message</text></g>
+</svg></div>
+<ul><li>Where the duplicate email check happens and what the Cenvic Team receives are not confirmed (PT-018).</li><li>Phone, message length and double-click submission rules are not confirmed (PT-025).</li></ul>
+<details><summary>Data flows (8) and elements (6)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Visitor / Prospective Customer</td><td>3.1 Validate request form</td><td>Company, contact details, message, agreements</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>3.1 Validate request form</td><td>Visitor / Prospective Customer</td><td>Required and format messages</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>3.1 Validate request form</td><td>3.2 Check existing email and save access request</td><td>Valid form data</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>3.2 Check existing email and save access request</td><td>D2 Access Requests</td><td>Email lookup, new access request</td><td>Derived</td></tr>
+<tr><td>F5</td><td>D2 Access Requests</td><td>3.2 Check existing email and save access request</td><td>Existing email result</td><td>Derived</td></tr>
+<tr><td>F6</td><td>3.2 Check existing email and save access request</td><td>Cenvic Team</td><td>Access request for review</td><td>Derived</td></tr>
+<tr><td>F7</td><td>3.2 Check existing email and save access request</td><td>3.3 Display result</td><td>Submission result (success or Email already exists)</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>3.3 Display result</td><td>Visitor / Prospective Customer</td><td>Thank-you message, Back to Login link or error message</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Visitor / Prospective Customer</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>3.1 Validate request form</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>3.2 Check existing email and save access request</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>3.3 Display result</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>D2 Access Requests</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>Cenvic Team</td><td>External entity</td><td>Derived</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="CS-L2-FORGOT">
+<h2>CS-L2-FORGOT — 4.0 Password Recovery - Forgot Password <span class="level">Level 2</span></h2>
+<p>The functions of the Forgot Password page (email step) and the data they use. The Reset Password functions are in the next diagram.</p>
+<div class="diagram"><svg viewBox="0 0 1200 816" role="img" aria-label="4.0 Password Recovery - Forgot Password" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-CS-L2-FORGOT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="227.3,370.0 581.3,116.0" marker-end="url(#arr-CS-L2-FORGOT)"/>
+<polyline class="flow" points="512.7,116.0 158.7,370.0" marker-end="url(#arr-CS-L2-FORGOT)"/>
+<polyline class="flow" points="600.0,116.0 600.0,205.0" marker-end="url(#arr-CS-L2-FORGOT)"/>
+<polyline class="flow" points="700.0,245.4 961.4,198.5" marker-end="url(#arr-CS-L2-FORGOT)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,158.1 698.6,205.0" marker-end="url(#arr-CS-L2-FORGOT)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="600.0,281.0 600.0,370.0" marker-end="url(#arr-CS-L2-FORGOT)"/>
+<polyline class="flow" points="700.0,243.0 830.0,243.0 830.0,738.0 700.0,738.0" marker-end="url(#arr-CS-L2-FORGOT)"/>
+<polyline class="flow" points="700.0,408.0 960.0,408.0" marker-end="url(#arr-CS-L2-FORGOT)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="600.0,446.0 600.0,535.0" marker-end="url(#arr-CS-L2-FORGOT)"/>
+<polyline class="flow" points="500.0,608.9 240.0,702.1" marker-end="url(#arr-CS-L2-FORGOT)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="140.0,700.0 140.0,446.0" marker-end="url(#arr-CS-L2-FORGOT)"/>
+<polyline class="flow" points="600.0,611.0 600.0,700.0" marker-end="url(#arr-CS-L2-FORGOT)"/>
+<polyline class="flow" points="547.0,700.0 193.0,446.0" marker-end="url(#arr-CS-L2-FORGOT)"/>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="412" text-anchor="middle">Registered User</text></g>
+<g class="node entity"><rect x="40" y="700" width="200" height="76"/><text x="140" y="742" text-anchor="middle">Email Service</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">4.1</text><text x="600" y="93" text-anchor="middle">Validate email</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">4.2</text><text x="600" y="258" text-anchor="middle">Find account</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">4.3</text><text x="600" y="423" text-anchor="middle">Generate and store code</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">4.4</text><text x="600" y="588" text-anchor="middle">Send code email</text></g>
+<g class="node process"><rect x="500" y="700" width="200" height="76" rx="12"/><line x1="500" y1="722" x2="700" y2="722"/><text class="num" x="600" y="716" text-anchor="middle">4.5</text><text x="600" y="753" text-anchor="middle">Display result</text></g>
+<g class="node store"><line x1="960" y1="122.5" x2="1160" y2="122.5" stroke-dasharray="6 4"/><line x1="960" y1="198.5" x2="1160" y2="198.5" stroke-dasharray="6 4"/><line x1="960" y1="122.5" x2="960" y2="198.5" stroke-dasharray="6 4"/><line x1="1004" y1="122.5" x2="1004" y2="198.5"/><text class="num" x="982" y="164.5" text-anchor="middle">D1</text><text x="1082" y="164.5" text-anchor="middle">User Accounts</text></g>
+<g class="node store"><line x1="960" y1="370" x2="1160" y2="370" stroke-dasharray="6 4"/><line x1="960" y1="446" x2="1160" y2="446" stroke-dasharray="6 4"/><line x1="960" y1="370" x2="960" y2="446" stroke-dasharray="6 4"/><line x1="1004" y1="370" x2="1004" y2="446"/><text class="num" x="982" y="412" text-anchor="middle">D3</text><text x="1082" y="412" text-anchor="middle">Verification Codes</text></g>
+<g class="label"><rect x="353.5" y="225.4" width="122.8" height="20" rx="3"/><text x="414.9" y="237.4" text-anchor="middle">F1 Email address</text></g>
+<g class="label"><rect x="225.4" y="248.9" width="156.8" height="34" rx="3"/><text x="303.8" y="260.9" text-anchor="middle">F2 Required and valid</text><text x="303.8" y="274.9" text-anchor="middle">email messages</text></g>
+<g class="label"><rect x="545.4" y="150.5" width="109.2" height="20" rx="3"/><text x="600.0" y="162.5" text-anchor="middle">F3 Valid email</text></g>
+<g class="label"><rect x="765.9" y="211.9" width="129.6" height="20" rx="3"/><text x="830.7" y="223.9" text-anchor="middle">F4 Account lookup</text></g>
+<g class="label"><rect x="757.7" y="164.6" width="143.2" height="34" rx="3"/><text x="829.3" y="176.6" text-anchor="middle">F5 Account found or</text><text x="829.3" y="190.6" text-anchor="middle">not found</text></g>
+<g class="label"><rect x="538.6" y="315.5" width="122.8" height="20" rx="3"/><text x="600.0" y="327.5" text-anchor="middle">F6 Account found</text></g>
+<g class="label"><rect x="765.2" y="473.5" width="129.6" height="34" rx="3"/><text x="830.0" y="485.5" text-anchor="middle">F7 User not found</text><text x="830.0" y="499.5" text-anchor="middle">result</text></g>
+<g class="label"><rect x="799.2" y="398.0" width="150.0" height="20" rx="3"/><text x="874.2" y="410.0" text-anchor="middle">F8 Verification code</text></g>
+<g class="label"><rect x="525.0" y="480.5" width="150.0" height="20" rx="3"/><text x="600.0" y="492.5" text-anchor="middle">F9 Verification code</text></g>
+<g class="label"><rect x="288.2" y="645.5" width="163.6" height="20" rx="3"/><text x="370.0" y="657.5" text-anchor="middle">F10 Code email request</text></g>
+<g class="label"><rect x="61.6" y="556.0" width="156.8" height="34" rx="3"/><text x="140.0" y="568.0" text-anchor="middle">F11 Verification code</text><text x="140.0" y="582.0" text-anchor="middle">email</text></g>
+<g class="label"><rect x="525.0" y="645.5" width="150.0" height="20" rx="3"/><text x="600.0" y="657.5" text-anchor="middle">F12 Code sent result</text></g>
+<g class="label"><rect x="291.6" y="549.0" width="156.8" height="48" rx="3"/><text x="370.0" y="561.0" text-anchor="middle">F13 Verification code</text><text x="370.0" y="575.0" text-anchor="middle">has been sent or User</text><text x="370.0" y="589.0" text-anchor="middle">not found toast</text></g>
+</svg></div>
+<ul><li>Rate limiting of repeated requests and behavior for a logged-in user are not confirmed (PT-022).</li><li>After a successful request the Reset Password step opens on the same page; its functions are shown in the next diagram.</li></ul>
+<details><summary>Data flows (13) and elements (9)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Registered User</td><td>4.1 Validate email</td><td>Email address</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>4.1 Validate email</td><td>Registered User</td><td>Required and valid email messages</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>4.1 Validate email</td><td>4.2 Find account</td><td>Valid email</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>4.2 Find account</td><td>D1 User Accounts</td><td>Account lookup</td><td>Derived</td></tr>
+<tr><td>F5</td><td>D1 User Accounts</td><td>4.2 Find account</td><td>Account found or not found</td><td>Derived</td></tr>
+<tr><td>F6</td><td>4.2 Find account</td><td>4.3 Generate and store code</td><td>Account found</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>4.2 Find account</td><td>4.5 Display result</td><td>User not found result</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>4.3 Generate and store code</td><td>D3 Verification Codes</td><td>Verification code</td><td>Derived</td></tr>
+<tr><td>F9</td><td>4.3 Generate and store code</td><td>4.4 Send code email</td><td>Verification code</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>4.4 Send code email</td><td>Email Service</td><td>Code email request</td><td>Derived</td></tr>
+<tr><td>F11</td><td>Email Service</td><td>Registered User</td><td>Verification code email</td><td>Confirmed</td></tr>
+<tr><td>F12</td><td>4.4 Send code email</td><td>4.5 Display result</td><td>Code sent result</td><td>Confirmed</td></tr>
+<tr><td>F13</td><td>4.5 Display result</td><td>Registered User</td><td>Verification code has been sent or User not found toast</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Email Service</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>4.1 Validate email</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.2 Find account</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.3 Generate and store code</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.4 Send code email</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.5 Display result</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>D1 User Accounts</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>D3 Verification Codes</td><td>Data store</td><td>Derived</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="CS-L2-RESET">
+<h2>CS-L2-RESET — 4.0 Password Recovery - Reset Password <span class="level">Level 2</span></h2>
+<p>The functions of the Reset Password step (code and new password) and the data they use.</p>
+<div class="diagram"><svg viewBox="0 0 1200 981" role="img" aria-label="4.0 Password Recovery - Reset Password" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-CS-L2-RESET" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="240.0,393.4 553.3,281.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="500.0,257.6 186.7,370.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="600.0,281.0 600.0,370.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="700.0,393.4 1013.3,281.0" marker-end="url(#arr-CS-L2-RESET)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,257.6 646.7,370.0" marker-end="url(#arr-CS-L2-RESET)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="600.0,446.0 600.0,535.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="700.0,408.0 830.0,408.0 830.0,738.0 700.0,738.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="700.0,573.0 960.0,573.0" marker-end="url(#arr-CS-L2-RESET)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="600.0,611.0 600.0,700.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="547.0,700.0 193.0,446.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="600.0,776.0 600.0,865.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="227.3,370.0 581.3,116.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="700.0,113.9 960.0,207.1" marker-end="url(#arr-CS-L2-RESET)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="500.0,78.0 240.0,78.0" marker-end="url(#arr-CS-L2-RESET)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="140.0,116.0 140.0,370.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<polyline class="flow" points="512.7,116.0 158.7,370.0" marker-end="url(#arr-CS-L2-RESET)"/>
+<g class="node entity"><rect x="40" y="40" width="200" height="76"/><text x="140" y="82" text-anchor="middle">Email Service</text></g>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="412" text-anchor="middle">Registered User</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">4.10</text><text x="600" y="93" text-anchor="middle">Resend code</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">4.6</text><text x="600" y="258" text-anchor="middle">Validate reset input</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">4.7</text><text x="600" y="423" text-anchor="middle">Verify and consume code</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">4.8</text><text x="600" y="588" text-anchor="middle">Update password</text></g>
+<g class="node process"><rect x="500" y="700" width="200" height="76" rx="12"/><line x1="500" y1="722" x2="700" y2="722"/><text class="num" x="600" y="716" text-anchor="middle">4.9</text><text x="600" y="745.5" text-anchor="middle">Display result and open</text><text x="600" y="760.5" text-anchor="middle">Login</text></g>
+<g class="node store"><line x1="960" y1="205" x2="1160" y2="205" stroke-dasharray="6 4"/><line x1="960" y1="281" x2="1160" y2="281" stroke-dasharray="6 4"/><line x1="960" y1="205" x2="960" y2="281" stroke-dasharray="6 4"/><line x1="1004" y1="205" x2="1004" y2="281"/><text class="num" x="982" y="247" text-anchor="middle">D3</text><text x="1082" y="247" text-anchor="middle">Verification Codes</text></g>
+<g class="node store"><line x1="960" y1="535" x2="1160" y2="535" stroke-dasharray="6 4"/><line x1="960" y1="611" x2="1160" y2="611" stroke-dasharray="6 4"/><line x1="960" y1="535" x2="960" y2="611" stroke-dasharray="6 4"/><line x1="1004" y1="535" x2="1004" y2="611"/><text class="num" x="982" y="577" text-anchor="middle">D1</text><text x="1082" y="577" text-anchor="middle">User Accounts</text></g>
+<g class="node entity"><rect x="500" y="865" width="200" height="76"/><text x="600" y="907" text-anchor="middle">Login Page (2.0)</text></g>
+<g class="label"><rect x="293.2" y="322.2" width="156.8" height="48" rx="3"/><text x="371.6" y="334.2" text-anchor="middle">F1 Verification code,</text><text x="371.6" y="348.2" text-anchor="middle">new password, confirm</text><text x="371.6" y="362.2" text-anchor="middle">password</text></g>
+<g class="label"><rect x="330.7" y="266.2" width="156.8" height="48" rx="3"/><text x="409.1" y="278.2" text-anchor="middle">F2 Required, mismatch</text><text x="409.1" y="292.2" text-anchor="middle">and password rule</text><text x="409.1" y="306.2" text-anchor="middle">messages</text></g>
+<g class="label"><rect x="545.4" y="315.5" width="109.2" height="20" rx="3"/><text x="600.0" y="327.5" text-anchor="middle">F3 Valid input</text></g>
+<g class="label"><rect x="805.4" y="327.2" width="102.4" height="20" rx="3"/><text x="856.6" y="339.2" text-anchor="middle">F4 Code check</text></g>
+<g class="label"><rect x="760.7" y="290.1" width="122.8" height="34" rx="3"/><text x="822.1" y="302.1" text-anchor="middle">F5 Code valid or</text><text x="822.1" y="316.1" text-anchor="middle">invalid</text></g>
+<g class="label"><rect x="548.8" y="480.5" width="102.4" height="20" rx="3"/><text x="600.0" y="492.5" text-anchor="middle">F6 Code valid</text></g>
+<g class="label"><rect x="748.2" y="580.7" width="163.6" height="20" rx="3"/><text x="830.0" y="592.7" text-anchor="middle">F7 Invalid code result</text></g>
+<g class="label"><rect x="855.2" y="563.0" width="116.0" height="20" rx="3"/><text x="913.2" y="575.0" text-anchor="middle">F8 New password</text></g>
+<g class="label"><rect x="528.4" y="645.5" width="143.2" height="20" rx="3"/><text x="600.0" y="657.5" text-anchor="middle">F9 Password updated</text></g>
+<g class="label"><rect x="295.0" y="549.0" width="150.0" height="48" rx="3"/><text x="370.0" y="561.0" text-anchor="middle">F10 Password changed</text><text x="370.0" y="575.0" text-anchor="middle">successfully or</text><text x="370.0" y="589.0" text-anchor="middle">invalid code toast</text></g>
+<g class="label"><rect x="525.0" y="810.5" width="150.0" height="20" rx="3"/><text x="600.0" y="822.5" text-anchor="middle">F11 Login page opens</text></g>
+<g class="label"><rect x="353.5" y="225.4" width="122.8" height="20" rx="3"/><text x="414.9" y="237.4" text-anchor="middle">F12 Resend click</text></g>
+<g class="label"><rect x="755.0" y="143.5" width="150.0" height="34" rx="3"/><text x="830.0" y="155.5" text-anchor="middle">F13 New verification</text><text x="830.0" y="169.5" text-anchor="middle">code</text></g>
+<g class="label"><rect x="288.2" y="68.0" width="163.6" height="20" rx="3"/><text x="370.0" y="80.0" text-anchor="middle">F14 Code email request</text></g>
+<g class="label"><rect x="65.0" y="226.0" width="150.0" height="34" rx="3"/><text x="140.0" y="238.0" text-anchor="middle">F15 New verification</text><text x="140.0" y="252.0" text-anchor="middle">code email</text></g>
+<g class="label"><rect x="310.4" y="187.9" width="156.8" height="34" rx="3"/><text x="388.8" y="199.9" text-anchor="middle">F16 Verification code</text><text x="388.8" y="213.9" text-anchor="middle">has been sent toast</text></g>
+</svg></div>
+<ul><li>Password rule messages, code format and reload behavior are not confirmed (PT-023, PT-026).</li><li>Whether a used or expired code is invalidated is not documented; the Verify and consume code step is derived from the invalid code toast.</li><li>The reset user and the email inbox used for automation are tracked in PT-019 and PT-020.</li></ul>
+<details><summary>Data flows (16) and elements (10)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Registered User</td><td>4.6 Validate reset input</td><td>Verification code, new password, confirm password</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>4.6 Validate reset input</td><td>Registered User</td><td>Required, mismatch and password rule messages</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>4.6 Validate reset input</td><td>4.7 Verify and consume code</td><td>Valid input</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>4.7 Verify and consume code</td><td>D3 Verification Codes</td><td>Code check</td><td>Derived</td></tr>
+<tr><td>F5</td><td>D3 Verification Codes</td><td>4.7 Verify and consume code</td><td>Code valid or invalid</td><td>Derived</td></tr>
+<tr><td>F6</td><td>4.7 Verify and consume code</td><td>4.8 Update password</td><td>Code valid</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>4.7 Verify and consume code</td><td>4.9 Display result and open Login</td><td>Invalid code result</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>4.8 Update password</td><td>D1 User Accounts</td><td>New password</td><td>Derived</td></tr>
+<tr><td>F9</td><td>4.8 Update password</td><td>4.9 Display result and open Login</td><td>Password updated</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>4.9 Display result and open Login</td><td>Registered User</td><td>Password changed successfully or invalid code toast</td><td>Confirmed</td></tr>
+<tr><td>F11</td><td>4.9 Display result and open Login</td><td>Login Page (2.0)</td><td>Login page opens</td><td>Confirmed</td></tr>
+<tr><td>F12</td><td>Registered User</td><td>4.10 Resend code</td><td>Resend click</td><td>Confirmed</td></tr>
+<tr><td>F13</td><td>4.10 Resend code</td><td>D3 Verification Codes</td><td>New verification code</td><td>Derived</td></tr>
+<tr><td>F14</td><td>4.10 Resend code</td><td>Email Service</td><td>Code email request</td><td>Derived</td></tr>
+<tr><td>F15</td><td>Email Service</td><td>Registered User</td><td>New verification code email</td><td>Confirmed</td></tr>
+<tr><td>F16</td><td>4.10 Resend code</td><td>Registered User</td><td>Verification code has been sent toast</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Email Service</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>4.10 Resend code</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.6 Validate reset input</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.7 Verify and consume code</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.8 Update password</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.9 Display result and open Login</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>D3 Verification Codes</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>D1 User Accounts</td><td>Data store</td><td>Derived</td></tr>
+<tr><td>Login Page (2.0)</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+</main>
+</body>
+</html>

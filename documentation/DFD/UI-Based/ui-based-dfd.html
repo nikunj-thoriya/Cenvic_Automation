@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cenvic — UI-Based Data Flow Diagram</title>
+<style>
+  body { font-family: Segoe UI, Arial, sans-serif; margin: 0; background: #f5f7fa; color: #1f2933; }
+  header { background: #1f3a5f; color: #fff; padding: 16px 24px; }
+  header h1 { margin: 0; font-size: 22px; }
+  header p { margin: 4px 0 0; font-size: 13px; opacity: 0.85; }
+  main { padding: 16px 24px; }
+  section { background: #fff; border: 1px solid #d9e2ec; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; }
+  h2 { font-size: 16px; margin: 0 0 8px; }
+  .level { font-size: 12px; background: #e3ecfa; border-radius: 3px; padding: 2px 8px; margin-left: 8px; font-weight: 500; }
+  .note { background: #fff3cd; border: 1px solid #ffeeba; color: #533f03; border-radius: 4px; padding: 8px 12px; font-size: 13px; }
+  .diagram { overflow-x: auto; border: 1px solid #e4e7eb; border-radius: 4px; background: #fff; }
+  .diagram svg { width: 100%; height: auto; min-width: 760px; }
+  svg text { font-family: Segoe UI, Arial, sans-serif; font-size: 12.5px; fill: #1f2933; }
+  svg .num { font-weight: 600; font-size: 12px; }
+  svg .legend-text { font-size: 11px; }
+  .node rect, .node line { stroke: #334e68; stroke-width: 1.5; }
+  .entity rect { fill: #fff7d6; }
+  .process rect { fill: #dbeafe; }
+  .store line { fill: none; }
+  .flow { fill: none; stroke: #334e68; stroke-width: 1.5; }
+  .label rect { fill: #fff; fill-opacity: 0.94; }
+  .label text { font-size: 11.5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  th, td { border: 1px solid #d9e2ec; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: #eef2f7; }
+  summary { cursor: pointer; font-size: 13px; font-weight: 500; margin-top: 8px; }
+  ul { margin: 4px 0; padding-left: 20px; font-size: 13px; }
+  nav ol { columns: 2; font-size: 13px; }
+  a { color: #1f4e8c; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Cenvic — UI-Based Data Flow Diagram</h1>
+  <p>Scope: Home, Login, Signup (Request Access), Forgot Password, Reset Password | Version 1.0 | Last updated 2026-11-23 17:42 IST</p>
+</header>
+<main>
+  <section><div class="note">No FRD, DFD, API specification or database schema has been provided. These diagrams are built only from the recorded flows, the captured DOM, the environment configuration and the approved test cases. Solid shapes are confirmed by those sources. Dashed shapes and flows are derived from observed behavior and are not documented by the application owner. The backend is shown as a single black box (Cenvic Backend); its internal structure is not modeled here.</div></section>
+  <section>
+    <h2>Notation and Legend</h2>
+    <p>Gane-Sarson notation. External entities are rectangles, processes are rounded rectangles with a number, data stores are open-ended rectangles with an ID, and arrows are labelled data flows (F1, F2...). Level 0 is the context diagram, Level 1 shows the pages, and Level 2 shows the functions of one page.</p>
+    <svg viewBox="0 0 760 120" role="img" aria-label="Legend" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-legend" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<g class="node entity"><rect x="10" y="10" width="140" height="44"/><text x="80" y="36" text-anchor="middle">External entity</text></g>
+<g class="node process"><rect x="170" y="10" width="140" height="44" rx="10"/><line x1="170" y1="26" x2="310" y2="26"/><text class="num" x="240" y="22" text-anchor="middle">1.0</text><text x="240" y="43" text-anchor="middle">Process</text></g>
+<g class="node store"><line x1="330" y1="10" x2="470" y2="10"/><line x1="330" y1="54" x2="470" y2="54"/><line x1="330" y1="10" x2="330" y2="54"/><line x1="360" y1="10" x2="360" y2="54"/><text class="num" x="345" y="36" text-anchor="middle">D1</text><text x="415" y="36" text-anchor="middle">Data store</text></g>
+<polyline class="flow" points="500,32 600,32" marker-end="url(#arr-legend)"/><text x="550" y="22" text-anchor="middle" class="legend-text">Data flow (Fn)</text>
+<polyline class="flow" points="620,32 740,32" stroke-dasharray="6 4" marker-end="url(#arr-legend)"/><text x="680" y="22" text-anchor="middle" class="legend-text">Derived flow</text>
+<g class="node entity"><rect x="10" y="70" width="140" height="40" stroke-dasharray="6 4"/><text x="80" y="94" text-anchor="middle">Derived element</text></g>
+</svg>
+  </section>
+  <section>
+    <h2>Sources</h2>
+    <ul><li>dom/login/login-recorded-flow.txt and login-dom.html</li><li>dom/home/home-recorded-flow.txt and home-dom.html</li><li>dom/signup/signup-recorded-flow.txt and signup-dom.html</li><li>dom/forgot-password/forgot-password-recorded-flow.txt and the Forgot / Reset Password DOM snapshots</li><li>documentation/Test-Cases/test-cases.json (approved test cases for the five modules)</li><li>Environment configuration (dev): web application URL and API base URL</li></ul>
+  </section>
+  <section>
+    <h2>Diagrams</h2>
+    <nav><ol><li><a href="#UI-L0">UI-L0 — Context diagram</a></li><li><a href="#UI-L1">UI-L1 — Pages and navigation</a></li><li><a href="#UI-L2-HOME">UI-L2-HOME — 1.0 Home Page</a></li><li><a href="#UI-L2-LOGIN">UI-L2-LOGIN — 2.0 Login Page</a></li><li><a href="#UI-L2-SIGNUP">UI-L2-SIGNUP — 3.0 Request Access Page (Signup)</a></li><li><a href="#UI-L2-FORGOT">UI-L2-FORGOT — 4.0 Forgot Password Page</a></li><li><a href="#UI-L2-RESET">UI-L2-RESET — 5.0 Reset Password Step</a></li></ol></nav>
+  </section>
+<section id="UI-L0">
+<h2>UI-L0 — Context diagram <span class="level">Level 0</span></h2>
+<p>The Cenvic web UI for the five modules and the people and systems it exchanges data with.</p>
+<div class="diagram"><svg viewBox="0 0 1200 486" role="img" aria-label="Context diagram" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-UI-L0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="186.7,116.0 500.0,228.4" marker-end="url(#arr-UI-L0)"/>
+<polyline class="flow" points="553.3,205.0 240.0,92.6" marker-end="url(#arr-UI-L0)"/>
+<polyline class="flow" points="240.0,393.4 553.3,281.0" marker-end="url(#arr-UI-L0)"/>
+<polyline class="flow" points="500.0,257.6 186.7,370.0" marker-end="url(#arr-UI-L0)"/>
+<polyline class="flow" points="700.0,223.0 960.0,223.0" marker-end="url(#arr-UI-L0)"/>
+<polyline class="flow" points="960.0,263.0 700.0,263.0" marker-end="url(#arr-UI-L0)"/>
+<polyline class="flow" points="500.0,408.0 240.0,408.0" marker-end="url(#arr-UI-L0)"/>
+<polyline class="flow" points="700.0,207.1 960.0,113.9" marker-end="url(#arr-UI-L0)"/>
+<g class="node entity"><rect x="40" y="40" width="200" height="76"/><text x="140" y="74.5" text-anchor="middle">Visitor / Prospective</text><text x="140" y="89.5" text-anchor="middle">Customer</text></g>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="412" text-anchor="middle">Registered User</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">0</text><text x="600" y="243" text-anchor="middle">Cenvic Web UI (Home,</text><text x="600" y="258" text-anchor="middle">Login, Request Access,</text><text x="600" y="273" text-anchor="middle">Forgot / Reset Password)</text></g>
+<g class="node entity"><rect x="960" y="205" width="200" height="76"/><text x="1060" y="247" text-anchor="middle">Cenvic Backend</text></g>
+<g class="node entity"><rect x="960" y="40" width="200" height="76"/><text x="1060" y="67" text-anchor="middle">Social Platforms</text><text x="1060" y="82" text-anchor="middle">(Facebook, LinkedIn,</text><text x="1060" y="97" text-anchor="middle">Instagram)</text></g>
+<g class="node entity"><rect x="500" y="370" width="200" height="76"/><text x="600" y="412" text-anchor="middle">Email Service</text></g>
+<g class="label"><rect x="261.6" y="141.2" width="163.6" height="62" rx="3"/><text x="343.4" y="153.2" text-anchor="middle">F1 Page visits, link</text><text x="343.4" y="167.2" text-anchor="middle">clicks, contact dialog</text><text x="343.4" y="181.2" text-anchor="middle">actions, Request</text><text x="343.4" y="195.2" text-anchor="middle">Access form</text></g>
+<g class="label"><rect x="321.6" y="124.8" width="150.0" height="48" rx="3"/><text x="396.6" y="136.8" text-anchor="middle">F2 Page content,</text><text x="396.6" y="150.8" text-anchor="middle">validation messages,</text><text x="396.6" y="164.8" text-anchor="middle">thank-you message</text></g>
+<g class="label"><rect x="324.2" y="309.8" width="163.6" height="48" rx="3"/><text x="406.0" y="321.8" text-anchor="middle">F3 Email, password,</text><text x="406.0" y="335.8" text-anchor="middle">verification code, new</text><text x="406.0" y="349.8" text-anchor="middle">password</text></g>
+<g class="label"><rect x="265.8" y="293.2" width="136.4" height="48" rx="3"/><text x="334.0" y="305.2" text-anchor="middle">F4 Validation</text><text x="334.0" y="319.2" text-anchor="middle">messages, toasts,</text><text x="334.0" y="333.2" text-anchor="middle">Dashboard redirect</text></g>
+<g class="label"><rect x="748.2" y="213.0" width="163.6" height="20" rx="3"/><text x="830.0" y="225.0" text-anchor="middle">F5 Submitted form data</text></g>
+<g class="label"><rect x="751.6" y="246.0" width="156.8" height="34" rx="3"/><text x="830.0" y="258.0" text-anchor="middle">F6 Results, messages,</text><text x="830.0" y="272.0" text-anchor="middle">page content</text></g>
+<g class="label"><rect x="295.0" y="391.0" width="150.0" height="34" rx="3"/><text x="370.0" y="403.0" text-anchor="middle">F7 Verification code</text><text x="370.0" y="417.0" text-anchor="middle">email</text></g>
+<g class="label"><rect x="755.0" y="143.5" width="150.0" height="34" rx="3"/><text x="830.0" y="155.5" text-anchor="middle">F8 Social link opens</text><text x="830.0" y="169.5" text-anchor="middle">in a new tab</text></g>
+</svg></div>
+<ul><li>The person who requests access and the person who logs in are shown as two roles of the same actor type; role and permission rules are not documented (PT-005).</li></ul>
+<details><summary>Data flows (8) and elements (6)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Visitor / Prospective Customer</td><td>0 Cenvic Web UI (Home, Login, Request Access, Forgot / Reset Password)</td><td>Page visits, link clicks, contact dialog actions, Request Access form</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>0 Cenvic Web UI (Home, Login, Request Access, Forgot / Reset Password)</td><td>Visitor / Prospective Customer</td><td>Page content, validation messages, thank-you message</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>Registered User</td><td>0 Cenvic Web UI (Home, Login, Request Access, Forgot / Reset Password)</td><td>Email, password, verification code, new password</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>0 Cenvic Web UI (Home, Login, Request Access, Forgot / Reset Password)</td><td>Registered User</td><td>Validation messages, toasts, Dashboard redirect</td><td>Confirmed</td></tr>
+<tr><td>F5</td><td>0 Cenvic Web UI (Home, Login, Request Access, Forgot / Reset Password)</td><td>Cenvic Backend</td><td>Submitted form data</td><td>Confirmed</td></tr>
+<tr><td>F6</td><td>Cenvic Backend</td><td>0 Cenvic Web UI (Home, Login, Request Access, Forgot / Reset Password)</td><td>Results, messages, page content</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>Email Service</td><td>Registered User</td><td>Verification code email</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>0 Cenvic Web UI (Home, Login, Request Access, Forgot / Reset Password)</td><td>Social Platforms (Facebook, LinkedIn, Instagram)</td><td>Social link opens in a new tab</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Visitor / Prospective Customer</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>0 Cenvic Web UI (Home, Login, Request Access, Forgot / Reset Password)</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>Cenvic Backend</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Social Platforms (Facebook, LinkedIn, Instagram)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Email Service</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="UI-L1">
+<h2>UI-L1 — Pages and navigation <span class="level">Level 1</span></h2>
+<p>The five pages of the scope, the navigation between them and the data each page exchanges with the user.</p>
+<div class="diagram"><svg viewBox="0 0 1660 717" role="img" aria-label="Pages and navigation" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-UI-L1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="500.0,92.6 186.7,205.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="240.0,228.4 553.3,116.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="646.7,116.0 960.0,228.4" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1013.3,205.0 700.0,92.6" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="240.0,257.6 553.3,370.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="500.0,393.4 186.7,281.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="240.0,243.0 960.0,243.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="646.7,370.0 960.0,257.6" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1013.3,281.0 700.0,393.4" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="700.0,388.0 960.0,388.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="960.0,428.0 700.0,428.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1160.0,408.0 1420.0,408.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1431.7,370.0 1290.0,309.0 700.0,393.7" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1028.9,601.0 700.0,435.8" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="631.1,446.0 960.0,611.2" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="500.0,408.0 240.0,408.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1080.0,601.0 1080.0,446.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1040.0,446.0 1040.0,601.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1160.0,611.2 1488.9,446.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1420.0,435.8 1091.1,601.0" marker-end="url(#arr-UI-L1)"/>
+<polyline class="flow" points="1420.0,639.0 1160.0,639.0" marker-end="url(#arr-UI-L1)"/>
+<g class="node entity"><rect x="500" y="40" width="200" height="76"/><text x="600" y="74.5" text-anchor="middle">Visitor / Prospective</text><text x="600" y="89.5" text-anchor="middle">Customer</text></g>
+<g class="node process"><rect x="40" y="205" width="200" height="76" rx="12"/><line x1="40" y1="227" x2="240" y2="227"/><text class="num" x="140" y="221" text-anchor="middle">1.0</text><text x="140" y="258" text-anchor="middle">Home Page</text></g>
+<g class="node process"><rect x="960" y="205" width="200" height="76" rx="12"/><line x1="960" y1="227" x2="1160" y2="227"/><text class="num" x="1060" y="221" text-anchor="middle">3.0</text><text x="1060" y="250.5" text-anchor="middle">Request Access Page</text><text x="1060" y="265.5" text-anchor="middle">(Signup)</text></g>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="404.5" text-anchor="middle">Dashboard (outside this</text><text x="140" y="419.5" text-anchor="middle">scope)</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">2.0</text><text x="600" y="423" text-anchor="middle">Login Page</text></g>
+<g class="node process"><rect x="960" y="370" width="200" height="76" rx="12"/><line x1="960" y1="392" x2="1160" y2="392"/><text class="num" x="1060" y="386" text-anchor="middle">4.0</text><text x="1060" y="423" text-anchor="middle">Forgot Password Page</text></g>
+<g class="node process"><rect x="1420" y="370" width="200" height="76" rx="12"/><line x1="1420" y1="392" x2="1620" y2="392"/><text class="num" x="1520" y="386" text-anchor="middle">5.0</text><text x="1520" y="423" text-anchor="middle">Reset Password Step</text></g>
+<g class="node entity"><rect x="960" y="601" width="200" height="76"/><text x="1060" y="643" text-anchor="middle">Registered User</text></g>
+<g class="node entity"><rect x="1420" y="601" width="200" height="76"/><text x="1520" y="643" text-anchor="middle">Email Service</text></g>
+<g class="label"><rect x="261.6" y="131.8" width="163.6" height="34" rx="3"/><text x="343.4" y="143.8" text-anchor="middle">F1 Page visit, section</text><text x="343.4" y="157.8" text-anchor="middle">and link clicks</text></g>
+<g class="label"><rect x="301.1" y="168.7" width="116.0" height="34" rx="3"/><text x="359.1" y="180.7" text-anchor="middle">F2 Landing page</text><text x="359.1" y="194.7" text-anchor="middle">content</text></g>
+<g class="label"><rect x="721.6" y="155.2" width="163.6" height="34" rx="3"/><text x="803.4" y="167.2" text-anchor="middle">F3 Request Access form</text><text x="803.4" y="181.2" text-anchor="middle">data</text></g>
+<g class="label"><rect x="709.9" y="97.8" width="143.2" height="48" rx="3"/><text x="781.5" y="109.8" text-anchor="middle">F4 Validation</text><text x="781.5" y="123.8" text-anchor="middle">messages, thank-you</text><text x="781.5" y="137.8" text-anchor="middle">message</text></g>
+<g class="label"><rect x="321.6" y="303.8" width="150.0" height="20" rx="3"/><text x="396.6" y="315.8" text-anchor="middle">F5 Get Started click</text></g>
+<g class="label"><rect x="265.0" y="327.2" width="156.8" height="20" rx="3"/><text x="343.4" y="339.2" text-anchor="middle">F6 Back to Home click</text></g>
+<g class="label"><rect x="531.8" y="233.0" width="136.4" height="20" rx="3"/><text x="600.0" y="245.0" text-anchor="middle">F7 Start Now click</text></g>
+<g class="label"><rect x="721.6" y="296.8" width="163.6" height="34" rx="3"/><text x="803.4" y="308.8" text-anchor="middle">F8 Request Access link</text><text x="803.4" y="322.8" text-anchor="middle">click</text></g>
+<g class="label"><rect x="766.3" y="333.9" width="143.2" height="20" rx="3"/><text x="837.9" y="345.9" text-anchor="middle">F9 Login link click</text></g>
+<g class="label"><rect x="805.2" y="371.0" width="143.2" height="34" rx="3"/><text x="876.8" y="383.0" text-anchor="middle">F10 Forgot Password</text><text x="876.8" y="397.0" text-anchor="middle">link click</text></g>
+<g class="label"><rect x="765.2" y="411.0" width="129.6" height="34" rx="3"/><text x="830.0" y="423.0" text-anchor="middle">F11 Back to Login</text><text x="830.0" y="437.0" text-anchor="middle">click</text></g>
+<g class="label"><rect x="1211.6" y="391.0" width="156.8" height="34" rx="3"/><text x="1290.0" y="403.0" text-anchor="middle">F12 Verification code</text><text x="1290.0" y="417.0" text-anchor="middle">sent, next step opens</text></g>
+<g class="label"><rect x="1138.1" y="302.1" width="163.6" height="34" rx="3"/><text x="1219.9" y="314.1" text-anchor="middle">F13 Password changed</text><text x="1219.9" y="328.1" text-anchor="middle">or Back to Login click</text></g>
+<g class="label"><rect x="769.7" y="491.5" width="150.0" height="34" rx="3"/><text x="844.7" y="503.5" text-anchor="middle">F14 Email, password,</text><text x="844.7" y="517.5" text-anchor="middle">Remember Me</text></g>
+<g class="label"><rect x="783.5" y="536.4" width="122.8" height="34" rx="3"/><text x="844.9" y="548.4" text-anchor="middle">F15 Validation</text><text x="844.9" y="562.4" text-anchor="middle">messages, toasts</text></g>
+<g class="label"><rect x="301.8" y="391.0" width="136.4" height="34" rx="3"/><text x="370.0" y="403.0" text-anchor="middle">F16 Redirect after</text><text x="370.0" y="417.0" text-anchor="middle">Login successfully</text></g>
+<g class="label"><rect x="1015.2" y="513.5" width="129.6" height="20" rx="3"/><text x="1080.0" y="525.5" text-anchor="middle">F17 Email address</text></g>
+<g class="label"><rect x="968.4" y="462.3" width="143.2" height="48" rx="3"/><text x="1040.0" y="474.3" text-anchor="middle">F18 Validation</text><text x="1040.0" y="488.3" text-anchor="middle">messages, code sent</text><text x="1040.0" y="502.3" text-anchor="middle">toast</text></g>
+<g class="label"><rect x="1242.6" y="511.6" width="163.6" height="34" rx="3"/><text x="1324.4" y="523.6" text-anchor="middle">F19 Verification code,</text><text x="1324.4" y="537.6" text-anchor="middle">new password</text></g>
+<g class="label"><rect x="1102.0" y="539.0" width="129.6" height="48" rx="3"/><text x="1166.8" y="551.0" text-anchor="middle">F20 Validation</text><text x="1166.8" y="565.0" text-anchor="middle">messages, success</text><text x="1166.8" y="579.0" text-anchor="middle">toast</text></g>
+<g class="label"><rect x="1211.6" y="622.0" width="156.8" height="34" rx="3"/><text x="1290.0" y="634.0" text-anchor="middle">F21 Verification code</text><text x="1290.0" y="648.0" text-anchor="middle">email</text></g>
+</svg></div>
+<ul><li>The Reset Password step is shown on the same URL as Forgot Password after the code is sent; it is drawn as its own process for clarity.</li><li>Destination pages for About Us, Privacy and Contact are not recorded (PT-027).</li></ul>
+<details><summary>Data flows (21) and elements (9)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Visitor / Prospective Customer</td><td>1.0 Home Page</td><td>Page visit, section and link clicks</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>1.0 Home Page</td><td>Visitor / Prospective Customer</td><td>Landing page content</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>Visitor / Prospective Customer</td><td>3.0 Request Access Page (Signup)</td><td>Request Access form data</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>3.0 Request Access Page (Signup)</td><td>Visitor / Prospective Customer</td><td>Validation messages, thank-you message</td><td>Confirmed</td></tr>
+<tr><td>F5</td><td>1.0 Home Page</td><td>2.0 Login Page</td><td>Get Started click</td><td>Confirmed</td></tr>
+<tr><td>F6</td><td>2.0 Login Page</td><td>1.0 Home Page</td><td>Back to Home click</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>1.0 Home Page</td><td>3.0 Request Access Page (Signup)</td><td>Start Now click</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>2.0 Login Page</td><td>3.0 Request Access Page (Signup)</td><td>Request Access link click</td><td>Confirmed</td></tr>
+<tr><td>F9</td><td>3.0 Request Access Page (Signup)</td><td>2.0 Login Page</td><td>Login link click</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>2.0 Login Page</td><td>4.0 Forgot Password Page</td><td>Forgot Password link click</td><td>Confirmed</td></tr>
+<tr><td>F11</td><td>4.0 Forgot Password Page</td><td>2.0 Login Page</td><td>Back to Login click</td><td>Confirmed</td></tr>
+<tr><td>F12</td><td>4.0 Forgot Password Page</td><td>5.0 Reset Password Step</td><td>Verification code sent, next step opens</td><td>Confirmed</td></tr>
+<tr><td>F13</td><td>5.0 Reset Password Step</td><td>2.0 Login Page</td><td>Password changed or Back to Login click</td><td>Confirmed</td></tr>
+<tr><td>F14</td><td>Registered User</td><td>2.0 Login Page</td><td>Email, password, Remember Me</td><td>Confirmed</td></tr>
+<tr><td>F15</td><td>2.0 Login Page</td><td>Registered User</td><td>Validation messages, toasts</td><td>Confirmed</td></tr>
+<tr><td>F16</td><td>2.0 Login Page</td><td>Dashboard (outside this scope)</td><td>Redirect after Login successfully</td><td>Confirmed</td></tr>
+<tr><td>F17</td><td>Registered User</td><td>4.0 Forgot Password Page</td><td>Email address</td><td>Confirmed</td></tr>
+<tr><td>F18</td><td>4.0 Forgot Password Page</td><td>Registered User</td><td>Validation messages, code sent toast</td><td>Confirmed</td></tr>
+<tr><td>F19</td><td>Registered User</td><td>5.0 Reset Password Step</td><td>Verification code, new password</td><td>Confirmed</td></tr>
+<tr><td>F20</td><td>5.0 Reset Password Step</td><td>Registered User</td><td>Validation messages, success toast</td><td>Confirmed</td></tr>
+<tr><td>F21</td><td>Email Service</td><td>Registered User</td><td>Verification code email</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Visitor / Prospective Customer</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>1.0 Home Page</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>3.0 Request Access Page (Signup)</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>Dashboard (outside this scope)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>2.0 Login Page</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.0 Forgot Password Page</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>5.0 Reset Password Step</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Email Service</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="UI-L2-HOME">
+<h2>UI-L2-HOME — 1.0 Home Page <span class="level">Level 2</span></h2>
+<p>The functions of the Home page as seen by the visitor.</p>
+<div class="diagram"><svg viewBox="0 0 1200 651" role="img" aria-label="1.0 Home Page" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-UI-L2-HOME" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="240.0,294.4 571.6,116.0" marker-end="url(#arr-UI-L2-HOME)"/>
+<polyline class="flow" points="500.0,109.1 168.4,287.5" marker-end="url(#arr-UI-L2-HOME)"/>
+<polyline class="flow" points="700.0,58.0 960.0,58.0" marker-end="url(#arr-UI-L2-HOME)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="960.0,98.0 700.0,98.0" marker-end="url(#arr-UI-L2-HOME)" stroke-dasharray="6 4"/>
+<polyline class="flow" points="240.0,327.9 501.4,281.0" marker-end="url(#arr-UI-L2-HOME)"/>
+<polyline class="flow" points="500.0,240.6 238.6,287.5" marker-end="url(#arr-UI-L2-HOME)"/>
+<polyline class="flow" points="700.0,243.0 960.0,243.0" marker-end="url(#arr-UI-L2-HOME)"/>
+<polyline class="flow" points="700.0,278.9 960.0,372.1" marker-end="url(#arr-UI-L2-HOME)"/>
+<polyline class="flow" points="238.6,363.5 500.0,410.4" marker-end="url(#arr-UI-L2-HOME)"/>
+<polyline class="flow" points="501.4,370.0 240.0,323.1" marker-end="url(#arr-UI-L2-HOME)"/>
+<polyline class="flow" points="210.6,363.5 529.4,535.0" marker-end="url(#arr-UI-L2-HOME)"/>
+<polyline class="flow" points="700.0,573.0 960.0,573.0" marker-end="url(#arr-UI-L2-HOME)"/>
+<g class="node entity"><rect x="40" y="287.5" width="200" height="76"/><text x="140" y="322" text-anchor="middle">Visitor / Prospective</text><text x="140" y="337" text-anchor="middle">Customer</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">1.1</text><text x="600" y="85.5" text-anchor="middle">Display landing page</text><text x="600" y="100.5" text-anchor="middle">content</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">1.2</text><text x="600" y="250.5" text-anchor="middle">Navigate sections and</text><text x="600" y="265.5" text-anchor="middle">pages</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">1.3</text><text x="600" y="423" text-anchor="middle">Handle Contact dialog</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">1.4</text><text x="600" y="588" text-anchor="middle">Open social links</text></g>
+<g class="node entity"><rect x="960" y="40" width="200" height="76" stroke-dasharray="6 4"/><text x="1060" y="74.5" text-anchor="middle">Cenvic Backend (Home</text><text x="1060" y="89.5" text-anchor="middle">content)</text></g>
+<g class="node entity"><rect x="960" y="205" width="200" height="76"/><text x="1060" y="247" text-anchor="middle">Login Page (2.0)</text></g>
+<g class="node entity"><rect x="960" y="370" width="200" height="76"/><text x="1060" y="412" text-anchor="middle">Request Access Page (3.0)</text></g>
+<g class="node entity"><rect x="960" y="535" width="200" height="76"/><text x="1060" y="577" text-anchor="middle">Social Platforms</text></g>
+<g class="label"><rect x="341.0" y="195.2" width="129.6" height="20" rx="3"/><text x="405.8" y="207.2" text-anchor="middle">F1 Page visit (/)</text></g>
+<g class="label"><rect x="199.8" y="204.8" width="129.6" height="62" rx="3"/><text x="264.6" y="216.8" text-anchor="middle">F2 Hero, stats,</text><text x="264.6" y="230.8" text-anchor="middle">Features, How It</text><text x="264.6" y="244.8" text-anchor="middle">Works, Teams Use</text><text x="264.6" y="258.8" text-anchor="middle">Campaigns, footer</text></g>
+<g class="label"><rect x="761.8" y="48.0" width="136.4" height="20" rx="3"/><text x="830.0" y="60.0" text-anchor="middle">F3 Content request</text></g>
+<g class="label"><rect x="761.8" y="81.0" width="136.4" height="34" rx="3"/><text x="830.0" y="93.0" text-anchor="middle">F4 Dynamic content</text><text x="830.0" y="107.0" text-anchor="middle">(categories)</text></g>
+<g class="label"><rect x="288.9" y="280.4" width="163.6" height="48" rx="3"/><text x="370.7" y="292.4" text-anchor="middle">F5 Navigation bar, CTA</text><text x="370.7" y="306.4" text-anchor="middle">and footer Products</text><text x="370.7" y="320.4" text-anchor="middle">clicks</text></g>
+<g class="label"><rect x="333.5" y="247.0" width="150.0" height="20" rx="3"/><text x="408.5" y="259.0" text-anchor="middle">F6 Scroll to section</text></g>
+<g class="label"><rect x="755.0" y="233.0" width="150.0" height="20" rx="3"/><text x="830.0" y="245.0" text-anchor="middle">F7 Get Started click</text></g>
+<g class="label"><rect x="761.8" y="315.5" width="136.4" height="20" rx="3"/><text x="830.0" y="327.5" text-anchor="middle">F8 Start Now click</text></g>
+<g class="label"><rect x="306.6" y="365.8" width="156.8" height="48" rx="3"/><text x="385.0" y="377.8" text-anchor="middle">F9 Contact Us,</text><text x="385.0" y="391.8" text-anchor="middle">Contact, Close, X,</text><text x="385.0" y="405.8" text-anchor="middle">Escape, outside click</text></g>
+<g class="label"><rect x="302.5" y="329.6" width="136.4" height="34" rx="3"/><text x="370.7" y="341.6" text-anchor="middle">F10 Contact dialog</text><text x="370.7" y="355.6" text-anchor="middle">opened or closed</text></g>
+<g class="label"><rect x="298.4" y="425.3" width="143.2" height="48" rx="3"/><text x="370.0" y="437.3" text-anchor="middle">F11 Facebook,</text><text x="370.0" y="451.3" text-anchor="middle">LinkedIn, Instagram</text><text x="370.0" y="465.3" text-anchor="middle">click</text></g>
+<g class="label"><rect x="758.4" y="556.0" width="143.2" height="34" rx="3"/><text x="830.0" y="568.0" text-anchor="middle">F12 Link opens in a</text><text x="830.0" y="582.0" text-anchor="middle">new tab</text></g>
+</svg></div>
+<ul><li>Contact dialog fields and any submission are not documented (PT-027); the dialog is shown only as opened and closed.</li><li>Home content loaded from the backend is derived from the CMS-driven category buttons noted in the Home recording (PT-018).</li></ul>
+<details><summary>Data flows (12) and elements (9)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Visitor / Prospective Customer</td><td>1.1 Display landing page content</td><td>Page visit (/)</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>1.1 Display landing page content</td><td>Visitor / Prospective Customer</td><td>Hero, stats, Features, How It Works, Teams Use Campaigns, footer</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>1.1 Display landing page content</td><td>Cenvic Backend (Home content)</td><td>Content request</td><td>Derived</td></tr>
+<tr><td>F4</td><td>Cenvic Backend (Home content)</td><td>1.1 Display landing page content</td><td>Dynamic content (categories)</td><td>Derived</td></tr>
+<tr><td>F5</td><td>Visitor / Prospective Customer</td><td>1.2 Navigate sections and pages</td><td>Navigation bar, CTA and footer Products clicks</td><td>Confirmed</td></tr>
+<tr><td>F6</td><td>1.2 Navigate sections and pages</td><td>Visitor / Prospective Customer</td><td>Scroll to section</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>1.2 Navigate sections and pages</td><td>Login Page (2.0)</td><td>Get Started click</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>1.2 Navigate sections and pages</td><td>Request Access Page (3.0)</td><td>Start Now click</td><td>Confirmed</td></tr>
+<tr><td>F9</td><td>Visitor / Prospective Customer</td><td>1.3 Handle Contact dialog</td><td>Contact Us, Contact, Close, X, Escape, outside click</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>1.3 Handle Contact dialog</td><td>Visitor / Prospective Customer</td><td>Contact dialog opened or closed</td><td>Confirmed</td></tr>
+<tr><td>F11</td><td>Visitor / Prospective Customer</td><td>1.4 Open social links</td><td>Facebook, LinkedIn, Instagram click</td><td>Confirmed</td></tr>
+<tr><td>F12</td><td>1.4 Open social links</td><td>Social Platforms</td><td>Link opens in a new tab</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Visitor / Prospective Customer</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>1.1 Display landing page content</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>1.2 Navigate sections and pages</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>1.3 Handle Contact dialog</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>1.4 Open social links</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>Cenvic Backend (Home content)</td><td>External entity</td><td>Derived</td></tr>
+<tr><td>Login Page (2.0)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Request Access Page (3.0)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Social Platforms</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="UI-L2-LOGIN">
+<h2>UI-L2-LOGIN — 2.0 Login Page <span class="level">Level 2</span></h2>
+<p>The functions of the Login page as seen by the registered user.</p>
+<div class="diagram"><svg viewBox="0 0 1200 981" role="img" aria-label="2.0 Login Page" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-UI-L2-LOGIN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="227.3,370.0 581.3,116.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="512.7,116.0 158.7,370.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="240.0,393.4 553.3,281.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="500.0,257.6 186.7,370.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="600.0,281.0 600.0,370.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="700.0,408.0 960.0,408.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="960.0,443.9 700.0,537.1" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="500.0,537.1 240.0,443.9" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="700.0,573.0 960.0,573.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="193.0,446.0 547.0,700.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="700.0,738.0 960.0,738.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="600.0,776.0 600.0,865.0" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<polyline class="flow" points="700.0,773.9 960.0,867.1" marker-end="url(#arr-UI-L2-LOGIN)"/>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="412" text-anchor="middle">Registered User</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">2.2</text><text x="600" y="85.5" text-anchor="middle">Toggle password visibility</text><text x="600" y="100.5" text-anchor="middle">and Remember Me</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">2.1</text><text x="600" y="258" text-anchor="middle">Validate Login fields</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">2.3</text><text x="600" y="423" text-anchor="middle">Submit credentials</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">2.4</text><text x="600" y="588" text-anchor="middle">Display result</text></g>
+<g class="node process"><rect x="500" y="700" width="200" height="76" rx="12"/><line x1="500" y1="722" x2="700" y2="722"/><text class="num" x="600" y="716" text-anchor="middle">2.5</text><text x="600" y="753" text-anchor="middle">Navigate from Login</text></g>
+<g class="node entity"><rect x="960" y="370" width="200" height="76"/><text x="1060" y="412" text-anchor="middle">Cenvic Backend</text></g>
+<g class="node entity"><rect x="960" y="535" width="200" height="76"/><text x="1060" y="569.5" text-anchor="middle">Dashboard (outside this</text><text x="1060" y="584.5" text-anchor="middle">scope)</text></g>
+<g class="node entity"><rect x="960" y="700" width="200" height="76"/><text x="1060" y="742" text-anchor="middle">Forgot Password Page (4.0)</text></g>
+<g class="node entity"><rect x="500" y="865" width="200" height="76"/><text x="600" y="907" text-anchor="middle">Home Page (1.0)</text></g>
+<g class="node entity"><rect x="960" y="865" width="200" height="76"/><text x="1060" y="907" text-anchor="middle">Request Access Page (3.0)</text></g>
+<g class="label"><rect x="336.5" y="211.4" width="156.8" height="48" rx="3"/><text x="414.9" y="223.4" text-anchor="middle">F1 Show / Hide</text><text x="414.9" y="237.4" text-anchor="middle">password, Remember Me</text><text x="414.9" y="251.4" text-anchor="middle">clicks</text></g>
+<g class="label"><rect x="197.0" y="264.7" width="150.0" height="48" rx="3"/><text x="272.0" y="276.7" text-anchor="middle">F2 Masked or visible</text><text x="272.0" y="290.7" text-anchor="middle">password, checkbox</text><text x="272.0" y="304.7" text-anchor="middle">state</text></g>
+<g class="label"><rect x="328.4" y="327.2" width="136.4" height="20" rx="3"/><text x="396.6" y="339.2" text-anchor="middle">F3 Email, password</text></g>
+<g class="label"><rect x="377.7" y="256.4" width="156.8" height="34" rx="3"/><text x="456.1" y="268.4" text-anchor="middle">F4 Required and valid</text><text x="456.1" y="282.4" text-anchor="middle">email messages</text></g>
+<g class="label"><rect x="542.0" y="315.5" width="116.0" height="20" rx="3"/><text x="600.0" y="327.5" text-anchor="middle">F5 Valid fields</text></g>
+<g class="label"><rect x="758.4" y="391.0" width="143.2" height="34" rx="3"/><text x="830.0" y="403.0" text-anchor="middle">F6 Email, password,</text><text x="830.0" y="417.0" text-anchor="middle">Remember Me</text></g>
+<g class="label"><rect x="772.0" y="480.5" width="116.0" height="20" rx="3"/><text x="830.0" y="492.5" text-anchor="middle">F7 Login result</text></g>
+<g class="label"><rect x="311.6" y="467.9" width="163.6" height="62" rx="3"/><text x="393.4" y="479.9" text-anchor="middle">F8 Login successfully,</text><text x="393.4" y="493.9" text-anchor="middle">Incorrect password or</text><text x="393.4" y="507.9" text-anchor="middle">Email ID not</text><text x="393.4" y="521.9" text-anchor="middle">registered toast</text></g>
+<g class="label"><rect x="775.4" y="556.0" width="109.2" height="34" rx="3"/><text x="830.0" y="568.0" text-anchor="middle">F9 Redirect to</text><text x="830.0" y="582.0" text-anchor="middle">/app/dashboard</text></g>
+<g class="label"><rect x="295.0" y="549.0" width="150.0" height="48" rx="3"/><text x="370.0" y="561.0" text-anchor="middle">F10 Forgot Password,</text><text x="370.0" y="575.0" text-anchor="middle">Request Access, Back</text><text x="370.0" y="589.0" text-anchor="middle">to Home clicks</text></g>
+<g class="label"><rect x="758.4" y="721.0" width="143.2" height="34" rx="3"/><text x="830.0" y="733.0" text-anchor="middle">F11 Forgot Password</text><text x="830.0" y="747.0" text-anchor="middle">link</text></g>
+<g class="label"><rect x="521.6" y="810.5" width="156.8" height="20" rx="3"/><text x="600.0" y="822.5" text-anchor="middle">F12 Back to Home link</text></g>
+<g class="label"><rect x="761.8" y="803.5" width="136.4" height="34" rx="3"/><text x="830.0" y="815.5" text-anchor="middle">F13 Request Access</text><text x="830.0" y="829.5" text-anchor="middle">link</text></g>
+</svg></div>
+<ul><li>Remember Me persistence after the browser is reopened is not confirmed (PT-017).</li><li>Account lockout after repeated failures is not confirmed (PT-013).</li></ul>
+<details><summary>Data flows (13) and elements (11)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Registered User</td><td>2.2 Toggle password visibility and Remember Me</td><td>Show / Hide password, Remember Me clicks</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>2.2 Toggle password visibility and Remember Me</td><td>Registered User</td><td>Masked or visible password, checkbox state</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>Registered User</td><td>2.1 Validate Login fields</td><td>Email, password</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>2.1 Validate Login fields</td><td>Registered User</td><td>Required and valid email messages</td><td>Confirmed</td></tr>
+<tr><td>F5</td><td>2.1 Validate Login fields</td><td>2.3 Submit credentials</td><td>Valid fields</td><td>Confirmed</td></tr>
+<tr><td>F6</td><td>2.3 Submit credentials</td><td>Cenvic Backend</td><td>Email, password, Remember Me</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>Cenvic Backend</td><td>2.4 Display result</td><td>Login result</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>2.4 Display result</td><td>Registered User</td><td>Login successfully, Incorrect password or Email ID not registered toast</td><td>Confirmed</td></tr>
+<tr><td>F9</td><td>2.4 Display result</td><td>Dashboard (outside this scope)</td><td>Redirect to /app/dashboard</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>Registered User</td><td>2.5 Navigate from Login</td><td>Forgot Password, Request Access, Back to Home clicks</td><td>Confirmed</td></tr>
+<tr><td>F11</td><td>2.5 Navigate from Login</td><td>Forgot Password Page (4.0)</td><td>Forgot Password link</td><td>Confirmed</td></tr>
+<tr><td>F12</td><td>2.5 Navigate from Login</td><td>Home Page (1.0)</td><td>Back to Home link</td><td>Confirmed</td></tr>
+<tr><td>F13</td><td>2.5 Navigate from Login</td><td>Request Access Page (3.0)</td><td>Request Access link</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>2.2 Toggle password visibility and Remember Me</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>2.1 Validate Login fields</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>2.3 Submit credentials</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>2.4 Display result</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>2.5 Navigate from Login</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>Cenvic Backend</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Dashboard (outside this scope)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Forgot Password Page (4.0)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Home Page (1.0)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Request Access Page (3.0)</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="UI-L2-SIGNUP">
+<h2>UI-L2-SIGNUP — 3.0 Request Access Page (Signup) <span class="level">Level 2</span></h2>
+<p>The functions of the Request Access page at /get-started as seen by the visitor.</p>
+<div class="diagram"><svg viewBox="0 0 1200 981" role="img" aria-label="3.0 Request Access Page (Signup)" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-UI-L2-SIGNUP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="227.3,370.0 581.3,116.0" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="512.7,116.0 158.7,370.0" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="240.0,393.4 553.3,281.0" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="500.0,257.6 186.7,370.0" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="600.0,281.0 600.0,370.0" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="700.0,408.0 960.0,408.0" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="960.0,443.9 700.0,537.1" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="500.0,537.1 240.0,443.9" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="193.0,446.0 547.0,700.0" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="700.0,738.0 960.0,738.0" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<polyline class="flow" points="600.0,776.0 600.0,865.0" marker-end="url(#arr-UI-L2-SIGNUP)"/>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="404.5" text-anchor="middle">Visitor / Prospective</text><text x="140" y="419.5" text-anchor="middle">Customer</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">3.1</text><text x="600" y="85.5" text-anchor="middle">Display Request Access</text><text x="600" y="100.5" text-anchor="middle">form</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">3.2</text><text x="600" y="250.5" text-anchor="middle">Validate fields and</text><text x="600" y="265.5" text-anchor="middle">agreements</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">3.3</text><text x="600" y="423" text-anchor="middle">Submit Request Access form</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">3.4</text><text x="600" y="588" text-anchor="middle">Display result</text></g>
+<g class="node process"><rect x="500" y="700" width="200" height="76" rx="12"/><line x1="500" y1="722" x2="700" y2="722"/><text class="num" x="600" y="716" text-anchor="middle">3.5</text><text x="600" y="745.5" text-anchor="middle">Open Login, Terms and</text><text x="600" y="760.5" text-anchor="middle">Privacy Policy links</text></g>
+<g class="node entity"><rect x="960" y="370" width="200" height="76"/><text x="1060" y="412" text-anchor="middle">Cenvic Backend</text></g>
+<g class="node entity"><rect x="960" y="700" width="200" height="76"/><text x="1060" y="742" text-anchor="middle">Login Page (2.0)</text></g>
+<g class="node entity"><rect x="500" y="865" width="200" height="76"/><text x="600" y="899.5" text-anchor="middle">Terms and Privacy Policy</text><text x="600" y="914.5" text-anchor="middle">pages</text></g>
+<g class="label"><rect x="349.7" y="226.0" width="109.2" height="34" rx="3"/><text x="404.3" y="238.0" text-anchor="middle">F1 Page visit</text><text x="404.3" y="252.0" text-anchor="middle">(/get-started)</text></g>
+<g class="label"><rect x="179.5" y="279.3" width="163.6" height="34" rx="3"/><text x="261.3" y="291.3" text-anchor="middle">F2 Company Details and</text><text x="261.3" y="305.3" text-anchor="middle">Personal Details form</text></g>
+<g class="label"><rect x="321.6" y="320.2" width="150.0" height="34" rx="3"/><text x="396.6" y="332.2" text-anchor="middle">F3 Field values,</text><text x="396.6" y="346.2" text-anchor="middle">agreement checkboxes</text></g>
+<g class="label"><rect x="374.3" y="256.4" width="163.6" height="34" rx="3"/><text x="456.1" y="268.4" text-anchor="middle">F4 Required and format</text><text x="456.1" y="282.4" text-anchor="middle">messages</text></g>
+<g class="label"><rect x="531.8" y="315.5" width="136.4" height="20" rx="3"/><text x="600.0" y="327.5" text-anchor="middle">F5 Valid form data</text></g>
+<g class="label"><rect x="758.4" y="384.0" width="143.2" height="48" rx="3"/><text x="830.0" y="396.0" text-anchor="middle">F6 Company, contact</text><text x="830.0" y="410.0" text-anchor="middle">details, message,</text><text x="830.0" y="424.0" text-anchor="middle">agreements</text></g>
+<g class="label"><rect x="755.0" y="466.5" width="150.0" height="48" rx="3"/><text x="830.0" y="478.5" text-anchor="middle">F7 Submission result</text><text x="830.0" y="492.5" text-anchor="middle">(success or Email</text><text x="830.0" y="506.5" text-anchor="middle">already exists)</text></g>
+<g class="label"><rect x="291.6" y="466.5" width="156.8" height="48" rx="3"/><text x="370.0" y="478.5" text-anchor="middle">F8 Thank-you message,</text><text x="370.0" y="492.5" text-anchor="middle">Back to Login link or</text><text x="370.0" y="506.5" text-anchor="middle">error message</text></g>
+<g class="label"><rect x="291.6" y="556.0" width="156.8" height="34" rx="3"/><text x="370.0" y="568.0" text-anchor="middle">F9 Login, Terms,</text><text x="370.0" y="582.0" text-anchor="middle">Privacy Policy clicks</text></g>
+<g class="label"><rect x="775.4" y="728.0" width="109.2" height="20" rx="3"/><text x="830.0" y="740.0" text-anchor="middle">F10 Login link</text></g>
+<g class="label"><rect x="518.2" y="810.5" width="163.6" height="20" rx="3"/><text x="600.0" y="822.5" text-anchor="middle">F11 Opens in a new tab</text></g>
+</svg></div>
+<ul><li>Phone, message length and double-click submission rules are not confirmed (PT-025).</li></ul>
+<details><summary>Data flows (11) and elements (9)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Visitor / Prospective Customer</td><td>3.1 Display Request Access form</td><td>Page visit (/get-started)</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>3.1 Display Request Access form</td><td>Visitor / Prospective Customer</td><td>Company Details and Personal Details form</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>Visitor / Prospective Customer</td><td>3.2 Validate fields and agreements</td><td>Field values, agreement checkboxes</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>3.2 Validate fields and agreements</td><td>Visitor / Prospective Customer</td><td>Required and format messages</td><td>Confirmed</td></tr>
+<tr><td>F5</td><td>3.2 Validate fields and agreements</td><td>3.3 Submit Request Access form</td><td>Valid form data</td><td>Confirmed</td></tr>
+<tr><td>F6</td><td>3.3 Submit Request Access form</td><td>Cenvic Backend</td><td>Company, contact details, message, agreements</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>Cenvic Backend</td><td>3.4 Display result</td><td>Submission result (success or Email already exists)</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>3.4 Display result</td><td>Visitor / Prospective Customer</td><td>Thank-you message, Back to Login link or error message</td><td>Confirmed</td></tr>
+<tr><td>F9</td><td>Visitor / Prospective Customer</td><td>3.5 Open Login, Terms and Privacy Policy links</td><td>Login, Terms, Privacy Policy clicks</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>3.5 Open Login, Terms and Privacy Policy links</td><td>Login Page (2.0)</td><td>Login link</td><td>Confirmed</td></tr>
+<tr><td>F11</td><td>3.5 Open Login, Terms and Privacy Policy links</td><td>Terms and Privacy Policy pages</td><td>Opens in a new tab</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Visitor / Prospective Customer</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>3.1 Display Request Access form</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>3.2 Validate fields and agreements</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>3.3 Submit Request Access form</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>3.4 Display result</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>3.5 Open Login, Terms and Privacy Policy links</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>Cenvic Backend</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Login Page (2.0)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Terms and Privacy Policy pages</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="UI-L2-FORGOT">
+<h2>UI-L2-FORGOT — 4.0 Forgot Password Page <span class="level">Level 2</span></h2>
+<p>The functions of the Forgot Password page (email step) as seen by the registered user.</p>
+<div class="diagram"><svg viewBox="0 0 1200 816" role="img" aria-label="4.0 Forgot Password Page" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-UI-L2-FORGOT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="227.3,370.0 581.3,116.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="512.7,116.0 158.7,370.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="240.0,393.4 553.3,281.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="500.0,257.6 186.7,370.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="600.0,281.0 600.0,370.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="700.0,408.0 960.0,408.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="960.0,443.9 700.0,537.1" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="500.0,537.1 240.0,443.9" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="700.0,573.0 960.0,573.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="140.0,700.0 140.0,446.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="193.0,446.0 547.0,700.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<polyline class="flow" points="700.0,738.0 960.0,738.0" marker-end="url(#arr-UI-L2-FORGOT)"/>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="412" text-anchor="middle">Registered User</text></g>
+<g class="node entity"><rect x="40" y="700" width="200" height="76"/><text x="140" y="742" text-anchor="middle">Email Service</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">4.1</text><text x="600" y="85.5" text-anchor="middle">Display Forgot Password</text><text x="600" y="100.5" text-anchor="middle">page</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">4.2</text><text x="600" y="258" text-anchor="middle">Validate email</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">4.3</text><text x="600" y="423" text-anchor="middle">Request verification code</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">4.4</text><text x="600" y="588" text-anchor="middle">Display result</text></g>
+<g class="node process"><rect x="500" y="700" width="200" height="76" rx="12"/><line x1="500" y1="722" x2="700" y2="722"/><text class="num" x="600" y="716" text-anchor="middle">4.5</text><text x="600" y="753" text-anchor="middle">Return to Login</text></g>
+<g class="node entity"><rect x="960" y="370" width="200" height="76"/><text x="1060" y="412" text-anchor="middle">Cenvic Backend</text></g>
+<g class="node entity"><rect x="960" y="535" width="200" height="76"/><text x="1060" y="577" text-anchor="middle">Reset Password Step (5.0)</text></g>
+<g class="node entity"><rect x="960" y="700" width="200" height="76"/><text x="1060" y="742" text-anchor="middle">Login Page (2.0)</text></g>
+<g class="label"><rect x="329.3" y="226.0" width="150.0" height="34" rx="3"/><text x="404.3" y="238.0" text-anchor="middle">F1 Page visit via</text><text x="404.3" y="252.0" text-anchor="middle">Forgot Password link</text></g>
+<g class="label"><rect x="349.5" y="150.4" width="163.6" height="48" rx="3"/><text x="431.3" y="162.4" text-anchor="middle">F2 Heading, email</text><text x="431.3" y="176.4" text-anchor="middle">field, branding panel,</text><text x="431.3" y="190.4" text-anchor="middle">testimonial carousel</text></g>
+<g class="label"><rect x="335.2" y="327.2" width="122.8" height="20" rx="3"/><text x="396.6" y="339.2" text-anchor="middle">F3 Email address</text></g>
+<g class="label"><rect x="321.3" y="276.6" width="156.8" height="34" rx="3"/><text x="399.7" y="288.6" text-anchor="middle">F4 Required and valid</text><text x="399.7" y="302.6" text-anchor="middle">email messages</text></g>
+<g class="label"><rect x="545.4" y="315.5" width="109.2" height="20" rx="3"/><text x="600.0" y="327.5" text-anchor="middle">F5 Valid email</text></g>
+<g class="label"><rect x="768.6" y="398.0" width="122.8" height="20" rx="3"/><text x="830.0" y="410.0" text-anchor="middle">F6 Email address</text></g>
+<g class="label"><rect x="755.0" y="473.5" width="150.0" height="34" rx="3"/><text x="830.0" y="485.5" text-anchor="middle">F7 Result (code sent</text><text x="830.0" y="499.5" text-anchor="middle">or User not found)</text></g>
+<g class="label"><rect x="291.6" y="466.5" width="156.8" height="48" rx="3"/><text x="370.0" y="478.5" text-anchor="middle">F8 Verification code</text><text x="370.0" y="492.5" text-anchor="middle">has been sent or User</text><text x="370.0" y="506.5" text-anchor="middle">not found toast</text></g>
+<g class="label"><rect x="748.2" y="556.0" width="163.6" height="34" rx="3"/><text x="830.0" y="568.0" text-anchor="middle">F9 Reset Password step</text><text x="830.0" y="582.0" text-anchor="middle">opens</text></g>
+<g class="label"><rect x="61.6" y="556.0" width="156.8" height="34" rx="3"/><text x="140.0" y="568.0" text-anchor="middle">F10 Verification code</text><text x="140.0" y="582.0" text-anchor="middle">email</text></g>
+<g class="label"><rect x="305.2" y="556.0" width="129.6" height="34" rx="3"/><text x="370.0" y="568.0" text-anchor="middle">F11 Back to Login</text><text x="370.0" y="582.0" text-anchor="middle">click</text></g>
+<g class="label"><rect x="755.0" y="728.0" width="150.0" height="20" rx="3"/><text x="830.0" y="740.0" text-anchor="middle">F12 Login page opens</text></g>
+</svg></div>
+<ul><li>Rate limiting of repeated requests and behavior for a logged-in user are not confirmed (PT-022).</li></ul>
+<details><summary>Data flows (12) and elements (10)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Registered User</td><td>4.1 Display Forgot Password page</td><td>Page visit via Forgot Password link</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>4.1 Display Forgot Password page</td><td>Registered User</td><td>Heading, email field, branding panel, testimonial carousel</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>Registered User</td><td>4.2 Validate email</td><td>Email address</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>4.2 Validate email</td><td>Registered User</td><td>Required and valid email messages</td><td>Confirmed</td></tr>
+<tr><td>F5</td><td>4.2 Validate email</td><td>4.3 Request verification code</td><td>Valid email</td><td>Confirmed</td></tr>
+<tr><td>F6</td><td>4.3 Request verification code</td><td>Cenvic Backend</td><td>Email address</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>Cenvic Backend</td><td>4.4 Display result</td><td>Result (code sent or User not found)</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>4.4 Display result</td><td>Registered User</td><td>Verification code has been sent or User not found toast</td><td>Confirmed</td></tr>
+<tr><td>F9</td><td>4.4 Display result</td><td>Reset Password Step (5.0)</td><td>Reset Password step opens</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>Email Service</td><td>Registered User</td><td>Verification code email</td><td>Confirmed</td></tr>
+<tr><td>F11</td><td>Registered User</td><td>4.5 Return to Login</td><td>Back to Login click</td><td>Confirmed</td></tr>
+<tr><td>F12</td><td>4.5 Return to Login</td><td>Login Page (2.0)</td><td>Login page opens</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Email Service</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>4.1 Display Forgot Password page</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.2 Validate email</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.3 Request verification code</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.4 Display result</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>4.5 Return to Login</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>Cenvic Backend</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Reset Password Step (5.0)</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Login Page (2.0)</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+<section id="UI-L2-RESET">
+<h2>UI-L2-RESET — 5.0 Reset Password Step <span class="level">Level 2</span></h2>
+<p>The functions of the Reset Password step (code and new password) as seen by the registered user.</p>
+<div class="diagram"><svg viewBox="0 0 1200 981" role="img" aria-label="5.0 Reset Password Step" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr-UI-L2-RESET" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334e68"/></marker></defs>
+<polyline class="flow" points="240.0,393.4 553.3,281.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="500.0,257.6 186.7,370.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="240.0,428.0 500.0,428.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="500.0,388.0 240.0,388.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="600.0,446.0 600.0,535.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="653.0,535.0 1007.0,281.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="960.0,243.0 830.0,243.0 830.0,738.0 700.0,738.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="547.0,700.0 193.0,446.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="600.0,776.0 600.0,865.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="227.3,370.0 581.3,116.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="700.0,113.9 960.0,207.1" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="512.7,116.0 158.7,370.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<polyline class="flow" points="140.0,116.0 140.0,370.0" marker-end="url(#arr-UI-L2-RESET)"/>
+<g class="node entity"><rect x="40" y="40" width="200" height="76"/><text x="140" y="82" text-anchor="middle">Email Service</text></g>
+<g class="node entity"><rect x="40" y="370" width="200" height="76"/><text x="140" y="412" text-anchor="middle">Registered User</text></g>
+<g class="node process"><rect x="500" y="40" width="200" height="76" rx="12"/><line x1="500" y1="62" x2="700" y2="62"/><text class="num" x="600" y="56" text-anchor="middle">5.5</text><text x="600" y="93" text-anchor="middle">Resend verification code</text></g>
+<g class="node process"><rect x="500" y="205" width="200" height="76" rx="12"/><line x1="500" y1="227" x2="700" y2="227"/><text class="num" x="600" y="221" text-anchor="middle">5.1</text><text x="600" y="250.5" text-anchor="middle">Display step and toggle</text><text x="600" y="265.5" text-anchor="middle">password visibility</text></g>
+<g class="node process"><rect x="500" y="370" width="200" height="76" rx="12"/><line x1="500" y1="392" x2="700" y2="392"/><text class="num" x="600" y="386" text-anchor="middle">5.2</text><text x="600" y="415.5" text-anchor="middle">Validate code and</text><text x="600" y="430.5" text-anchor="middle">passwords</text></g>
+<g class="node process"><rect x="500" y="535" width="200" height="76" rx="12"/><line x1="500" y1="557" x2="700" y2="557"/><text class="num" x="600" y="551" text-anchor="middle">5.3</text><text x="600" y="588" text-anchor="middle">Submit password reset</text></g>
+<g class="node process"><rect x="500" y="700" width="200" height="76" rx="12"/><line x1="500" y1="722" x2="700" y2="722"/><text class="num" x="600" y="716" text-anchor="middle">5.4</text><text x="600" y="753" text-anchor="middle">Display result</text></g>
+<g class="node entity"><rect x="960" y="205" width="200" height="76"/><text x="1060" y="247" text-anchor="middle">Cenvic Backend</text></g>
+<g class="node entity"><rect x="500" y="865" width="200" height="76"/><text x="600" y="907" text-anchor="middle">Login Page (2.0)</text></g>
+<g class="label"><rect x="318.2" y="320.2" width="156.8" height="34" rx="3"/><text x="396.6" y="332.2" text-anchor="middle">F1 Step opens, Show /</text><text x="396.6" y="346.2" text-anchor="middle">Hide password clicks</text></g>
+<g class="label"><rect x="346.9" y="262.8" width="143.2" height="48" rx="3"/><text x="418.5" y="274.8" text-anchor="middle">F2 Fields, password</text><text x="418.5" y="288.8" text-anchor="middle">rules, countdowns,</text><text x="418.5" y="302.8" text-anchor="middle">visibility state</text></g>
+<g class="label"><rect x="247.4" y="404.0" width="156.8" height="48" rx="3"/><text x="325.8" y="416.0" text-anchor="middle">F3 Verification code,</text><text x="325.8" y="430.0" text-anchor="middle">new password, confirm</text><text x="325.8" y="444.0" text-anchor="middle">password</text></g>
+<g class="label"><rect x="322.8" y="364.0" width="156.8" height="48" rx="3"/><text x="401.2" y="376.0" text-anchor="middle">F4 Required, mismatch</text><text x="401.2" y="390.0" text-anchor="middle">and password rule</text><text x="401.2" y="404.0" text-anchor="middle">messages</text></g>
+<g class="label"><rect x="545.4" y="480.5" width="109.2" height="20" rx="3"/><text x="600.0" y="492.5" text-anchor="middle">F5 Valid input</text></g>
+<g class="label"><rect x="836.6" y="330.0" width="156.8" height="34" rx="3"/><text x="915.0" y="342.0" text-anchor="middle">F6 Verification code,</text><text x="915.0" y="356.0" text-anchor="middle">new password</text></g>
+<g class="label"><rect x="772.0" y="480.5" width="116.0" height="20" rx="3"/><text x="830.0" y="492.5" text-anchor="middle">F7 Reset result</text></g>
+<g class="label"><rect x="298.4" y="549.0" width="143.2" height="48" rx="3"/><text x="370.0" y="561.0" text-anchor="middle">F8 Password changed</text><text x="370.0" y="575.0" text-anchor="middle">successfully or</text><text x="370.0" y="589.0" text-anchor="middle">invalid code toast</text></g>
+<g class="label"><rect x="528.4" y="810.5" width="143.2" height="20" rx="3"/><text x="600.0" y="822.5" text-anchor="middle">F9 Login page opens</text></g>
+<g class="label"><rect x="353.5" y="225.4" width="122.8" height="20" rx="3"/><text x="414.9" y="237.4" text-anchor="middle">F10 Resend click</text></g>
+<g class="label"><rect x="761.8" y="150.5" width="136.4" height="20" rx="3"/><text x="830.0" y="162.5" text-anchor="middle">F11 Resend request</text></g>
+<g class="label"><rect x="310.4" y="187.9" width="156.8" height="34" rx="3"/><text x="388.8" y="199.9" text-anchor="middle">F12 Verification code</text><text x="388.8" y="213.9" text-anchor="middle">has been sent toast</text></g>
+<g class="label"><rect x="65.0" y="226.0" width="150.0" height="34" rx="3"/><text x="140.0" y="238.0" text-anchor="middle">F13 New verification</text><text x="140.0" y="252.0" text-anchor="middle">code email</text></g>
+</svg></div>
+<ul><li>Password rule messages, code format and reload behavior are not confirmed (PT-023, PT-026).</li><li>The reset user and the email inbox used for automation are tracked in PT-019 and PT-020.</li></ul>
+<details><summary>Data flows (13) and elements (9)</summary>
+<table><thead><tr><th>Flow</th><th>From</th><th>To</th><th>Data</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>F1</td><td>Registered User</td><td>5.1 Display step and toggle password visibility</td><td>Step opens, Show / Hide password clicks</td><td>Confirmed</td></tr>
+<tr><td>F2</td><td>5.1 Display step and toggle password visibility</td><td>Registered User</td><td>Fields, password rules, countdowns, visibility state</td><td>Confirmed</td></tr>
+<tr><td>F3</td><td>Registered User</td><td>5.2 Validate code and passwords</td><td>Verification code, new password, confirm password</td><td>Confirmed</td></tr>
+<tr><td>F4</td><td>5.2 Validate code and passwords</td><td>Registered User</td><td>Required, mismatch and password rule messages</td><td>Confirmed</td></tr>
+<tr><td>F5</td><td>5.2 Validate code and passwords</td><td>5.3 Submit password reset</td><td>Valid input</td><td>Confirmed</td></tr>
+<tr><td>F6</td><td>5.3 Submit password reset</td><td>Cenvic Backend</td><td>Verification code, new password</td><td>Confirmed</td></tr>
+<tr><td>F7</td><td>Cenvic Backend</td><td>5.4 Display result</td><td>Reset result</td><td>Confirmed</td></tr>
+<tr><td>F8</td><td>5.4 Display result</td><td>Registered User</td><td>Password changed successfully or invalid code toast</td><td>Confirmed</td></tr>
+<tr><td>F9</td><td>5.4 Display result</td><td>Login Page (2.0)</td><td>Login page opens</td><td>Confirmed</td></tr>
+<tr><td>F10</td><td>Registered User</td><td>5.5 Resend verification code</td><td>Resend click</td><td>Confirmed</td></tr>
+<tr><td>F11</td><td>5.5 Resend verification code</td><td>Cenvic Backend</td><td>Resend request</td><td>Confirmed</td></tr>
+<tr><td>F12</td><td>5.5 Resend verification code</td><td>Registered User</td><td>Verification code has been sent toast</td><td>Confirmed</td></tr>
+<tr><td>F13</td><td>Email Service</td><td>Registered User</td><td>New verification code email</td><td>Confirmed</td></tr>
+</tbody></table>
+<table><thead><tr><th>Element</th><th>Type</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Email Service</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Registered User</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>5.5 Resend verification code</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>5.1 Display step and toggle password visibility</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>5.2 Validate code and passwords</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>5.3 Submit password reset</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>5.4 Display result</td><td>Process</td><td>Confirmed</td></tr>
+<tr><td>Cenvic Backend</td><td>External entity</td><td>Confirmed</td></tr>
+<tr><td>Login Page (2.0)</td><td>External entity</td><td>Confirmed</td></tr>
+</tbody></table>
+</details>
+</section>
+</main>
+</body>
+</html>

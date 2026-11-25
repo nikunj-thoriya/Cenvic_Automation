@@ -1,0 +1,27 @@
+{
+  "name": "cenvic-automation",
+  "version": "1.1.1",
+  "private": true,
+  "description": "Cenvic Playwright + TypeScript automation framework (Page Object Model)",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "testcases:html": "node utils/generate-test-case-html.mts",
+    "rtm:html": "node utils/generate-rtm-html.mts",
+    "dfd:html": "node utils/generate-dfd-html.mts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^26.6.6",
+    "dotenv": "^18.0.10",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.12.2",
+    "prettier": "^3.10.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.73.0"
+  }
+}

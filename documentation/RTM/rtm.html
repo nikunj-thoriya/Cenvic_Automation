@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cenvic — Requirement Traceability Matrix</title>
+<style>
+  body { font-family: Segoe UI, Arial, sans-serif; margin: 0; background: #f5f7fa; color: #1f2933; }
+  header { background: #1f3a5f; color: #fff; padding: 16px 24px; }
+  header h1 { margin: 0; font-size: 22px; }
+  header p { margin: 4px 0 0; font-size: 13px; opacity: 0.85; }
+  main { padding: 16px 24px; }
+  section { background: #fff; border: 1px solid #d9e2ec; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; }
+  h2 { font-size: 16px; margin: 0 0 10px; }
+  .counts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .count { background: #eef2f7; border-radius: 4px; padding: 6px 10px; font-size: 13px; }
+  .note { background: #fff3cd; border: 1px solid #ffeeba; color: #533f03; border-radius: 4px; padding: 8px 12px; font-size: 13px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+  .filters label { display: flex; flex-direction: column; font-size: 12px; gap: 4px; }
+  .filters input, .filters select { padding: 5px; font-size: 13px; min-width: 150px; }
+  button { padding: 6px 12px; font-size: 13px; cursor: pointer; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { border: 1px solid #d9e2ec; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #eef2f7; }
+  .tc { display: inline-block; background: #e3ecfa; border-radius: 3px; padding: 1px 6px; margin: 1px; white-space: nowrap; }
+  .blank { color: #616e7c; font-style: italic; }
+  .status-tag { display: inline-block; border-radius: 3px; padding: 2px 8px; font-weight: 500; font-size: 12px; white-space: nowrap; }
+  .status-passed, .status-covered { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .status-failed, .status-not-covered { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  .status-partially-run, .status-partially-covered { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+  .status-not-run { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+  .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; font-size: 13px; }
+  ul { margin: 4px 0; padding-left: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Cenvic — Requirement Traceability Matrix</h1>
+  <p>Scope: Login, Home, Signup, Forgot Password, Reset Password | Version 1.0 | Last updated 2026-11-23 17:16 IST</p>
+</header>
+<main>
+  <section>
+    <div class="note">No FRD or requirement IDs have been provided. Each row is a feature-level requirement derived from the approved test cases and the recorded DOM. Requirement IDs are intentionally blank and will be assigned later. Test case, automation and execution data come from test-cases.json.</div>
+  </section>
+  <section>
+    <h2>Summary</h2>
+    <div class="counts">
+      <div class="count">Requirements: <strong>31</strong></div>
+      <div class="count">Test cases mapped: <strong>144</strong></div>
+      <div class="count">Automated: <strong>106</strong></div>
+      <div class="count">Manual: <strong>6</strong></div>
+      <div class="count">Planned: <strong>32</strong></div>
+      <div class="count">Covered: <strong>17</strong></div>
+      <div class="count">Partially Covered: <strong>14</strong></div>
+      <div class="count">Not Covered: <strong>0</strong></div>
+      <div class="count">Requirement IDs assigned: <strong>0</strong></div>
+    </div>
+  </section>
+  <section>
+    <h2>Module Summary</h2>
+    <table>
+      <thead>
+        <tr><th>Module</th><th>Requirements</th><th>Test Cases Mapped</th><th>Automated</th><th>Manual</th><th>Planned</th><th>Covered</th><th>Partially Covered</th><th>Not Covered</th></tr>
+      </thead>
+      <tbody>
+<tr><td>Login</td><td>8</td><td>32 of 32</td><td>23</td><td>1</td><td>8</td><td>4</td><td>4</td><td>0</td></tr>
+<tr><td>Home</td><td>6</td><td>30 of 30</td><td>23</td><td>2</td><td>5</td><td>2</td><td>4</td><td>0</td></tr>
+<tr><td>Signup</td><td>5</td><td>29 of 29</td><td>21</td><td>0</td><td>8</td><td>3</td><td>2</td><td>0</td></tr>
+<tr><td>Forgot Password</td><td>5</td><td>21 of 21</td><td>17</td><td>2</td><td>2</td><td>4</td><td>1</td><td>0</td></tr>
+<tr><td>Reset Password</td><td>7</td><td>32 of 32</td><td>22</td><td>1</td><td>9</td><td>4</td><td>3</td><td>0</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Traceability Gaps</h2>
+    <ul>
+<li>Test cases without a requirement mapping: None</li>
+<li>Requirements without automation: None</li>
+<li>Requirements with failed tests: Login field validation</li>
+<li>Requirements without a Requirement ID: 31 of 31</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Search and Filters</h2>
+    <div class="filters">
+      <label>Search<input id="search" type="search" placeholder="Feature, description, test case ID..."></label>
+      <label>Module<select id="module"><option value="">All</option><option value="Login">Login</option><option value="Home">Home</option><option value="Signup">Signup</option><option value="Forgot Password">Forgot Password</option><option value="Reset Password">Reset Password</option></select></label>
+      <label>Coverage Status<select id="coverage"><option value="">All</option><option value="Covered">Covered</option><option value="Partially Covered">Partially Covered</option><option value="Not Covered">Not Covered</option></select></label>
+      <button id="reset" type="button">Reset</button>
+    </div>
+  </section>
+  <section>
+    <h2 id="resultsTitle">Requirement Traceability</h2>
+    <table>
+      <thead>
+        <tr><th>Requirement ID</th><th>Module</th><th>Requirement</th><th>Test Case IDs</th><th>Automation Script</th><th>Automation</th><th>Execution Status</th><th>Coverage Status</th><th>Remarks</th></tr>
+      </thead>
+      <tbody id="rows">
+<tr data-module="Login" data-coverage="Covered" data-search=" login login page display and navigation links the login page opens from the home get started link and displays the logo, heading, fields, remember me, forgot password link, login button and request access link. the forgot password, request access and back to home links navigate correctly. tc-login-001 tc-login-002 tc-login-018 tc-login-019 tc-login-020">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Login</td>
+  <td><strong>Login page display and navigation links</strong><br>The Login page opens from the Home Get Started link and displays the logo, heading, fields, Remember Me, Forgot Password link, Login button and Request Access link. The Forgot Password, Request Access and Back to Home links navigate correctly.</td>
+  <td><span class="tc" title="To verify the Login page opens from the home page Get Started link">TC-LOGIN-001</span> <span class="tc" title="To verify the Login page displays the logo, heading, fields, Remember Me, Forgot Password link, Login button and Request Access link">TC-LOGIN-002</span> <span class="tc" title="To verify the Forgot Password link opens its page and Back to Login returns to the Login page">TC-LOGIN-018</span> <span class="tc" title="To verify the Request Access link opens its page and the Login link returns to the Login page">TC-LOGIN-019</span> <span class="tc" title="To verify the Back to Home link returns to the home page">TC-LOGIN-020</span></td>
+  <td>tests/login/Login.spec.ts</td>
+  <td>Automated 5, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-passed">Passed</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Login" data-coverage="Covered" data-search=" login login with valid credentials a registered user who enters a valid email and password is logged in, sees the login successfully message and is redirected to the dashboard. tc-login-003 tc-login-004 tc-login-005">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Login</td>
+  <td><strong>Login with valid credentials</strong><br>A registered user who enters a valid email and password is logged in, sees the Login successfully message and is redirected to the dashboard.</td>
+  <td><span class="tc" title="To verify login with a valid registered email and valid password">TC-LOGIN-003</span> <span class="tc" title="To verify the user is redirected to the dashboard after successful login">TC-LOGIN-004</span> <span class="tc" title="To verify the Login successfully toast is displayed after successful login">TC-LOGIN-005</span></td>
+  <td>tests/login/Login.spec.ts</td>
+  <td>Automated 3, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-passed">Passed</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Login" data-coverage="Partially Covered" data-search=" login login rejection with invalid credentials a user with an incorrect password or an unregistered email is not logged in and sees the matching error message. repeated failed attempts lock the account. tc-login-006 tc-login-007 tc-login-008 tc-login-009 tc-login-028">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Login</td>
+  <td><strong>Login rejection with invalid credentials</strong><br>A user with an incorrect password or an unregistered email is not logged in and sees the matching error message. Repeated failed attempts lock the account.</td>
+  <td><span class="tc" title="To verify login with a valid registered email and an incorrect password">TC-LOGIN-006</span> <span class="tc" title="To verify the Incorrect password toast is displayed for an incorrect password">TC-LOGIN-007</span> <span class="tc" title="To verify login with an unregistered email">TC-LOGIN-008</span> <span class="tc" title="To verify the Email ID not registered toast is displayed for an unregistered email">TC-LOGIN-009</span> <span class="tc" title="To verify account lockout after repeated failed login attempts">TC-LOGIN-028</span></td>
+  <td>tests/login/Login.spec.ts</td>
+  <td>Automated 4, Manual 0, Planned 1</td>
+  <td><span class="status-tag status-partially-run">Partially Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Account lockout rule is not confirmed (PT-013).</td>
+</tr>
+<tr data-module="Login" data-coverage="Covered" data-search=" login login field validation empty fields and an invalid email format are rejected with the required and valid email messages. tc-login-010 tc-login-011 tc-login-012 tc-login-013 tc-login-021">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Login</td>
+  <td><strong>Login field validation</strong><br>Empty fields and an invalid email format are rejected with the required and valid email messages.</td>
+  <td><span class="tc" title="To verify login with both fields empty shows the required field messages">TC-LOGIN-010</span> <span class="tc" title="To verify login with an empty email field shows the email required message">TC-LOGIN-011</span> <span class="tc" title="To verify login with an empty password field shows the password required message">TC-LOGIN-012</span> <span class="tc" title="To verify login with an invalid email format shows the valid email message">TC-LOGIN-013</span> <span class="tc" title="To verify login with an email missing the domain extension shows the valid email toast">TC-LOGIN-021</span></td>
+  <td>tests/login/Login.spec.ts</td>
+  <td>Automated 5, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-failed">Failed</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Login" data-coverage="Covered" data-search=" login password visibility the password is masked by default and the show password and hide password buttons reveal and mask it. tc-login-014 tc-login-015">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Login</td>
+  <td><strong>Password visibility</strong><br>The password is masked by default and the Show password and Hide password buttons reveal and mask it.</td>
+  <td><span class="tc" title="To verify the password is masked by default">TC-LOGIN-014</span> <span class="tc" title="To verify Show password reveals the password and Hide password masks it again">TC-LOGIN-015</span></td>
+  <td>tests/login/Login.spec.ts</td>
+  <td>Automated 2, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-passed">Passed</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Login" data-coverage="Partially Covered" data-search=" login remember me the remember me checkbox and its label toggle the checked state, and the session persists after the browser is reopened when it is checked. tc-login-016 tc-login-017 tc-login-030">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Login</td>
+  <td><strong>Remember Me</strong><br>The Remember Me checkbox and its label toggle the checked state, and the session persists after the browser is reopened when it is checked.</td>
+  <td><span class="tc" title="To verify the Remember Me checkbox can be checked and unchecked">TC-LOGIN-016</span> <span class="tc" title="To verify clicking the Remember Me label toggles the checkbox">TC-LOGIN-017</span> <span class="tc" title="To verify Remember Me persistence after closing and reopening the browser">TC-LOGIN-030</span></td>
+  <td>tests/login/Login.spec.ts</td>
+  <td>Automated 2, Manual 0, Planned 1</td>
+  <td><span class="status-tag status-partially-run">Partially Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Persistence behavior is not confirmed (PT-017).</td>
+</tr>
+<tr data-module="Login" data-coverage="Partially Covered" data-search=" login email and password input handling leading spaces, long values, letter case, special characters and injection attempts in the email and password fields are handled safely and consistently. tc-login-022 tc-login-023 tc-login-024 tc-login-025 tc-login-026 tc-login-027">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Login</td>
+  <td><strong>Email and password input handling</strong><br>Leading spaces, long values, letter case, special characters and injection attempts in the email and password fields are handled safely and consistently.</td>
+  <td><span class="tc" title="To verify that leading spaces in the email field are handled correctly">TC-LOGIN-022</span> <span class="tc" title="To verify login behavior with an email address exceeding 255 characters">TC-LOGIN-023</span> <span class="tc" title="To verify email case sensitivity during login">TC-LOGIN-024</span> <span class="tc" title="To verify email addresses containing valid special characters">TC-LOGIN-025</span> <span class="tc" title="To verify login with password special characters">TC-LOGIN-026</span> <span class="tc" title="To verify login prevents SQL injection attempts">TC-LOGIN-027</span></td>
+  <td>tests/login/Login.spec.ts</td>
+  <td>Automated 1, Manual 0, Planned 5</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Expected behavior for edge inputs is not confirmed (PT-016, PT-025).</td>
+</tr>
+<tr data-module="Login" data-coverage="Partially Covered" data-search=" login login accessibility and responsiveness the login page is usable with the keyboard and a screen reader and on a mobile viewport. tc-login-029 tc-login-031 tc-login-032">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Login</td>
+  <td><strong>Login accessibility and responsiveness</strong><br>The Login page is usable with the keyboard and a screen reader and on a mobile viewport.</td>
+  <td><span class="tc" title="To verify login keyboard navigation using Tab and Enter">TC-LOGIN-029</span> <span class="tc" title="To verify login controls expose correct screen reader ARIA information">TC-LOGIN-031</span> <span class="tc" title="To verify the login page is usable on a mobile viewport">TC-LOGIN-032</span></td>
+  <td>tests/login/Login.spec.ts</td>
+  <td>Automated 1, Manual 1, Planned 1</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Screen reader scope is not confirmed (PT-025).</td>
+</tr>
+<tr data-module="Home" data-coverage="Covered" data-search=" home home page display the home page displays the logo, hero heading, start now link, statistics strip and why choose us section. tc-home-001 tc-home-007 tc-home-008">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Home</td>
+  <td><strong>Home page display</strong><br>The Home page displays the logo, hero heading, Start Now link, statistics strip and Why Choose Us section.</td>
+  <td><span class="tc" title="To verify the Home page displays the logo, hero heading and Start Now link">TC-HOME-001</span> <span class="tc" title="To verify the stats strip displays Video Reviews, Trusted Customers, Average Rating and Active Campaigns counters">TC-HOME-007</span> <span class="tc" title="To verify the Why Choose Us section displays its heading and sub-heading">TC-HOME-008</span></td>
+  <td>tests/home/Home.spec.ts</td>
+  <td>Automated 3, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Home" data-coverage="Covered" data-search=" home navigation and call-to-action links the get started, start now, features, how it works and logo links, and the bottom get started link, open the correct page or section. tc-home-002 tc-home-003 tc-home-004 tc-home-005 tc-home-006 tc-home-013">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Home</td>
+  <td><strong>Navigation and call-to-action links</strong><br>The Get Started, Start Now, Features, How It Works and logo links, and the bottom Get Started link, open the correct page or section.</td>
+  <td><span class="tc" title="To verify the Get Started link in the navigation bar opens the Login page">TC-HOME-002</span> <span class="tc" title="To verify the Start Now link opens the Request Access page">TC-HOME-003</span> <span class="tc" title="To verify the Features link in the navigation bar scrolls to the Features section">TC-HOME-004</span> <span class="tc" title="To verify the How It Works link in the navigation bar scrolls to the How It Works section">TC-HOME-005</span> <span class="tc" title="To verify clicking the logo in the navigation bar returns to the Home page">TC-HOME-006</span> <span class="tc" title="To verify the bottom Ready to Transform section Get Started link opens the Login page">TC-HOME-013</span></td>
+  <td>tests/home/Home.spec.ts</td>
+  <td>Automated 6, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Home" data-coverage="Partially Covered" data-search=" home content sections and carousel the features, how it works and how teams use campaigns sections display their content, the content is loaded from the admin configuration, and the carousel can be used with the keyboard. tc-home-010 tc-home-011 tc-home-012 tc-home-026 tc-home-027 tc-home-028">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Home</td>
+  <td><strong>Content sections and carousel</strong><br>The Features, How It Works and How Teams Use Campaigns sections display their content, the content is loaded from the admin configuration, and the carousel can be used with the keyboard.</td>
+  <td><span class="tc" title="To verify the Features section displays the QR Code Generation, Customer Management, Secure &amp; Compliant, Video Testimonials and Advanced Analytics cards">TC-HOME-010</span> <span class="tc" title="To verify the How It Works section displays the Create Campaign, Share QR Code and Collect Reviews steps">TC-HOME-011</span> <span class="tc" title="To verify the How Teams Use Campaigns section heading is displayed">TC-HOME-012</span> <span class="tc" title="To verify carousel navigation using keyboard arrows">TC-HOME-026</span> <span class="tc" title="To verify category filtering syncs with admin configuration">TC-HOME-027</span> <span class="tc" title="To verify dynamic content loads correctly on home page">TC-HOME-028</span></td>
+  <td>tests/home/Home.spec.ts</td>
+  <td>Automated 3, Manual 1, Planned 2</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Admin panel integration is not verified (PT-018, PT-025).</td>
+</tr>
+<tr data-module="Home" data-coverage="Partially Covered" data-search=" home contact dialog the contact us and footer contact buttons open the contact dialog, and the close button, x button, escape key and a click outside close it without submitting data. tc-home-009 tc-home-018 tc-home-021 tc-home-022 tc-home-023 tc-home-024">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Home</td>
+  <td><strong>Contact dialog</strong><br>The Contact Us and footer Contact buttons open the contact dialog, and the Close button, X button, Escape key and a click outside close it without submitting data.</td>
+  <td><span class="tc" title="To verify the Contact Us button in the Why Choose Us section opens the contact dialog and the Close button closes it">TC-HOME-009</span> <span class="tc" title="To verify the footer Contact button opens the contact dialog and the Close button closes it">TC-HOME-018</span> <span class="tc" title="To verify Contact dialog Close button closes the dialog without submission">TC-HOME-021</span> <span class="tc" title="To verify Contact dialog X button closes the dialog">TC-HOME-022</span> <span class="tc" title="To verify pressing Escape closes the contact dialog">TC-HOME-023</span> <span class="tc" title="To verify clicking outside contact dialog closes it">TC-HOME-024</span></td>
+  <td>tests/home/Home.spec.ts</td>
+  <td>Automated 4, Manual 1, Planned 1</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Home" data-coverage="Partially Covered" data-search=" home footer the footer displays the logo, description and company links, the products links scroll to their sections, and the social icons open facebook, linkedin and instagram in a new tab. tc-home-014 tc-home-015 tc-home-016 tc-home-017 tc-home-019 tc-home-025">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Home</td>
+  <td><strong>Footer</strong><br>The footer displays the logo, description and Company links, the Products links scroll to their sections, and the social icons open Facebook, LinkedIn and Instagram in a new tab.</td>
+  <td><span class="tc" title="To verify the footer displays the logo and the platform description text">TC-HOME-014</span> <span class="tc" title="To verify the footer Products section Features button scrolls to the Features section">TC-HOME-015</span> <span class="tc" title="To verify the footer Products section How It Works button scrolls to the How It Works section">TC-HOME-016</span> <span class="tc" title="To verify the footer Company section displays the About Us, Contact and Privacy links">TC-HOME-017</span> <span class="tc" title="To verify the footer social icons open Facebook, LinkedIn and Instagram in a new tab">TC-HOME-019</span> <span class="tc" title="To verify social media links open in new tabs with correct URLs">TC-HOME-025</span></td>
+  <td>tests/home/Home.spec.ts</td>
+  <td>Automated 5, Manual 0, Planned 1</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Home" data-coverage="Partially Covered" data-search=" home public access, responsiveness and performance the home page is reachable without login, displays correctly on a mobile viewport and loads within the accepted time. tc-home-020 tc-home-029 tc-home-030">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Home</td>
+  <td><strong>Public access, responsiveness and performance</strong><br>The Home page is reachable without login, displays correctly on a mobile viewport and loads within the accepted time.</td>
+  <td><span class="tc" title="To verify the Home page is reachable directly by URL without authentication">TC-HOME-020</span> <span class="tc" title="To verify home page is responsive on mobile viewport">TC-HOME-029</span> <span class="tc" title="To verify home page load time is within acceptable limits">TC-HOME-030</span></td>
+  <td>tests/home/Home.spec.ts</td>
+  <td>Automated 2, Manual 0, Planned 1</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Performance threshold is not confirmed (PT-025).</td>
+</tr>
+<tr data-module="Signup" data-coverage="Covered" data-search=" signup request access page display the request access page displays the company details and personal details sections and all their fields. tc-signup-001 tc-signup-002 tc-signup-003">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Signup</td>
+  <td><strong>Request Access page display</strong><br>The Request Access page displays the Company Details and Personal Details sections and all their fields.</td>
+  <td><span class="tc" title="To verify Sign Up page loads with all required sections visible">TC-SIGNUP-001</span> <span class="tc" title="To verify all Company Details form fields are visible">TC-SIGNUP-002</span> <span class="tc" title="To verify all Personal Details form fields are visible">TC-SIGNUP-003</span></td>
+  <td>tests/signup/Signup.spec.ts</td>
+  <td>Automated 3, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Signup" data-coverage="Covered" data-search=" signup required field validation each required field and both agreement checkboxes show their required message when left empty or unchecked. tc-signup-004 tc-signup-005 tc-signup-006 tc-signup-007 tc-signup-008 tc-signup-009 tc-signup-011 tc-signup-012">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Signup</td>
+  <td><strong>Required field validation</strong><br>Each required field and both agreement checkboxes show their required message when left empty or unchecked.</td>
+  <td><span class="tc" title="To verify Company Name field is required (validation)">TC-SIGNUP-004</span> <span class="tc" title="To verify Industry field is required (validation)">TC-SIGNUP-005</span> <span class="tc" title="To verify Address field is required (validation)">TC-SIGNUP-006</span> <span class="tc" title="To verify Name field is required (validation)">TC-SIGNUP-007</span> <span class="tc" title="To verify Email field is required (validation)">TC-SIGNUP-008</span> <span class="tc" title="To verify Phone Number field is required (validation)">TC-SIGNUP-009</span> <span class="tc" title="To verify 'I agree to be contacted' checkbox is required">TC-SIGNUP-011</span> <span class="tc" title="To verify 'I agree to Terms &amp; Conditions' checkbox is required">TC-SIGNUP-012</span></td>
+  <td>tests/signup/Signup.spec.ts</td>
+  <td>Automated 8, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Signup" data-coverage="Partially Covered" data-search=" signup field format and input validation the phone, email, company name, name and message fields accept valid values and reject invalid formats, special characters, extra spaces and values over the limit. tc-signup-010 tc-signup-019 tc-signup-020 tc-signup-022 tc-signup-023 tc-signup-024 tc-signup-025 tc-signup-026 tc-signup-027">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Signup</td>
+  <td><strong>Field format and input validation</strong><br>The phone, email, company name, name and message fields accept valid values and reject invalid formats, special characters, extra spaces and values over the limit.</td>
+  <td><span class="tc" title="To verify phone number format validation (555) 555-5555">TC-SIGNUP-010</span> <span class="tc" title="To verify email field accepts valid email format">TC-SIGNUP-019</span> <span class="tc" title="To verify phone field accepts valid phone format (555) 555-5555">TC-SIGNUP-020</span> <span class="tc" title="To verify that leading and trailing spaces in the company name are handled correctly">TC-SIGNUP-022</span> <span class="tc" title="To verify that invalid special characters in the company name are rejected">TC-SIGNUP-023</span> <span class="tc" title="To verify that invalid special characters in the name field are rejected">TC-SIGNUP-024</span> <span class="tc" title="To verify that email edge cases are validated correctly">TC-SIGNUP-025</span> <span class="tc" title="To verify that phone numbers with extensions are handled according to the signup rules">TC-SIGNUP-026</span> <span class="tc" title="To verify that the signup message field enforces its character limit">TC-SIGNUP-027</span></td>
+  <td>tests/signup/Signup.spec.ts</td>
+  <td>Automated 3, Manual 0, Planned 6</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Limits and messages are not confirmed (PT-025).</td>
+</tr>
+<tr data-module="Signup" data-coverage="Covered" data-search=" signup agreement checkboxes and links the agreement checkboxes toggle, the terms link opens the terms page, the privacy policy link is clickable and the login link opens the login page. tc-signup-013 tc-signup-014 tc-signup-015 tc-signup-016 tc-signup-017">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Signup</td>
+  <td><strong>Agreement checkboxes and links</strong><br>The agreement checkboxes toggle, the Terms link opens the Terms page, the Privacy Policy link is clickable and the Login link opens the Login page.</td>
+  <td><span class="tc" title="To verify user can toggle 'I agree to be contacted' checkbox">TC-SIGNUP-013</span> <span class="tc" title="To verify user can toggle 'I agree to Terms &amp; Conditions' checkbox">TC-SIGNUP-014</span> <span class="tc" title="To verify Terms link is clickable and opens Terms page">TC-SIGNUP-015</span> <span class="tc" title="To verify Privacy Policy link is clickable">TC-SIGNUP-016</span> <span class="tc" title="To verify Login link navigates to login page">TC-SIGNUP-017</span></td>
+  <td>tests/signup/Signup.spec.ts</td>
+  <td>Automated 5, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Signup" data-coverage="Partially Covered" data-search=" signup request access submission a valid form is submitted once with a success message, and a duplicate email or a double-click does not create a duplicate request. tc-signup-018 tc-signup-021 tc-signup-028 tc-signup-029">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Signup</td>
+  <td><strong>Request Access submission</strong><br>A valid form is submitted once with a success message, and a duplicate email or a double-click does not create a duplicate request.</td>
+  <td><span class="tc" title="To verify successful signup form submission with valid data">TC-SIGNUP-018</span> <span class="tc" title="To verify email duplicate detection (same email cannot be used twice)">TC-SIGNUP-021</span> <span class="tc" title="To verify that double-clicking the signup button does not create duplicate submissions">TC-SIGNUP-028</span> <span class="tc" title="To verify that a clear success message is displayed after successful signup">TC-SIGNUP-029</span></td>
+  <td>tests/signup/Signup.spec.ts</td>
+  <td>Automated 2, Manual 0, Planned 2</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Double-click and success message cases are not confirmed (PT-025).</td>
+</tr>
+<tr data-module="Forgot Password" data-coverage="Covered" data-search=" forgot password forgot password page display the forgot password page displays the logo, heading, instruction, email address field, send verification code button, back to login button, branding panel and testimonial carousel. tc-forgot-password-001 tc-forgot-password-002 tc-forgot-password-003 tc-forgot-password-021">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Forgot Password</td>
+  <td><strong>Forgot Password page display</strong><br>The Forgot Password page displays the logo, heading, instruction, Email Address field, Send Verification Code button, Back to Login button, branding panel and testimonial carousel.</td>
+  <td><span class="tc" title="To verify the Forgot Password page displays the logo, heading, instruction, Email Address field, Send Verification Code button and Back to Login button">TC-FORGOT-PASSWORD-001</span> <span class="tc" title="To verify the Forgot Password page displays the branding panel with the headline, tagline and feature points">TC-FORGOT-PASSWORD-002</span> <span class="tc" title="To verify the Forgot Password page displays the testimonial carousel">TC-FORGOT-PASSWORD-003</span> <span class="tc" title="To verify the Email Address field uses the email input type and displays its placeholder">TC-FORGOT-PASSWORD-021</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 4, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Forgot Password" data-coverage="Covered" data-search=" forgot password email validation an empty email, an email without @ or a domain extension, and a very long email are rejected with a validation message. tc-forgot-password-004 tc-forgot-password-005 tc-forgot-password-008 tc-forgot-password-011">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Forgot Password</td>
+  <td><strong>Email validation</strong><br>An empty email, an email without @ or a domain extension, and a very long email are rejected with a validation message.</td>
+  <td><span class="tc" title="To verify sending a verification code with an empty email shows the email required message">TC-FORGOT-PASSWORD-004</span> <span class="tc" title="To verify sending a verification code with an invalid email format shows the valid email message">TC-FORGOT-PASSWORD-005</span> <span class="tc" title="To verify an email without a domain extension is rejected">TC-FORGOT-PASSWORD-008</span> <span class="tc" title="To verify a very long email address is rejected without breaking the page">TC-FORGOT-PASSWORD-011</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 4, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Forgot Password" data-coverage="Partially Covered" data-search=" forgot password verification code request a verification code is sent for a registered email, including one in upper case or with surrounding spaces, and the reset password step opens; an unregistered email shows user not found; a double-click sends only one code, repeated requests are limited and a logged-in user opening the page is handled. tc-forgot-password-006 tc-forgot-password-007 tc-forgot-password-009 tc-forgot-password-010 tc-forgot-password-015 tc-forgot-password-016 tc-forgot-password-017">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Forgot Password</td>
+  <td><strong>Verification code request</strong><br>A verification code is sent for a registered email, including one in upper case or with surrounding spaces, and the Reset Password step opens; an unregistered email shows User not found; a double-click sends only one code, repeated requests are limited and a logged-in user opening the page is handled.</td>
+  <td><span class="tc" title="To verify sending a verification code to an unregistered email shows the User not found message">TC-FORGOT-PASSWORD-006</span> <span class="tc" title="To verify sending a verification code to a registered email shows the code sent message and the Reset Password step">TC-FORGOT-PASSWORD-007</span> <span class="tc" title="To verify leading and trailing spaces around a registered email are handled">TC-FORGOT-PASSWORD-009</span> <span class="tc" title="To verify a registered email in upper case is treated the same as in lower case">TC-FORGOT-PASSWORD-010</span> <span class="tc" title="To verify double-clicking the Send Verification Code button sends only one code">TC-FORGOT-PASSWORD-015</span> <span class="tc" title="To verify repeated verification code requests for the same email are limited">TC-FORGOT-PASSWORD-016</span> <span class="tc" title="To verify a logged-in user opening the Forgot Password page is handled">TC-FORGOT-PASSWORD-017</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 5, Manual 0, Planned 2</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Rate limit and logged-in behavior are not confirmed (PT-022).</td>
+</tr>
+<tr data-module="Forgot Password" data-coverage="Covered" data-search=" forgot password email field input security sql injection and script input in the email field are rejected without a server error or script execution. tc-forgot-password-012 tc-forgot-password-013">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Forgot Password</td>
+  <td><strong>Email field input security</strong><br>SQL injection and script input in the email field are rejected without a server error or script execution.</td>
+  <td><span class="tc" title="To verify SQL injection input in the email field is rejected">TC-FORGOT-PASSWORD-012</span> <span class="tc" title="To verify script input in the email field is not executed">TC-FORGOT-PASSWORD-013</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 2, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Forgot Password" data-coverage="Covered" data-search=" forgot password navigation, keyboard and responsiveness back to login returns to the login page, the enter key sends the code, the tab order is logical and the page is usable on a mobile viewport. tc-forgot-password-014 tc-forgot-password-018 tc-forgot-password-019 tc-forgot-password-020">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Forgot Password</td>
+  <td><strong>Navigation, keyboard and responsiveness</strong><br>Back to Login returns to the Login page, the Enter key sends the code, the tab order is logical and the page is usable on a mobile viewport.</td>
+  <td><span class="tc" title="To verify pressing Enter in the email field sends the verification code">TC-FORGOT-PASSWORD-014</span> <span class="tc" title="To verify the Back to Login button returns to the Login page">TC-FORGOT-PASSWORD-018</span> <span class="tc" title="To verify the keyboard tab order on the Forgot Password page">TC-FORGOT-PASSWORD-019</span> <span class="tc" title="To verify the Forgot Password page layout on a mobile viewport">TC-FORGOT-PASSWORD-020</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 2, Manual 2, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Reset Password" data-coverage="Covered" data-search=" reset password reset password step display the reset password step displays the heading, instruction, verification code, new password and confirm password fields, countdowns, reset password button and placeholders. tc-reset-password-001 tc-reset-password-002 tc-reset-password-003 tc-reset-password-028">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Reset Password</td>
+  <td><strong>Reset Password step display</strong><br>The Reset Password step displays the heading, instruction, Verification Code, New Password and Confirm Password fields, countdowns, Reset Password button and placeholders.</td>
+  <td><span class="tc" title="To verify the Reset Password step displays the heading, instruction, Verification Code, New Password and Confirm Password fields, resend countdown and Reset Password button">TC-RESET-PASSWORD-001</span> <span class="tc" title="To verify the Reset Password step displays the verification code expiry countdown">TC-RESET-PASSWORD-002</span> <span class="tc" title="To verify the Reset Password step lists the password rules">TC-RESET-PASSWORD-003</span> <span class="tc" title="To verify the Reset Password step fields display their placeholders">TC-RESET-PASSWORD-028</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 4, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>Password rule indicators need the validation-error DOM (PT-026).</td>
+</tr>
+<tr data-module="Reset Password" data-coverage="Partially Covered" data-search=" reset password password and field validation empty fields and a mismatched confirmation are rejected. the new password must be 8 to 12 characters (7 and 13 are rejected, 8 and 12 are accepted) and contain an uppercase letter, a number and a special character. the password rule indicators update as it is typed, and a password equal to the current one is handled. tc-reset-password-004 tc-reset-password-006 tc-reset-password-012 tc-reset-password-013 tc-reset-password-014 tc-reset-password-015 tc-reset-password-016 tc-reset-password-017 tc-reset-password-018 tc-reset-password-019 tc-reset-password-024">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Reset Password</td>
+  <td><strong>Password and field validation</strong><br>Empty fields and a mismatched confirmation are rejected. The New Password must be 8 to 12 characters (7 and 13 are rejected, 8 and 12 are accepted) and contain an uppercase letter, a number and a special character. The password rule indicators update as it is typed, and a password equal to the current one is handled.</td>
+  <td><span class="tc" title="To verify resetting the password with all fields empty shows the required field messages">TC-RESET-PASSWORD-004</span> <span class="tc" title="To verify a Confirm Password that does not match the New Password shows the Passwords do not match message">TC-RESET-PASSWORD-006</span> <span class="tc" title="To verify a New Password with 7 characters is rejected">TC-RESET-PASSWORD-012</span> <span class="tc" title="To verify a New Password with exactly 8 characters is accepted">TC-RESET-PASSWORD-013</span> <span class="tc" title="To verify a New Password with exactly 12 characters is accepted">TC-RESET-PASSWORD-014</span> <span class="tc" title="To verify a New Password with 13 characters is rejected">TC-RESET-PASSWORD-015</span> <span class="tc" title="To verify a New Password without an uppercase letter is rejected">TC-RESET-PASSWORD-016</span> <span class="tc" title="To verify a New Password without a number is rejected">TC-RESET-PASSWORD-017</span> <span class="tc" title="To verify a New Password without a special character is rejected">TC-RESET-PASSWORD-018</span> <span class="tc" title="To verify the password rule indicators change state as the New Password is typed">TC-RESET-PASSWORD-019</span> <span class="tc" title="To verify a New Password that is the same as the current password is handled">TC-RESET-PASSWORD-024</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 4, Manual 0, Planned 7</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Password rule messages are not confirmed (PT-023, PT-026).</td>
+</tr>
+<tr data-module="Reset Password" data-coverage="Partially Covered" data-search=" reset password verification code handling an invalid, expired, superseded (after resend) or already used verification code is rejected with the invalid or expired code message, a code with extra spaces or a different letter case is handled, and script input in the code field is not executed. tc-reset-password-007 tc-reset-password-020 tc-reset-password-021 tc-reset-password-022 tc-reset-password-023 tc-reset-password-026">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Reset Password</td>
+  <td><strong>Verification code handling</strong><br>An invalid, expired, superseded (after Resend) or already used verification code is rejected with the invalid or expired code message, a code with extra spaces or a different letter case is handled, and script input in the code field is not executed.</td>
+  <td><span class="tc" title="To verify resetting the password with an invalid verification code shows the invalid or expired code message">TC-RESET-PASSWORD-007</span> <span class="tc" title="To verify a verification code with extra spaces or a different letter case is handled">TC-RESET-PASSWORD-020</span> <span class="tc" title="To verify an expired verification code is rejected after the countdown ends">TC-RESET-PASSWORD-021</span> <span class="tc" title="To verify the previous verification code is rejected after Resend">TC-RESET-PASSWORD-022</span> <span class="tc" title="To verify a verification code cannot be used a second time after a successful reset">TC-RESET-PASSWORD-023</span> <span class="tc" title="To verify script input in the Verification Code field is not executed">TC-RESET-PASSWORD-026</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 5, Manual 0, Planned 1</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Code format rule and previous-code behavior are not confirmed (PT-023). Depends on the reset user (PT-019, PT-020).</td>
+</tr>
+<tr data-module="Reset Password" data-coverage="Covered" data-search=" reset password resend code and countdowns the resend button sends a new code after its countdown ends, and the code expiry and resend countdowns start at their expected durations. tc-reset-password-008 tc-reset-password-027 tc-reset-password-031">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Reset Password</td>
+  <td><strong>Resend code and countdowns</strong><br>The Resend button sends a new code after its countdown ends, and the code expiry and resend countdowns start at their expected durations.</td>
+  <td><span class="tc" title="To verify the Resend button sends a new verification code">TC-RESET-PASSWORD-008</span> <span class="tc" title="To verify the Resend button replaces the countdown when the resend countdown ends">TC-RESET-PASSWORD-027</span> <span class="tc" title="To verify the code expiry and resend countdowns start at their expected durations">TC-RESET-PASSWORD-031</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 3, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>Depends on the reset user (PT-019).</td>
+</tr>
+<tr data-module="Reset Password" data-coverage="Covered" data-search=" reset password password visibility the show password and hide password buttons on the new password and confirm password fields reveal and mask the value. tc-reset-password-005 tc-reset-password-030">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Reset Password</td>
+  <td><strong>Password visibility</strong><br>The Show password and Hide password buttons on the New Password and Confirm Password fields reveal and mask the value.</td>
+  <td><span class="tc" title="To verify the show and hide toggle on the New Password field">TC-RESET-PASSWORD-005</span> <span class="tc" title="To verify the show and hide toggle on the Confirm Password field">TC-RESET-PASSWORD-030</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 2, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>-</td>
+</tr>
+<tr data-module="Reset Password" data-coverage="Covered" data-search=" reset password successful reset and login with the new password a valid code and password reset the password, the login page opens, the new password logs in and the old password is rejected. tc-reset-password-009 tc-reset-password-010 tc-reset-password-011">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Reset Password</td>
+  <td><strong>Successful reset and login with the new password</strong><br>A valid code and password reset the password, the Login page opens, the new password logs in and the old password is rejected.</td>
+  <td><span class="tc" title="To verify resetting the password with the verification code received by email shows the success message and opens the Login page">TC-RESET-PASSWORD-009</span> <span class="tc" title="To verify login with the new password after a successful reset">TC-RESET-PASSWORD-010</span> <span class="tc" title="To verify login with the old password is rejected after a successful reset">TC-RESET-PASSWORD-011</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 3, Manual 0, Planned 0</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-covered">Covered</span></td>
+  <td>Depends on the reset user and the YOPmail inbox (PT-019, PT-020).</td>
+</tr>
+<tr data-module="Reset Password" data-coverage="Partially Covered" data-search=" reset password navigation, keyboard and page reload back to login returns to the login page, the enter key submits the form and reloading the step is handled. tc-reset-password-025 tc-reset-password-029 tc-reset-password-032">
+  <td><span class="blank">Not assigned</span></td>
+  <td>Reset Password</td>
+  <td><strong>Navigation, keyboard and page reload</strong><br>Back to Login returns to the Login page, the Enter key submits the form and reloading the step is handled.</td>
+  <td><span class="tc" title="To verify reloading the Reset Password step is handled">TC-RESET-PASSWORD-025</span> <span class="tc" title="To verify the Back to Login button on the Reset Password step returns to the Login page">TC-RESET-PASSWORD-029</span> <span class="tc" title="To verify pressing Enter in the Confirm Password field submits the Reset Password form">TC-RESET-PASSWORD-032</span></td>
+  <td>tests/forgot-password/ForgotPassword.spec.ts</td>
+  <td>Automated 1, Manual 1, Planned 1</td>
+  <td><span class="status-tag status-not-run">Not Run</span></td>
+  <td><span class="status-tag status-partially-covered">Partially Covered</span></td>
+  <td>Reload behavior is not confirmed (PT-023).</td>
+</tr>
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>Definitions</h2>
+    <div class="legend">
+      <div><strong>Covered</strong>: every mapped test case is Automated or Manual.</div>
+      <div><strong>Partially Covered</strong>: some mapped test cases are Automated or Manual and the rest are not yet.</div>
+      <div><strong>Not Covered</strong>: no mapped test case is Automated or Manual.</div>
+      <div><strong>Execution Status</strong>: Failed if any mapped case failed; Passed if all passed; Partially Run if some passed or were skipped; otherwise Not Run. Manual cases are not run by the automation.</div>
+    </div>
+  </section>
+</main>
+<script>(function () {
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#rows tr'));
+  var search = document.getElementById('search');
+  var moduleSelect = document.getElementById('module');
+  var coverage = document.getElementById('coverage');
+  function apply() {
+    var q = search.value.trim().toLowerCase();
+    var shown = 0;
+    rows.forEach(function (row) {
+      var ok = (!q || row.getAttribute('data-search').indexOf(q) !== -1) &&
+        (!moduleSelect.value || row.getAttribute('data-module') === moduleSelect.value) &&
+        (!coverage.value || row.getAttribute('data-coverage') === coverage.value);
+      row.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    });
+    document.getElementById('resultsTitle').textContent = 'Requirement Traceability (' + shown + ' of ' + rows.length + ')';
+  }
+  [search, moduleSelect, coverage].forEach(function (el) { el.addEventListener('input', apply); });
+  document.getElementById('reset').addEventListener('click', function () {
+    search.value = ''; moduleSelect.value = ''; coverage.value = ''; apply();
+  });
+  apply();
+})();</script>
+</body>
+</html>

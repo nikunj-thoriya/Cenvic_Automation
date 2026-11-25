@@ -1,0 +1,325 @@
+{
+  "project": "Cenvic",
+  "title": "Requirement Traceability Matrix",
+  "schemaVersion": "1.0",
+  "version": "1.0",
+  "lastUpdated": "2026-11-23 IST",
+  "scope": ["Login", "Home", "Signup", "Forgot Password", "Reset Password"],
+  "note": "No FRD or requirement IDs have been provided. Each row is a feature-level requirement derived from the approved test cases and the recorded DOM. Requirement IDs are intentionally blank and will be assigned later. Test case, automation and execution data come from test-cases.json.",
+  "requirements": [
+    {
+      "requirementId": "",
+      "module": "Login",
+      "feature": "Login page display and navigation links",
+      "description": "The Login page opens from the Home Get Started link and displays the logo, heading, fields, Remember Me, Forgot Password link, Login button and Request Access link. The Forgot Password, Request Access and Back to Home links navigate correctly.",
+      "testCaseIds": ["TC-LOGIN-001", "TC-LOGIN-002", "TC-LOGIN-018", "TC-LOGIN-019", "TC-LOGIN-020"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Login",
+      "feature": "Login with valid credentials",
+      "description": "A registered user who enters a valid email and password is logged in, sees the Login successfully message and is redirected to the dashboard.",
+      "testCaseIds": ["TC-LOGIN-003", "TC-LOGIN-004", "TC-LOGIN-005"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Login",
+      "feature": "Login rejection with invalid credentials",
+      "description": "A user with an incorrect password or an unregistered email is not logged in and sees the matching error message. Repeated failed attempts lock the account.",
+      "testCaseIds": ["TC-LOGIN-006", "TC-LOGIN-007", "TC-LOGIN-008", "TC-LOGIN-009", "TC-LOGIN-028"],
+      "remarks": "Account lockout rule is not confirmed (PT-013)."
+    },
+    {
+      "requirementId": "",
+      "module": "Login",
+      "feature": "Login field validation",
+      "description": "Empty fields and an invalid email format are rejected with the required and valid email messages.",
+      "testCaseIds": ["TC-LOGIN-010", "TC-LOGIN-011", "TC-LOGIN-012", "TC-LOGIN-013", "TC-LOGIN-021"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Login",
+      "feature": "Password visibility",
+      "description": "The password is masked by default and the Show password and Hide password buttons reveal and mask it.",
+      "testCaseIds": ["TC-LOGIN-014", "TC-LOGIN-015"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Login",
+      "feature": "Remember Me",
+      "description": "The Remember Me checkbox and its label toggle the checked state, and the session persists after the browser is reopened when it is checked.",
+      "testCaseIds": ["TC-LOGIN-016", "TC-LOGIN-017", "TC-LOGIN-030"],
+      "remarks": "Persistence behavior is not confirmed (PT-017)."
+    },
+    {
+      "requirementId": "",
+      "module": "Login",
+      "feature": "Email and password input handling",
+      "description": "Leading spaces, long values, letter case, special characters and injection attempts in the email and password fields are handled safely and consistently.",
+      "testCaseIds": ["TC-LOGIN-022", "TC-LOGIN-023", "TC-LOGIN-024", "TC-LOGIN-025", "TC-LOGIN-026", "TC-LOGIN-027"],
+      "remarks": "Expected behavior for edge inputs is not confirmed (PT-016, PT-025)."
+    },
+    {
+      "requirementId": "",
+      "module": "Login",
+      "feature": "Login accessibility and responsiveness",
+      "description": "The Login page is usable with the keyboard and a screen reader and on a mobile viewport.",
+      "testCaseIds": ["TC-LOGIN-029", "TC-LOGIN-031", "TC-LOGIN-032"],
+      "remarks": "Screen reader scope is not confirmed (PT-025)."
+    },
+    {
+      "requirementId": "",
+      "module": "Home",
+      "feature": "Home page display",
+      "description": "The Home page displays the logo, hero heading, Start Now link, statistics strip and Why Choose Us section.",
+      "testCaseIds": ["TC-HOME-001", "TC-HOME-007", "TC-HOME-008"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Home",
+      "feature": "Navigation and call-to-action links",
+      "description": "The Get Started, Start Now, Features, How It Works and logo links, and the bottom Get Started link, open the correct page or section.",
+      "testCaseIds": ["TC-HOME-002", "TC-HOME-003", "TC-HOME-004", "TC-HOME-005", "TC-HOME-006", "TC-HOME-013"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Home",
+      "feature": "Content sections and carousel",
+      "description": "The Features, How It Works and How Teams Use Campaigns sections display their content, the content is loaded from the admin configuration, and the carousel can be used with the keyboard.",
+      "testCaseIds": ["TC-HOME-010", "TC-HOME-011", "TC-HOME-012", "TC-HOME-026", "TC-HOME-027", "TC-HOME-028"],
+      "remarks": "Admin panel integration is not verified (PT-018, PT-025)."
+    },
+    {
+      "requirementId": "",
+      "module": "Home",
+      "feature": "Contact dialog",
+      "description": "The Contact Us and footer Contact buttons open the contact dialog, and the Close button, X button, Escape key and a click outside close it without submitting data.",
+      "testCaseIds": ["TC-HOME-009", "TC-HOME-018", "TC-HOME-021", "TC-HOME-022", "TC-HOME-023", "TC-HOME-024"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Home",
+      "feature": "Footer",
+      "description": "The footer displays the logo, description and Company links, the Products links scroll to their sections, and the social icons open Facebook, LinkedIn and Instagram in a new tab.",
+      "testCaseIds": ["TC-HOME-014", "TC-HOME-015", "TC-HOME-016", "TC-HOME-017", "TC-HOME-019", "TC-HOME-025"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Home",
+      "feature": "Public access, responsiveness and performance",
+      "description": "The Home page is reachable without login, displays correctly on a mobile viewport and loads within the accepted time.",
+      "testCaseIds": ["TC-HOME-020", "TC-HOME-029", "TC-HOME-030"],
+      "remarks": "Performance threshold is not confirmed (PT-025)."
+    },
+    {
+      "requirementId": "",
+      "module": "Signup",
+      "feature": "Request Access page display",
+      "description": "The Request Access page displays the Company Details and Personal Details sections and all their fields.",
+      "testCaseIds": ["TC-SIGNUP-001", "TC-SIGNUP-002", "TC-SIGNUP-003"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Signup",
+      "feature": "Required field validation",
+      "description": "Each required field and both agreement checkboxes show their required message when left empty or unchecked.",
+      "testCaseIds": [
+        "TC-SIGNUP-004",
+        "TC-SIGNUP-005",
+        "TC-SIGNUP-006",
+        "TC-SIGNUP-007",
+        "TC-SIGNUP-008",
+        "TC-SIGNUP-009",
+        "TC-SIGNUP-011",
+        "TC-SIGNUP-012"
+      ],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Signup",
+      "feature": "Field format and input validation",
+      "description": "The phone, email, company name, name and message fields accept valid values and reject invalid formats, special characters, extra spaces and values over the limit.",
+      "testCaseIds": [
+        "TC-SIGNUP-010",
+        "TC-SIGNUP-019",
+        "TC-SIGNUP-020",
+        "TC-SIGNUP-022",
+        "TC-SIGNUP-023",
+        "TC-SIGNUP-024",
+        "TC-SIGNUP-025",
+        "TC-SIGNUP-026",
+        "TC-SIGNUP-027"
+      ],
+      "remarks": "Limits and messages are not confirmed (PT-025)."
+    },
+    {
+      "requirementId": "",
+      "module": "Signup",
+      "feature": "Agreement checkboxes and links",
+      "description": "The agreement checkboxes toggle, the Terms link opens the Terms page, the Privacy Policy link is clickable and the Login link opens the Login page.",
+      "testCaseIds": ["TC-SIGNUP-013", "TC-SIGNUP-014", "TC-SIGNUP-015", "TC-SIGNUP-016", "TC-SIGNUP-017"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Signup",
+      "feature": "Request Access submission",
+      "description": "A valid form is submitted once with a success message, and a duplicate email or a double-click does not create a duplicate request.",
+      "testCaseIds": ["TC-SIGNUP-018", "TC-SIGNUP-021", "TC-SIGNUP-028", "TC-SIGNUP-029"],
+      "remarks": "Double-click and success message cases are not confirmed (PT-025)."
+    },
+    {
+      "requirementId": "",
+      "module": "Forgot Password",
+      "feature": "Forgot Password page display",
+      "description": "The Forgot Password page displays the logo, heading, instruction, Email Address field, Send Verification Code button, Back to Login button, branding panel and testimonial carousel.",
+      "testCaseIds": [
+        "TC-FORGOT-PASSWORD-001",
+        "TC-FORGOT-PASSWORD-002",
+        "TC-FORGOT-PASSWORD-003",
+        "TC-FORGOT-PASSWORD-021"
+      ],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Forgot Password",
+      "feature": "Email validation",
+      "description": "An empty email, an email without @ or a domain extension, and a very long email are rejected with a validation message.",
+      "testCaseIds": [
+        "TC-FORGOT-PASSWORD-004",
+        "TC-FORGOT-PASSWORD-005",
+        "TC-FORGOT-PASSWORD-008",
+        "TC-FORGOT-PASSWORD-011"
+      ],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Forgot Password",
+      "feature": "Verification code request",
+      "description": "A verification code is sent for a registered email, including one in upper case or with surrounding spaces, and the Reset Password step opens; an unregistered email shows User not found; a double-click sends only one code, repeated requests are limited and a logged-in user opening the page is handled.",
+      "testCaseIds": [
+        "TC-FORGOT-PASSWORD-006",
+        "TC-FORGOT-PASSWORD-007",
+        "TC-FORGOT-PASSWORD-009",
+        "TC-FORGOT-PASSWORD-010",
+        "TC-FORGOT-PASSWORD-015",
+        "TC-FORGOT-PASSWORD-016",
+        "TC-FORGOT-PASSWORD-017"
+      ],
+      "remarks": "Rate limit and logged-in behavior are not confirmed (PT-022)."
+    },
+    {
+      "requirementId": "",
+      "module": "Forgot Password",
+      "feature": "Email field input security",
+      "description": "SQL injection and script input in the email field are rejected without a server error or script execution.",
+      "testCaseIds": ["TC-FORGOT-PASSWORD-012", "TC-FORGOT-PASSWORD-013"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Forgot Password",
+      "feature": "Navigation, keyboard and responsiveness",
+      "description": "Back to Login returns to the Login page, the Enter key sends the code, the tab order is logical and the page is usable on a mobile viewport.",
+      "testCaseIds": [
+        "TC-FORGOT-PASSWORD-014",
+        "TC-FORGOT-PASSWORD-018",
+        "TC-FORGOT-PASSWORD-019",
+        "TC-FORGOT-PASSWORD-020"
+      ],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Reset Password",
+      "feature": "Reset Password step display",
+      "description": "The Reset Password step displays the heading, instruction, Verification Code, New Password and Confirm Password fields, countdowns, Reset Password button and placeholders.",
+      "testCaseIds": [
+        "TC-RESET-PASSWORD-001",
+        "TC-RESET-PASSWORD-002",
+        "TC-RESET-PASSWORD-003",
+        "TC-RESET-PASSWORD-028"
+      ],
+      "remarks": "Password rule indicators need the validation-error DOM (PT-026)."
+    },
+    {
+      "requirementId": "",
+      "module": "Reset Password",
+      "feature": "Password and field validation",
+      "description": "Empty fields and a mismatched confirmation are rejected. The New Password must be 8 to 12 characters (7 and 13 are rejected, 8 and 12 are accepted) and contain an uppercase letter, a number and a special character. The password rule indicators update as it is typed, and a password equal to the current one is handled.",
+      "testCaseIds": [
+        "TC-RESET-PASSWORD-004",
+        "TC-RESET-PASSWORD-006",
+        "TC-RESET-PASSWORD-012",
+        "TC-RESET-PASSWORD-013",
+        "TC-RESET-PASSWORD-014",
+        "TC-RESET-PASSWORD-015",
+        "TC-RESET-PASSWORD-016",
+        "TC-RESET-PASSWORD-017",
+        "TC-RESET-PASSWORD-018",
+        "TC-RESET-PASSWORD-019",
+        "TC-RESET-PASSWORD-024"
+      ],
+      "remarks": "Password rule messages are not confirmed (PT-023, PT-026)."
+    },
+    {
+      "requirementId": "",
+      "module": "Reset Password",
+      "feature": "Verification code handling",
+      "description": "An invalid, expired, superseded (after Resend) or already used verification code is rejected with the invalid or expired code message, a code with extra spaces or a different letter case is handled, and script input in the code field is not executed.",
+      "testCaseIds": [
+        "TC-RESET-PASSWORD-007",
+        "TC-RESET-PASSWORD-020",
+        "TC-RESET-PASSWORD-021",
+        "TC-RESET-PASSWORD-022",
+        "TC-RESET-PASSWORD-023",
+        "TC-RESET-PASSWORD-026"
+      ],
+      "remarks": "Code format rule and previous-code behavior are not confirmed (PT-023). Depends on the reset user (PT-019, PT-020)."
+    },
+    {
+      "requirementId": "",
+      "module": "Reset Password",
+      "feature": "Resend code and countdowns",
+      "description": "The Resend button sends a new code after its countdown ends, and the code expiry and resend countdowns start at their expected durations.",
+      "testCaseIds": ["TC-RESET-PASSWORD-008", "TC-RESET-PASSWORD-027", "TC-RESET-PASSWORD-031"],
+      "remarks": "Depends on the reset user (PT-019)."
+    },
+    {
+      "requirementId": "",
+      "module": "Reset Password",
+      "feature": "Password visibility",
+      "description": "The Show password and Hide password buttons on the New Password and Confirm Password fields reveal and mask the value.",
+      "testCaseIds": ["TC-RESET-PASSWORD-005", "TC-RESET-PASSWORD-030"],
+      "remarks": ""
+    },
+    {
+      "requirementId": "",
+      "module": "Reset Password",
+      "feature": "Successful reset and login with the new password",
+      "description": "A valid code and password reset the password, the Login page opens, the new password logs in and the old password is rejected.",
+      "testCaseIds": ["TC-RESET-PASSWORD-009", "TC-RESET-PASSWORD-010", "TC-RESET-PASSWORD-011"],
+      "remarks": "Depends on the reset user and the YOPmail inbox (PT-019, PT-020)."
+    },
+    {
+      "requirementId": "",
+      "module": "Reset Password",
+      "feature": "Navigation, keyboard and page reload",
+      "description": "Back to Login returns to the Login page, the Enter key submits the form and reloading the step is handled.",
+      "testCaseIds": ["TC-RESET-PASSWORD-025", "TC-RESET-PASSWORD-029", "TC-RESET-PASSWORD-032"],
+      "remarks": "Reload behavior is not confirmed (PT-023)."
+    }
+  ]
+}

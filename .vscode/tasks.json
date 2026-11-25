@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Generate Test Cases HTML",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"testcases:html"
+			],
+			"group": "build"
+		}
+	]
+}

@@ -1,0 +1,67 @@
+{
+  "routes": {
+    "signup": "/get-started",
+    "login": "/login",
+    "home": "/"
+  },
+  "companyDetails": {
+    "companyName": "Alliance Tek",
+    "industry": "1: 1",
+    "address": "Ahmedabad, Gujarat",
+    "companyNameAlt": "Test Company",
+    "industryAlt": "2: 2",
+    "addressAlt": "Mumbai, Maharashtra"
+  },
+  "personalDetails": {
+    "name": "Nikunj Thoriya",
+    "email": "nikunj.thoriya+test@alliancetek.com",
+    "phone": "(111) 111-1111",
+    "message": "Interested in CENVIC for video testimonials",
+    "nameAlt": "John Doe",
+    "emailAlt": "john.doe@example.com",
+    "emailWithTag": "first.last+tag@example.co.in",
+    "phoneAlt": "(555) 555-5555"
+  },
+  "fieldLimits": {
+    "companyNameMax": 250,
+    "addressMax": 500,
+    "nameMax": 150,
+    "emailMax": 50,
+    "emailDomain": "@example.com",
+    "messageMax": 2000
+  },
+  "specialCharacters": {
+    "companyName": "Acme & Sons, Inc. #1 (R&D) - O'Neil's @ 100%",
+    "name": "Jean-Luc O'Neil Jr. (Test) #2"
+  },
+  "invalidData": {
+    "invalidEmail": "nikunj.thoriya@a",
+    "invalidEmailFormats": ["plainaddress", "user@@example.com", "@example.com", "nikunj.thoriya@a"],
+    "invalidPhone": "(111) 11",
+    "shortCompanyName": "A",
+    "duplicateEmail": "nikunj.thoriya@alliancetek.com",
+    "sqlInjectionMessage": "' OR '1'='1",
+    "scriptInjectionMessage": "<script>alert(1)</script>"
+  },
+  "validationMessages": {
+    "companyNameRequired": "Company name is required",
+    "industryRequired": "Please select an industry",
+    "addressRequired": "Company address is required",
+    "nameRequired": "Name is required",
+    "emailRequired": "Email is required",
+    "phoneRequired": "Phone number is required",
+    "phoneFormatError": "Enter phone in (555) 555-5555",
+    "agreeToContactRequired": "You must agree to be contacted",
+    "agreeToTermsRequired": "You must accept the Terms &",
+    "emailExists": "Email already exists",
+    "emailTooLong": "Email cannot exceed 50 characters",
+    "companyNameTooLong": "Company name cannot exceed 250 characters",
+    "addressTooLong": "Address cannot exceed 500 characters",
+    "nameTooLong": "Name cannot exceed 150 characters",
+    "messageTooLong": "cannot exceed 2000 characters"
+  },
+  "successMessages": {
+    "signupSuccess": "Thank you! Your request has been received",
+    "thankYou": "Thank you! Our team will contact you"
+  }
+}

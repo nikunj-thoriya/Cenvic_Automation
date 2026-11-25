@@ -1,0 +1,391 @@
+{
+  "project": "Cenvic",
+  "title": "Complete System Data Flow Diagram",
+  "dfdType": "Complete-System",
+  "version": "1.0",
+  "lastUpdated": "2026-11-23 IST",
+  "scope": ["Home", "Login", "Signup (Request Access)", "Forgot Password", "Reset Password"],
+  "note": "No FRD, DFD, API specification or database schema has been provided. These diagrams are built only from the recorded flows, the captured DOM, the environment configuration and the approved test cases. Solid shapes are confirmed by those sources: the web application, the API reached through the API base URL, S3 image storage and the verification code email. Dashed shapes and flows (data stores, Cenvic Team, browser session) are logical items derived from observed behavior; their real names, structure and technology are not documented. The Administrator and any admin or CMS integration are not shown because they are unconfirmed (PT-018).",
+  "notation": "Gane-Sarson notation. External entities are rectangles, processes are rounded rectangles with a number, data stores are open-ended rectangles with an ID (D1, D2...), and arrows are labelled data flows (F1, F2...). Level 0 is the context diagram, Level 1 shows the main processes and data stores, and Level 2 shows the functions of one module. Reset Password is part of the Password Recovery process (4.0), so its Level 2 functions are numbered 4.6 to 4.10.",
+  "sources": [
+    "dom/login/login-recorded-flow.txt and login-dom.html",
+    "dom/home/home-recorded-flow.txt and home-dom.html",
+    "dom/signup/signup-recorded-flow.txt and signup-dom.html",
+    "dom/forgot-password/forgot-password-recorded-flow.txt and the Forgot / Reset Password DOM snapshots",
+    "documentation/Test-Cases/test-cases.json (approved test cases for the five modules)",
+    "Environment configuration (dev): web application URL, API base URL and S3 image storage"
+  ],
+  "diagrams": [
+    {
+      "id": "CS-L0",
+      "level": "0",
+      "title": "Context diagram",
+      "description": "The Cenvic platform for the five modules and the people and systems it exchanges data with.",
+      "nodes": [
+        { "id": "V", "type": "entity", "label": "Visitor / Prospective Customer", "col": 0, "row": 0 },
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 0, "row": 2 },
+        {
+          "id": "P0",
+          "type": "process",
+          "number": "0",
+          "label": "Cenvic Platform (web application, API and data)",
+          "col": 1,
+          "row": 1
+        },
+        {
+          "id": "SO",
+          "type": "entity",
+          "label": "Social Platforms (Facebook, LinkedIn, Instagram)",
+          "col": 0,
+          "row": 1
+        },
+        { "id": "S3", "type": "entity", "label": "S3 Image Storage", "col": 2, "row": 0 },
+        { "id": "TM", "type": "entity", "label": "Cenvic Team", "col": 2, "row": 1, "derived": true },
+        { "id": "EM", "type": "entity", "label": "Email Service", "col": 2, "row": 2 }
+      ],
+      "flows": [
+        { "from": "V", "to": "P0", "label": "Page visits, link clicks, Request Access form" },
+        { "from": "P0", "to": "V", "label": "Page content, validation messages, thank-you message" },
+        { "from": "U", "to": "P0", "label": "Email, password, verification code, new password", "at": 0.7 },
+        { "from": "P0", "to": "U", "label": "Validation messages, toasts, Dashboard redirect" },
+        { "from": "S3", "to": "P0", "label": "Images" },
+        { "from": "P0", "to": "TM", "label": "Access request for review", "derived": true },
+        { "from": "P0", "to": "EM", "label": "Verification code email request", "derived": true },
+        { "from": "EM", "to": "U", "label": "Verification code email" },
+        { "from": "P0", "to": "SO", "label": "Social link opens in a new tab" }
+      ],
+      "notes": [
+        "The person who requests access and the person who logs in are shown as two roles of the same actor type; role and permission rules are not documented (PT-005).",
+        "How a Request Access submission reaches the Cenvic Team (email, admin screen or CMS) is not confirmed (PT-018)."
+      ]
+    },
+    {
+      "id": "CS-L1",
+      "level": "1",
+      "title": "Main processes and data stores",
+      "description": "The four main processes of the scope and the logical data stores they read and write.",
+      "nodes": [
+        { "id": "V", "type": "entity", "label": "Visitor / Prospective Customer", "col": 0, "row": 1.5 },
+        { "id": "TM", "type": "entity", "label": "Cenvic Team", "col": 0, "row": 2.9, "derived": true },
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 0, "row": 4 },
+        { "id": "EM", "type": "entity", "label": "Email Service", "col": 0, "row": 5.4 },
+        { "id": "S3", "type": "entity", "label": "S3 Image Storage", "col": 2, "row": 0 },
+        { "id": "P1", "type": "process", "number": "1.0", "label": "Public Content (Home)", "col": 1, "row": 1 },
+        { "id": "P3", "type": "process", "number": "3.0", "label": "Access Request (Signup)", "col": 1, "row": 2 },
+        { "id": "P2", "type": "process", "number": "2.0", "label": "Authentication (Login)", "col": 1, "row": 3 },
+        {
+          "id": "P4",
+          "type": "process",
+          "number": "4.0",
+          "label": "Password Recovery (Forgot and Reset)",
+          "col": 1,
+          "row": 4.5
+        },
+        { "id": "D4", "type": "store", "number": "D4", "label": "Home Content", "col": 2, "row": 1, "derived": true },
+        {
+          "id": "D2",
+          "type": "store",
+          "number": "D2",
+          "label": "Access Requests",
+          "col": 2,
+          "row": 2,
+          "derived": true
+        },
+        {
+          "id": "D5",
+          "type": "store",
+          "number": "D5",
+          "label": "Browser Session",
+          "col": 3,
+          "row": 2.5,
+          "derived": true
+        },
+        {
+          "id": "D1",
+          "type": "store",
+          "number": "D1",
+          "label": "User Accounts",
+          "col": 2,
+          "row": 3.75,
+          "derived": true
+        },
+        {
+          "id": "D3",
+          "type": "store",
+          "number": "D3",
+          "label": "Verification Codes",
+          "col": 2,
+          "row": 5.5,
+          "derived": true
+        }
+      ],
+      "flows": [
+        { "from": "V", "to": "P1", "label": "Page visit, section and link clicks" },
+        { "from": "P1", "to": "V", "label": "Landing page content" },
+        { "from": "V", "to": "P3", "label": "Request Access form data" },
+        { "from": "P3", "to": "V", "label": "Validation messages, thank-you message" },
+        { "from": "D4", "to": "P1", "label": "Home content (categories)", "derived": true },
+        { "from": "S3", "to": "P1", "label": "Images" },
+        { "from": "P3", "to": "D2", "label": "New access request", "derived": true },
+        { "from": "D2", "to": "P3", "label": "Existing email result", "derived": true },
+        { "from": "P3", "to": "TM", "label": "Access request for review", "derived": true },
+        { "from": "U", "to": "P2", "label": "Email, password, Remember Me" },
+        { "from": "P2", "to": "U", "label": "Validation messages, toasts, Dashboard redirect" },
+        { "from": "P2", "to": "D1", "label": "Credential lookup", "derived": true },
+        { "from": "D1", "to": "P2", "label": "Account match result", "derived": true },
+        { "from": "P2", "to": "D5", "label": "Session data", "derived": true },
+        { "from": "U", "to": "P4", "label": "Email, verification code, new password" },
+        { "from": "P4", "to": "U", "label": "Validation messages, toasts" },
+        { "from": "P4", "to": "D1", "label": "Account lookup, new password", "derived": true },
+        { "from": "D1", "to": "P4", "label": "Account found or not found", "derived": true },
+        { "from": "P4", "to": "D3", "label": "Verification code", "derived": true },
+        { "from": "D3", "to": "P4", "label": "Code check result", "derived": true },
+        { "from": "P4", "to": "EM", "label": "Code email request", "derived": true },
+        { "from": "EM", "to": "U", "label": "Verification code email" }
+      ],
+      "notes": [
+        "Navigation between the pages (for example Home to Login) is shown in the UI-Based DFD.",
+        "Data store names and boundaries are logical and derived from observed behavior; they must be confirmed against the real database schema (PT-031).",
+        "Whether Remember Me keeps the session after the browser is reopened is not confirmed (PT-017)."
+      ]
+    },
+    {
+      "id": "CS-L2-HOME",
+      "level": "2",
+      "title": "1.0 Public Content (Home)",
+      "description": "The functions of the Home module and the data they use.",
+      "nodes": [
+        { "id": "V", "type": "entity", "label": "Visitor / Prospective Customer", "col": 0, "row": 2 },
+        { "id": "P11", "type": "process", "number": "1.1", "label": "Request Home content", "col": 1, "row": 0 },
+        { "id": "P12", "type": "process", "number": "1.2", "label": "Render landing page", "col": 1, "row": 1 },
+        { "id": "P13", "type": "process", "number": "1.3", "label": "Navigate sections and pages", "col": 1, "row": 2 },
+        { "id": "P14", "type": "process", "number": "1.4", "label": "Handle Contact dialog", "col": 1, "row": 3 },
+        { "id": "P15", "type": "process", "number": "1.5", "label": "Open social links", "col": 1, "row": 4 },
+        { "id": "D4", "type": "store", "number": "D4", "label": "Home Content", "col": 2, "row": 0, "derived": true },
+        { "id": "S3", "type": "entity", "label": "S3 Image Storage", "col": 2, "row": 1 },
+        { "id": "SO", "type": "entity", "label": "Social Platforms", "col": 2, "row": 4 }
+      ],
+      "flows": [
+        { "from": "V", "to": "P11", "label": "Page visit (/)" },
+        { "from": "P11", "to": "D4", "label": "Content request", "derived": true },
+        { "from": "D4", "to": "P11", "label": "Home content (categories)", "derived": true },
+        { "from": "P11", "to": "P12", "label": "Content to render" },
+        { "from": "S3", "to": "P12", "label": "Images" },
+        { "from": "P12", "to": "V", "label": "Hero, stats, Features, How It Works, Teams Use Campaigns, footer" },
+        { "from": "V", "to": "P13", "label": "Navigation bar, CTA and footer clicks" },
+        { "from": "P13", "to": "V", "label": "Scroll to section or page change" },
+        { "from": "V", "to": "P14", "label": "Contact Us, Close, X, Escape, outside click" },
+        { "from": "P14", "to": "V", "label": "Contact dialog opened or closed" },
+        { "from": "V", "to": "P15", "label": "Facebook, LinkedIn, Instagram click" },
+        { "from": "P15", "to": "SO", "label": "Link opens in a new tab" }
+      ],
+      "notes": [
+        "Contact dialog fields and any submission are not documented (PT-027); the dialog is shown only as opened and closed.",
+        "Home content is derived from the CMS-driven category buttons noted in the Home recording (PT-018)."
+      ]
+    },
+    {
+      "id": "CS-L2-LOGIN",
+      "level": "2",
+      "title": "2.0 Authentication (Login)",
+      "description": "The functions of the Login module and the data they use.",
+      "nodes": [
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 0, "row": 1.5 },
+        { "id": "P21", "type": "process", "number": "2.1", "label": "Validate login input", "col": 1, "row": 0 },
+        { "id": "P22", "type": "process", "number": "2.2", "label": "Authenticate credentials", "col": 1, "row": 1 },
+        { "id": "P23", "type": "process", "number": "2.3", "label": "Display result and redirect", "col": 1, "row": 2 },
+        { "id": "P24", "type": "process", "number": "2.4", "label": "Establish session", "col": 1, "row": 3 },
+        { "id": "D1", "type": "store", "number": "D1", "label": "User Accounts", "col": 2, "row": 1, "derived": true },
+        { "id": "DB", "type": "entity", "label": "Dashboard (outside this scope)", "col": 2, "row": 2 },
+        { "id": "D5", "type": "store", "number": "D5", "label": "Browser Session", "col": 2, "row": 3, "derived": true }
+      ],
+      "flows": [
+        { "from": "U", "to": "P21", "label": "Email, password, Remember Me" },
+        { "from": "P21", "to": "U", "label": "Required and valid email messages" },
+        { "from": "P21", "to": "P22", "label": "Valid credentials" },
+        { "from": "P22", "to": "D1", "label": "Credential lookup", "derived": true },
+        { "from": "D1", "to": "P22", "label": "Account match result", "derived": true },
+        { "from": "P22", "to": "P23", "label": "Authentication result" },
+        {
+          "from": "P23",
+          "to": "U",
+          "label": "Login successfully, Incorrect password or Email ID not registered toast"
+        },
+        { "from": "P23", "to": "DB", "label": "Redirect to /app/dashboard" },
+        { "from": "P23", "to": "P24", "label": "Successful login" },
+        { "from": "P24", "to": "D5", "label": "Session data", "derived": true }
+      ],
+      "notes": [
+        "How the session is stored (cookie, local storage or token) is not confirmed, and neither is Remember Me persistence (PT-017).",
+        "Account lockout after repeated failures is not confirmed (PT-013)."
+      ]
+    },
+    {
+      "id": "CS-L2-SIGNUP",
+      "level": "2",
+      "title": "3.0 Access Request (Signup)",
+      "description": "The functions of the Request Access module and the data they use.",
+      "nodes": [
+        { "id": "V", "type": "entity", "label": "Visitor / Prospective Customer", "col": 0, "row": 1 },
+        { "id": "P31", "type": "process", "number": "3.1", "label": "Validate request form", "col": 1, "row": 0 },
+        {
+          "id": "P32",
+          "type": "process",
+          "number": "3.2",
+          "label": "Check existing email and save access request",
+          "col": 1,
+          "row": 1
+        },
+        { "id": "P33", "type": "process", "number": "3.3", "label": "Display result", "col": 1, "row": 2 },
+        {
+          "id": "D2",
+          "type": "store",
+          "number": "D2",
+          "label": "Access Requests",
+          "col": 2,
+          "row": 0.5,
+          "derived": true
+        },
+        { "id": "TM", "type": "entity", "label": "Cenvic Team", "col": 2, "row": 1.5, "derived": true }
+      ],
+      "flows": [
+        { "from": "V", "to": "P31", "label": "Company, contact details, message, agreements" },
+        { "from": "P31", "to": "V", "label": "Required and format messages" },
+        { "from": "P31", "to": "P32", "label": "Valid form data" },
+        { "from": "P32", "to": "D2", "label": "Email lookup, new access request", "derived": true },
+        { "from": "D2", "to": "P32", "label": "Existing email result", "derived": true },
+        { "from": "P32", "to": "TM", "label": "Access request for review", "derived": true },
+        { "from": "P32", "to": "P33", "label": "Submission result (success or Email already exists)" },
+        { "from": "P33", "to": "V", "label": "Thank-you message, Back to Login link or error message" }
+      ],
+      "notes": [
+        "Where the duplicate email check happens and what the Cenvic Team receives are not confirmed (PT-018).",
+        "Phone, message length and double-click submission rules are not confirmed (PT-025)."
+      ]
+    },
+    {
+      "id": "CS-L2-FORGOT",
+      "level": "2",
+      "title": "4.0 Password Recovery - Forgot Password",
+      "description": "The functions of the Forgot Password page (email step) and the data they use. The Reset Password functions are in the next diagram.",
+      "nodes": [
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 0, "row": 2 },
+        { "id": "EM", "type": "entity", "label": "Email Service", "col": 0, "row": 4 },
+        { "id": "P41", "type": "process", "number": "4.1", "label": "Validate email", "col": 1, "row": 0 },
+        { "id": "P42", "type": "process", "number": "4.2", "label": "Find account", "col": 1, "row": 1 },
+        { "id": "P43", "type": "process", "number": "4.3", "label": "Generate and store code", "col": 1, "row": 2 },
+        { "id": "P44", "type": "process", "number": "4.4", "label": "Send code email", "col": 1, "row": 3 },
+        { "id": "P45", "type": "process", "number": "4.5", "label": "Display result", "col": 1, "row": 4 },
+        {
+          "id": "D1",
+          "type": "store",
+          "number": "D1",
+          "label": "User Accounts",
+          "col": 2,
+          "row": 0.5,
+          "derived": true
+        },
+        {
+          "id": "D3",
+          "type": "store",
+          "number": "D3",
+          "label": "Verification Codes",
+          "col": 2,
+          "row": 2,
+          "derived": true
+        }
+      ],
+      "flows": [
+        { "from": "U", "to": "P41", "label": "Email address" },
+        { "from": "P41", "to": "U", "label": "Required and valid email messages" },
+        { "from": "P41", "to": "P42", "label": "Valid email" },
+        { "from": "P42", "to": "D1", "label": "Account lookup", "derived": true },
+        { "from": "D1", "to": "P42", "label": "Account found or not found", "derived": true },
+        { "from": "P42", "to": "P43", "label": "Account found" },
+        {
+          "from": "P42",
+          "to": "P45",
+          "label": "User not found result",
+          "via": [
+            [1.5, 1],
+            [1.5, 4]
+          ]
+        },
+        { "from": "P43", "to": "D3", "label": "Verification code", "derived": true, "at": 0.82 },
+        { "from": "P43", "to": "P44", "label": "Verification code" },
+        { "from": "P44", "to": "EM", "label": "Code email request", "derived": true },
+        { "from": "EM", "to": "U", "label": "Verification code email" },
+        { "from": "P44", "to": "P45", "label": "Code sent result" },
+        { "from": "P45", "to": "U", "label": "Verification code has been sent or User not found toast" }
+      ],
+      "notes": [
+        "Rate limiting of repeated requests and behavior for a logged-in user are not confirmed (PT-022).",
+        "After a successful request the Reset Password step opens on the same page; its functions are shown in the next diagram."
+      ]
+    },
+    {
+      "id": "CS-L2-RESET",
+      "level": "2",
+      "title": "4.0 Password Recovery - Reset Password",
+      "description": "The functions of the Reset Password step (code and new password) and the data they use.",
+      "nodes": [
+        { "id": "EM", "type": "entity", "label": "Email Service", "col": 0, "row": 0 },
+        { "id": "U", "type": "entity", "label": "Registered User", "col": 0, "row": 2 },
+        { "id": "P410", "type": "process", "number": "4.10", "label": "Resend code", "col": 1, "row": 0 },
+        { "id": "P46", "type": "process", "number": "4.6", "label": "Validate reset input", "col": 1, "row": 1 },
+        { "id": "P47", "type": "process", "number": "4.7", "label": "Verify and consume code", "col": 1, "row": 2 },
+        { "id": "P48", "type": "process", "number": "4.8", "label": "Update password", "col": 1, "row": 3 },
+        {
+          "id": "P49",
+          "type": "process",
+          "number": "4.9",
+          "label": "Display result and open Login",
+          "col": 1,
+          "row": 4
+        },
+        {
+          "id": "D3",
+          "type": "store",
+          "number": "D3",
+          "label": "Verification Codes",
+          "col": 2,
+          "row": 1,
+          "derived": true
+        },
+        { "id": "D1", "type": "store", "number": "D1", "label": "User Accounts", "col": 2, "row": 3, "derived": true },
+        { "id": "LG", "type": "entity", "label": "Login Page (2.0)", "col": 1, "row": 5 }
+      ],
+      "flows": [
+        { "from": "U", "to": "P46", "label": "Verification code, new password, confirm password", "at": 0.3 },
+        { "from": "P46", "to": "U", "label": "Required, mismatch and password rule messages" },
+        { "from": "P46", "to": "P47", "label": "Valid input" },
+        { "from": "P47", "to": "D3", "label": "Code check", "derived": true },
+        { "from": "D3", "to": "P47", "label": "Code valid or invalid", "derived": true },
+        { "from": "P47", "to": "P48", "label": "Code valid" },
+        {
+          "from": "P47",
+          "to": "P49",
+          "label": "Invalid code result",
+          "via": [
+            [1.5, 2],
+            [1.5, 4]
+          ]
+        },
+        { "from": "P48", "to": "D1", "label": "New password", "derived": true, "at": 0.82 },
+        { "from": "P48", "to": "P49", "label": "Password updated" },
+        { "from": "P49", "to": "U", "label": "Password changed successfully or invalid code toast" },
+        { "from": "P49", "to": "LG", "label": "Login page opens" },
+        { "from": "U", "to": "P410", "label": "Resend click" },
+        { "from": "P410", "to": "D3", "label": "New verification code", "derived": true },
+        { "from": "P410", "to": "EM", "label": "Code email request", "derived": true },
+        { "from": "EM", "to": "U", "label": "New verification code email" },
+        { "from": "P410", "to": "U", "label": "Verification code has been sent toast" }
+      ],
+      "notes": [
+        "Password rule messages, code format and reload behavior are not confirmed (PT-023, PT-026).",
+        "Whether a used or expired code is invalidated is not documented; the Verify and consume code step is derived from the invalid code toast.",
+        "The reset user and the email inbox used for automation are tracked in PT-019 and PT-020."
+      ]
+    }
+  ]
+}

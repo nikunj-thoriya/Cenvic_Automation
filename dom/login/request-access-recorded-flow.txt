@@ -1,0 +1,83 @@
+Module        : Login / Request Access
+Page          : Home -> Login -> Request Access (same-origin navigation, no new tab)
+Environment   : dev
+Captured on   : 2026-11-24 (IST)
+Source        : Playwright codegen recording provided by the user; Industry option list provided as raw HTML by the user
+State         : Unauthenticated
+Credentials   : Not applicable; form submits a business-access request, not a login.
+Note          : Evidence of captured UI structure only, not proof of business logic.
+                No full-page DOM HTML snapshot has been saved for this page; the Industry <select>
+                markup was provided directly and is included below instead.
+
+URLs
+  Login            : https://cenvicagencydev.alliancetek.net/login
+  Request Access   : https://cenvicagencydev.alliancetek.net/get-started
+
+Navigation
+  Login -> link "Request Access." -> Request Access page
+  Request Access (after successful submit) -> element "Back to Login" -> Login
+
+Request Access page elements (recorded)
+  Company Name field     : getByRole('textbox', { name: 'Company Name *' })
+  Industry field         : getByLabel('Industry *')   (dropdown/select, id: cncIndustry, formcontrolname: industryId)
+  Address field          : getByRole('textbox', { name: 'Address *' })
+  Name field             : getByRole('textbox', { name: 'Name *', exact: true })
+  Email field            : getByRole('textbox', { name: 'Email *' })
+  Phone Number field     : getByRole('textbox', { name: 'Phone Number *' })
+  Contact consent        : getByRole('checkbox', { name: 'I agree to be contacted' })
+  Terms consent          : getByRole('checkbox', { name: 'I agree to the Terms & ...' })   (label truncated in recording)
+  Submit button          : getByRole('button', { name: 'Submit' })
+  Back to Login          : locator('div').filter({ hasText: /^Back to Login$/ })   (role-based locator not available from this recording)
+
+Industry dropdown options (value: label, in order; placeholder is disabled/hidden)
+  0: null   Select Industry   (disabled, hidden, placeholder)
+  1: 1      Information Technology (IT & Software)
+  2: 2      Healthcare & Pharmaceuticals
+  3: 3      Banking, Financial Services & Insurance (BFSI)
+  4: 4      Real Estate & Construction
+  5: 5      Education & EdTech
+  6: 6      Manufacturing & Industrial
+  7: 7      Retail & E-commerce
+  8: 8      Media & Entertainment
+  9: 9      Telecommunications
+  10: 10    Energy & Utilities
+  11: 11    Transportation & Logistics
+  12: 12    Automotive Industry
+  13: 13    Travel & Hospitality
+  14: 14    Agriculture & Food Industry
+  15: 15    Chemicals & Fertilizers
+  16: 16    Aerospace & Defense
+  17: 17    Other
+
+Recorded flow
+  1. Login -> Request Access. -> Request Access page is displayed.
+  2. Fill Company Name, select an Industry option, fill Address, fill Name, fill Email, fill Phone Number.
+  3. Check both consent checkboxes ("I agree to be contacted", "I agree to the Terms & ...").
+  4. Click Submit -> an alert toast "Failed to fetch" is shown (title "Cenvic"). Confirmed by the user to be
+     caused by the dev team doing a deployment at the time of recording, not a real app/validation error;
+     do not script this as an expected case.
+  5. Edit the Email field several times (including pasting a full URL, then a different email format) before settling
+     on a valid email, then click Submit again -> success.
+
+Messages (confirmed final by the user)
+  Submit failure (environmental, not app behavior) : "Failed to fetch"   (alert toast, title "Cenvic")
+  Submit success                                   : "Thank you! Your request has been submitted. Our team will be in touch shortly."
+
+Open Items (remaining, non-blocking)
+  1. A full-page DOM HTML snapshot (default state) is still not saved under dom/login/, e.g. via
+     `node utils/record-dom.mts https://cenvicagencydev.alliancetek.net/get-started login request-access`.
+     Not required to script the happy-path case since locators and messages above are already confirmed.
+
+Messages (recorded, not yet confirmed as final by the user)
+  Submit failure   : "Failed to fetch"   (alert toast, title "Cenvic")
+  Submit success   : "Thank you!" heading/text, plus "Your request has ..." body text (full wording not captured)
+
+Open Items (need user/team confirmation before this page can be scripted or PT-010 closed)
+  1. The Request Access page's real URL/route (for `page.goto()` / `waitForURL()` assertions).
+  2. Whether "Failed to fetch" on the first Submit was a genuine app/validation error, or an unrelated
+     network/backend hiccup during recording — this determines whether it should be scripted as an expected case.
+  3. Full text of the second checkbox label ("I agree to the Terms & ...") and the full "Thank you!" success message.
+  4. The actual list of Industry dropdown options (recording shows `selectOption('1: 1')`, which is not a
+     readable option label).
+  5. A DOM HTML snapshot of the page (default state, and ideally the success state), captured via
+     `node utils/record-dom.mts <url> login request-access`.
