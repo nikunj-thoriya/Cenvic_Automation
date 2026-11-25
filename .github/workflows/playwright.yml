@@ -48,8 +48,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Get Playwright version
+        id: pw-version
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ steps.pw-version.outputs.version }}
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+
+      - name: Install Playwright OS dependencies only
+        run: npx playwright install-deps chromium
+        if: steps.pw-cache.outputs.cache-hit == 'true'
 
       - name: Create .env.dev
         run: |
@@ -91,12 +107,18 @@ jobs:
   full-tests:
     name: Full Suite - ${{ matrix.browser }}
     runs-on: ubuntu-latest
+    # Browsers are pre-installed in this image, so no install step is needed.
+    container: mcr.microsoft.com/playwright:v1.65.1-noble
     needs: lint-and-typecheck
     if: github.event_name != 'schedule' || github.ref == 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
-        browser: [chromium, firefox, webkit]
+        # Comment out a line below to skip that browser (keep at least one).
+        browser:
+          - chromium
+        #  - firefox
+        #  - webkit
     steps:
       - uses: actions/checkout@v4
 
@@ -108,9 +130,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps ${{ matrix.browser }}
 
       - name: Create .env.dev
         run: |
