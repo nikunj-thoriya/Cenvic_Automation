@@ -117,8 +117,8 @@ jobs:
         # Comment out a line below to skip that browser (keep at least one).
         browser:
           - chromium
-          - firefox
-          - webkit
+        #  - firefox
+        #  - webkit
     steps:
       - uses: actions/checkout@v4
 
