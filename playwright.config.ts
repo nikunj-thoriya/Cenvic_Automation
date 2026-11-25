@@ -12,9 +12,9 @@ export default defineConfig({
   testDir: './tests',
   outputDir: `./test-results/${reportName}`,
   fullyParallel: true,
-  forbidOnly: true,
-  retries: environment.retries,
-  workers: environment.workers,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 1 : environment.retries,
+  workers: process.env.CI ? 1 : environment.workers,
   timeout: environment.testTimeout,
   expect: { timeout: environment.expectTimeout },
   reporter: [

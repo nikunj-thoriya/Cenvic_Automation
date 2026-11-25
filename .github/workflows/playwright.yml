@@ -1,0 +1,196 @@
+name: Playwright Tests (Login & Signup)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Runs daily at 3:30 AM UTC (9:00 AM IST / 10:30 AM CEST)
+    - cron: '30 3 * * *'
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+  smoke-tests:
+    name: Smoke Tests (@High)
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Create .env.dev
+        run: |
+          cat <<'EOF' > .env.dev
+          TEST_ENV=dev
+          BASE_URL=${{ secrets.DEV_BASE_URL }}
+          LOGIN_PATH=/login
+          API_BASE_URL=${{ secrets.DEV_API_BASE_URL }}
+          SWAGGER_URL=https://cenvicapidev.alliancetek.net/swagger/index.html
+          SWAGGER_JSON_URL=https://cenvicapidev.alliancetek.net/swagger/v1/swagger.json
+          HEADLESS=true
+          RETRIES=1
+          WORKERS=1
+          TEST_TIMEOUT=63000
+          EXPECT_TIMEOUT=13000
+          ACTION_TIMEOUT=18000
+          NAVIGATION_TIMEOUT=33000
+          USER_USERNAME=${{ secrets.DEV_USER_USERNAME }}
+          USER_PASSWORD=${{ secrets.DEV_USER_PASSWORD }}
+          NO_CAMPAIGN_USER_USERNAME=nik@yopmail.com
+          NO_CAMPAIGN_USER_PASSWORD=bq6Qk&lHbnT^
+          YOPMAIL_URL=https://yopmail.com
+          EOF
+
+      - name: Run smoke tests (@High)
+        run: npx playwright test tests/login tests/signup --grep @High --reporter=github
+
+      - name: Upload test results on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-tests-results
+          path: |
+            test-results/
+            reports/
+            playwright-report/
+          retention-days: 30
+
+  full-tests:
+    name: Full Suite - ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    if: github.event_name != 'schedule' || github.ref == 'refs/heads/main'
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Create .env.dev
+        run: |
+          cat <<'EOF' > .env.dev
+          TEST_ENV=dev
+          BASE_URL=${{ secrets.DEV_BASE_URL }}
+          LOGIN_PATH=/login
+          API_BASE_URL=${{ secrets.DEV_API_BASE_URL }}
+          SWAGGER_URL=https://cenvicapidev.alliancetek.net/swagger/index.html
+          SWAGGER_JSON_URL=https://cenvicapidev.alliancetek.net/swagger/v1/swagger.json
+          HEADLESS=true
+          RETRIES=1
+          WORKERS=1
+          TEST_TIMEOUT=63000
+          EXPECT_TIMEOUT=13000
+          ACTION_TIMEOUT=18000
+          NAVIGATION_TIMEOUT=33000
+          USER_USERNAME=${{ secrets.DEV_USER_USERNAME }}
+          USER_PASSWORD=${{ secrets.DEV_USER_PASSWORD }}
+          NO_CAMPAIGN_USER_USERNAME=nik@yopmail.com
+          NO_CAMPAIGN_USER_PASSWORD=bq6Qk&lHbnT^
+          YOPMAIL_URL=https://yopmail.com
+          EOF
+
+      - name: Run login tests
+        env:
+          BROWSER: ${{ matrix.browser }}
+        run: npx playwright test tests/login --reporter=github
+
+      - name: Run signup tests
+        env:
+          BROWSER: ${{ matrix.browser }}
+        run: npx playwright test tests/signup --reporter=github
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.browser }}
+          path: |
+            test-results/
+            reports/
+            playwright-report/
+          retention-days: 30
+
+  publish-report:
+    name: Publish Report to Pages
+    runs-on: ubuntu-latest
+    needs: [full-tests]
+    if: always() && (github.ref == 'refs/heads/main')
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Extract latest reports
+        run: |
+          mkdir -p public
+          if [ -d "artifacts/test-results-chromium" ]; then
+            find artifacts/test-results-chromium -name "index.html" -type f | head -1 | xargs -I {} cp {} public/index.html 2>/dev/null || true
+          fi
+          if [ -d "artifacts/test-results-chromium" ]; then
+            cp -r artifacts/test-results-chromium/*/index.html public/ 2>/dev/null || true
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'public'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
