@@ -91,7 +91,7 @@ jobs:
           EOF
 
       - name: Run smoke tests (@High)
-        run: npx playwright test tests/login --grep @High --reporter=github
+        run: npx playwright test tests/login --grep @High
 
       - name: Show test summary
         if: always()
@@ -161,7 +161,7 @@ jobs:
       - name: Run login tests
         env:
           BROWSER: ${{ matrix.browser }}
-        run: npx playwright test tests/login --reporter=github
+        run: npx playwright test tests/login
 
       - name: Show test summary
         if: always()
