@@ -2,6 +2,8 @@
 
 All notable changes to this project are recorded here. Dates are in IST.
 
+CI verification: login smoke and full suite all-pass PR check.
+
 ## [1.23.17] - 2026-11-25
 
 ### Added
