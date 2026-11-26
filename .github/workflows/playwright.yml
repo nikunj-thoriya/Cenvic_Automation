@@ -93,6 +93,10 @@ jobs:
       - name: Run smoke tests (@High)
         run: npx playwright test tests/login --grep @High --reporter=github
 
+      - name: Show test summary
+        if: always()
+        run: node utils/ci-summary.mjs "Smoke tests (@High)"
+
       - name: Upload test results on failure
         if: always()
         uses: actions/upload-artifact@v4
@@ -158,6 +162,10 @@ jobs:
         env:
           BROWSER: ${{ matrix.browser }}
         run: npx playwright test tests/login --reporter=github
+
+      - name: Show test summary
+        if: always()
+        run: node utils/ci-summary.mjs "Full suite (${{ matrix.browser }})"
 
       - name: Upload test results
         if: always()
