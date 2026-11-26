@@ -10,6 +10,7 @@ export default defineConfig(
       'node_modules/',
       'reports/',
       'test-results/',
+      'playwright-report/',
       'backups/',
       'dom/',
       'documentation/',
