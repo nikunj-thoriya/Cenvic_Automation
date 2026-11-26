@@ -1,0 +1,11 @@
+{
+  "title": "ci: publish per-run reports to gh-pages with history (main and PRs)",
+  "author": "nikunj-thoriya",
+  "kind": "PR #9",
+  "ref": "9/merge",
+  "sha": "feaeec5668f67e230e4cdccab151eddae6caf75c",
+  "result": "success",
+  "run_number": "22",
+  "date": "2026-11-26T08:19:02Z",
+  "run_url": "https://github.com/nikunj-thoriya/Cenvic_Automation/actions/runs/45781777753"
+}
