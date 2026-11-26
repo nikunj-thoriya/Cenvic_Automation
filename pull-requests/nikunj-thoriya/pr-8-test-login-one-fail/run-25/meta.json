@@ -1,0 +1,11 @@
+{
+  "title": "Test/login one fail",
+  "author": "nikunj-thoriya",
+  "kind": "PR #8",
+  "ref": "8/merge",
+  "sha": "7b67627b50a82fe12cc1e6c9a01455ffa2251999",
+  "result": "failure",
+  "run_number": "25",
+  "date": "2026-11-26T08:29:01Z",
+  "run_url": "https://github.com/nikunj-thoriya/Cenvic_Automation/actions/runs/45783151951"
+}
