@@ -91,9 +91,13 @@ jobs:
           EOF
 
       - name: Run smoke tests (@High)
-        run: npx playwright test tests/login tests/signup --grep @High --reporter=github
+        run: npx playwright test tests/login tests/signup --grep @High
 
-      - name: Upload test results on failure
+      - name: Show test summary
+        if: always()
+        run: node utils/ci-summary.mjs "Smoke tests (@High)"
+
+      - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -154,15 +158,14 @@ jobs:
           YOPMAIL_URL=https://yopmail.com
           EOF
 
-      - name: Run login tests
+      - name: Run login and signup tests
         env:
           BROWSER: ${{ matrix.browser }}
-        run: npx playwright test tests/login --reporter=github
+        run: npx playwright test tests/login tests/signup
 
-      - name: Run signup tests
-        env:
-          BROWSER: ${{ matrix.browser }}
-        run: npx playwright test tests/signup --reporter=github
+      - name: Show test summary
+        if: always()
+        run: node utils/ci-summary.mjs "Full suite (${{ matrix.browser }})"
 
       - name: Upload test results
         if: always()
@@ -195,11 +198,9 @@ jobs:
       - name: Extract latest reports
         run: |
           mkdir -p public
-          if [ -d "artifacts/test-results-chromium" ]; then
-            find artifacts/test-results-chromium -name "index.html" -type f | head -1 | xargs -I {} cp {} public/index.html 2>/dev/null || true
-          fi
-          if [ -d "artifacts/test-results-chromium" ]; then
-            cp -r artifacts/test-results-chromium/*/index.html public/ 2>/dev/null || true
+          latest=$(find artifacts/test-results-chromium/reports -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort | tail -1)
+          if [ -n "$latest" ]; then
+            cp -r "$latest"/. public/
           fi
 
       - name: Setup Pages
